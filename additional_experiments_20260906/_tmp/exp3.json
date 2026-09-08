@@ -1,0 +1,63 @@
+{
+ "per_clip_retarget_scalars": {
+  "turn_right_1771233000": 16,
+  "walk_869488000": 16,
+  "turn_left_1771233000": 16,
+  "start_stop_1271493000": 16,
+  "start_stop_785558000": 16,
+  "slow_turn_1771233000": 16,
+  "slow_1313807000": 17,
+  "left_right_turn_2058226999": 16,
+  "stairs_1_5199540000": 19,
+  "stairs_2_5299211000": 19,
+  "stairs_3_5339749000": 19,
+  "obstacle_2_3126098000": 18,
+  "obstacle_1_3015061000": 18,
+  "obstacle_3_3015061000": 18,
+  "stand_up_2431270000": 21,
+  "box_1_399682000": 18,
+  "box_2_986388000": 17
+ },
+ "total_retarget_scalars": 296,
+ "n_clips": 17,
+ "mocap_global_scalars": 15,
+ "mocap_per_clip_branches": 0,
+ "dead_branches": {
+  "obstacle_1_301506103500": 6
+ },
+ "outlier_statements": {
+  "turn_left_1771233000": 1,
+  "slow_turn_1771233000": 2,
+  "left_right_turn_2058226999": 3,
+  "obstacle_2_3126098000": 1,
+  "stand_up_2431270000": 1,
+  "box_1_399682000": 1
+ },
+ "ground_plane_clips": [
+  "walk_869488000",
+  "stairs_1_5199540000",
+  "stairs_2_5299211000",
+  "stairs_3_5339749000",
+  "obstacle_3_3015061000"
+ ],
+ "slam_override": [
+  "obstacle_1_3015061000"
+ ],
+ "hip_order_swaps": [
+  "obstacle_2_3126098000",
+  "box_1_399682000",
+  "box_2_986388000"
+ ],
+ "freeze_fix": {
+  "stand_up_2431270000": 4
+ },
+ "total_video_handset": 317.0,
+ "duration_s": {
+  "mocap": 6.804,
+  "video": 31.87082
+ },
+ "per_second": {
+  "video": 9.94640238312036,
+  "mocap": 2.204585537918871
+ }
+}

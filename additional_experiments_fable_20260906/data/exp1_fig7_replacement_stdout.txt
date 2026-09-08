@@ -1,0 +1,7 @@
+figure 3.50 x 3.13 in; video row of the grid: corrected intrinsics + depth Hampel + 6 Hz zero-phase low-pass
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_fig7_replacement.pdf
+fig_exp1_fig7_replacement (d) body: MoCap 0.19  Video 0.31  ratio 1.63x  [% hip height, robust std]
+fig_exp1_fig7_replacement (d) paw: MoCap 0.33  Video 0.71  ratio 2.18x  [% hip height, robust std]
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_fig7_replacement_viridis.pdf
+fig_exp1_fig7_replacement_viridis (d) body: MoCap 0.19  Video 0.31  ratio 1.63x  [% hip height, robust std]
+fig_exp1_fig7_replacement_viridis (d) paw: MoCap 0.33  Video 0.71  ratio 2.18x  [% hip height, robust std]

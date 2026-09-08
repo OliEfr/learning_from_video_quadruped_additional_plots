@@ -1,0 +1,4 @@
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips_corrected.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips_14rows.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips_corrected_14rows.pdf

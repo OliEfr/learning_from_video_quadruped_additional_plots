@@ -1,0 +1,7 @@
+MoCap            n_frames=  330
+Video            n_frames=  185
+Video (extended) n_frames=  374
+occupied bins: 529, counts min=1 median=2 max=19
+count histogram (n frames in bin -> n bins): {1: 187, 2: 124, 3: 66, 4: 37, 5: 30, 6: 24, 7: 14, 8: 17, 9: 8, 10: 9, 11: 4, 12: 5, 13: 2, 18: 1, 19: 1}
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp2_state_coverage_2col.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp2_state_coverage_2col_log.pdf

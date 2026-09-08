@@ -1,0 +1,193 @@
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp2_target_coverage.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp2_state_coverage.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp2_velocity_distributions.pdf
+| dataset | clips | frames | dur [s] | vx-vy cells | vx-wz cells | 3D box cov [%] | vx p5 | vx p95 | vy p5 | vy p95 | wz p5 | wz p95 | standing [%] | turning [%] | outside box [%] |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| MoCap | 6 | 330 | 6.80 | 14/147 | 56/441 | 13.18 | -0.09 | 2.22 | -0.27 | 0.11 | -0.94 | 2.43 | 0.00 | 33.30 | 56.09 |
+| Video | 4 | 185 | 6.03 | 22/147 | 48/441 | 13.87 | 0.05 | 1.68 | -0.29 | 0.10 | -2.82 | 3.49 | 2.17 | 41.97 | 48.61 |
+| Video (extended) | 8 | 374 | 12.20 | 24/147 | 83/441 | 25.01 | -0.04 | 1.67 | -0.29 | 0.09 | -3.09 | 2.31 | 4.01 | 54.02 | 45.63 |
+{
+ "xy: video_ext minus video": 2,
+ "xy: video_ext minus mocap": 22,
+ "xy: mocap minus video_ext": 12,
+ "xy: video minus mocap": 20,
+ "xy: mocap minus video": 12,
+ "xy: union of all three": 36,
+ "xyaw: video_ext minus video": 35,
+ "xyaw: video_ext minus mocap": 64,
+ "xyaw: mocap minus video_ext": 37,
+ "xyaw: video minus mocap": 35,
+ "xyaw: mocap minus video": 43,
+ "xy cells total": 147,
+ "xyaw cells total": 441,
+ "xy cells with vx>=0": 77,
+ "xyaw cells with vx>=0": 231,
+ "xy: covered cells with vx<0 (mocap, video, video_ext)": [
+  0,
+  2,
+  2
+ ],
+ "xyaw: covered cells with vx<0 (mocap, video, video_ext)": [
+  0,
+  2,
+  7
+ ],
+ "xy: covered cells in vx in [0.0,0.5] band (mocap, video, video_ext)": [
+  3,
+  17,
+  18
+ ],
+ "xyaw: covered cells with |wz|>=0.5 (mocap, video, video_ext)": [
+  27,
+  16,
+  39
+ ],
+ "xyaw: covered cells with wz<=-0.5 (mocap, video, video_ext)": [
+  17,
+  12,
+  31
+ ],
+ "xyaw: covered cells with wz>=0.5 (mocap, video, video_ext)": [
+  10,
+  4,
+  8
+ ]
+}
+MoCap raw-vs-smooth std: wz 0.024 vx 0.021 | covered raw: 14 60 box raw 0.136
+Video raw-vs-smooth std: wz 0.429 vx 0.124 | covered raw: 32 55 box raw 0.203
+Video (extended) raw-vs-smooth std: wz 0.563 vx 0.118 | covered raw: 37 89 box raw 0.328
+{
+ "tol=0.05,slice_w=0.25,slice_vy=0.1,velocities=smoothed": {
+  "MoCap": {
+   "xy": 14,
+   "xyaw": 56
+  },
+  "Video": {
+   "xy": 22,
+   "xyaw": 48
+  },
+  "Video (extended)": {
+   "xy": 24,
+   "xyaw": 83
+  }
+ },
+ "tol=0.05,slice_w=0.25,slice_vy=0.1,velocities=raw": {
+  "MoCap": {
+   "xy": 14,
+   "xyaw": 60
+  },
+  "Video": {
+   "xy": 32,
+   "xyaw": 55
+  },
+  "Video (extended)": {
+   "xy": 37,
+   "xyaw": 89
+  }
+ },
+ "tol=0.05,slice_w=0.125,slice_vy=0.05,velocities=smoothed": {
+  "MoCap": {
+   "xy": 12,
+   "xyaw": 37
+  },
+  "Video": {
+   "xy": 17,
+   "xyaw": 33
+  },
+  "Video (extended)": {
+   "xy": 17,
+   "xyaw": 58
+  }
+ },
+ "tol=0.05,slice_w=0.125,slice_vy=0.05,velocities=raw": {
+  "MoCap": {
+   "xy": 12,
+   "xyaw": 35
+  },
+  "Video": {
+   "xy": 25,
+   "xyaw": 37
+  },
+  "Video (extended)": {
+   "xy": 28,
+   "xyaw": 64
+  }
+ },
+ "tol=0.05,slice_w=0.5,slice_vy=0.2,velocities=smoothed": {
+  "MoCap": {
+   "xy": 17,
+   "xyaw": 69
+  },
+  "Video": {
+   "xy": 22,
+   "xyaw": 53
+  },
+  "Video (extended)": {
+   "xy": 25,
+   "xyaw": 96
+  }
+ },
+ "tol=0.05,slice_w=0.5,slice_vy=0.2,velocities=raw": {
+  "MoCap": {
+   "xy": 19,
+   "xyaw": 72
+  },
+  "Video": {
+   "xy": 38,
+   "xyaw": 68
+  },
+  "Video (extended)": {
+   "xy": 44,
+   "xyaw": 109
+  }
+ },
+ "tol=0.1,slice_w=0.25,slice_vy=0.1,velocities=smoothed": {
+  "MoCap": {
+   "xy": 28,
+   "xyaw": 102
+  },
+  "Video": {
+   "xy": 40,
+   "xyaw": 104
+  },
+  "Video (extended)": {
+   "xy": 47,
+   "xyaw": 150
+  }
+ },
+ "tol=0.1,slice_w=0.25,slice_vy=0.1,velocities=raw": {
+  "MoCap": {
+   "xy": 30,
+   "xyaw": 110
+  },
+  "Video": {
+   "xy": 59,
+   "xyaw": 125
+  },
+  "Video (extended)": {
+   "xy": 70,
+   "xyaw": 175
+  }
+ }
+}
+## MoCap
+  canter                         T= 29 w=1.0 xy= 0 xyaw=  0 vx[1.65,2.36] mean 2.08 | vy[-0.31,0.02] | wz[-0.11,0.44] (raw [-0.15,0.44]) | speed [1.64,2.38]
+  left turn0                     T= 46 w=1.0 xy= 0 xyaw=  8 vx[-0.23,0.14] mean -0.02 | vy[-0.19,0.07] | wz[0.73,2.76] (raw [0.72,2.77]) | speed [0.04,0.26]
+  pace                           T= 39 w=1.0 xy= 4 xyaw= 17 vx[0.65,0.81] mean 0.71 | vy[-0.10,0.03] | wz[-0.67,0.50] (raw [-0.67,0.48]) | speed [0.64,0.82]
+  right turn0                    T=150 w=1.0 xy=10 xyaw= 27 vx[0.35,0.68] mean 0.49 | vy[-0.29,0.02] | wz[-1.38,-0.03] (raw [-1.37,-0.04]) | speed [0.35,0.78]
+  trot2                          T= 33 w=1.0 xy= 2 xyaw=  3 vx[0.94,1.31] mean 1.15 | vy[-0.21,0.09] | wz[-0.35,0.11] (raw [-0.38,0.12]) | speed [0.94,1.32]
+  trot                           T= 33 w=1.0 xy= 2 xyaw=  5 vx[0.95,1.37] mean 1.16 | vy[-0.06,0.16] | wz[-0.48,0.29] (raw [-0.50,0.33]) | speed [0.93,1.39]
+## Video
+  slow_1313807000                T= 69 w=1.0 xy=18 xyaw= 19 vx[-0.04,0.37] mean 0.18 | vy[-0.16,0.13] | wz[-0.16,0.27] (raw [-0.26,0.38]) | speed [0.02,0.49]
+  turn_left_1771233000           T= 45 w=1.0 xy= 6 xyaw= 15 vx[0.08,0.72] mean 0.40 | vy[-0.22,0.11] | wz[0.05,4.44] (raw [-0.02,4.55]) | speed [0.08,0.75]
+  turn_right_1771233000          T= 44 w=1.0 xy= 0 xyaw= 14 vx[-0.03,0.56] mean 0.28 | vy[-0.30,0.09] | wz[-3.32,-0.48] (raw [-4.33,-0.29]) | speed [0.07,0.60]
+  walk_869488000                 T= 27 w=1.0 xy= 0 xyaw=  0 vx[1.20,1.77] mean 1.54 | vy[-0.30,-0.03] | wz[-0.93,0.29] (raw [-0.76,0.57]) | speed [1.16,1.88]
+## Video (extended)
+  left_right_turn_2058226999     T= 73 w=1.0 xy= 1 xyaw= 17 vx[-0.02,0.50] mean 0.31 | vy[-0.23,0.13] | wz[-3.92,5.63] (raw [-3.91,5.83]) | speed [0.03,0.71]
+  slow_1313807000                T= 69 w=1.0 xy=18 xyaw= 19 vx[-0.04,0.37] mean 0.18 | vy[-0.16,0.13] | wz[-0.16,0.27] (raw [-0.26,0.38]) | speed [0.02,0.49]
+  slow_turn_1771233000           T= 44 w=1.0 xy= 0 xyaw= 13 vx[-0.06,0.57] mean 0.28 | vy[-0.26,0.07] | wz[-3.83,-0.49] (raw [-4.48,-0.39]) | speed [0.02,0.60]
+  start_stop_1271493000          T= 27 w=1.0 xy= 4 xyaw= 17 vx[-0.11,0.16] mean 0.05 | vy[-0.11,0.03] | wz[-0.95,0.27] (raw [-1.11,0.56]) | speed [0.03,0.18]
+  start_stop_785558000           T= 45 w=1.0 xy= 5 xyaw=  8 vx[0.00,0.52] mean 0.22 | vy[-0.39,-0.03] | wz[-0.88,1.30] (raw [-1.00,2.18]) | speed [0.04,0.63]
+  turn_left_1771233000           T= 45 w=1.0 xy= 6 xyaw= 15 vx[0.08,0.72] mean 0.40 | vy[-0.22,0.11] | wz[0.05,4.44] (raw [-0.02,4.55]) | speed [0.08,0.75]
+  turn_right_1771233000          T= 44 w=1.0 xy= 0 xyaw= 14 vx[-0.03,0.56] mean 0.28 | vy[-0.30,0.09] | wz[-3.32,-0.48] (raw [-4.33,-0.29]) | speed [0.07,0.60]
+  walk_869488000                 T= 27 w=2.0 xy= 0 xyaw=  0 vx[1.20,1.77] mean 1.54 | vy[-0.30,-0.03] | wz[-0.93,0.29] (raw [-0.76,0.57]) | speed [1.16,1.88]

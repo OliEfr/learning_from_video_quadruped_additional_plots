@@ -1,0 +1,65 @@
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp3_manual_intervention.pdf
+| clip | scenario | clip trimming (frame range) | input override (mask / track file / camera) | keypoint fix (delete, freeze, reorder) | rt: base offset | rt: foot offsets | rt: scale / foot-lift gain | rt: method switch | RL: RSI transform / motion weight | total | statements |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| walk_869488000 | flat | 2 | 2 | 0 | 3 | 12 | 1 | 0 | 2 | 22 | 8 |
+| slow_1313807000 | flat | 3 | 0 | 0 | 3 | 12 | 1 | 0 | 0 | 19 | 5 |
+| turn_left_1771233000 | flat | 2 | 0 | 3 | 3 | 12 | 1 | 0 | 0 | 21 | 5 |
+| turn_right_1771233000 | flat | 2 | 0 | 0 | 3 | 12 | 1 | 0 | 0 | 18 | 4 |
+| slow_turn_1771233000 | flat | 2 | 0 | 6 | 3 | 12 | 1 | 0 | 0 | 24 | 6 |
+| left_right_turn_2058226999 | flat | 2 | 0 | 11 | 3 | 12 | 1 | 0 | 0 | 29 | 7 |
+| start_stop_1271493000 | flat | 2 | 0 | 0 | 3 | 12 | 1 | 0 | 0 | 18 | 4 |
+| start_stop_785558000 | flat | 2 | 0 | 0 | 3 | 12 | 1 | 0 | 0 | 18 | 4 |
+| stairs_1_5199540000 | stairs | 3 | 1 | 0 | 3 | 12 | 2 | 1 | 0 | 22 | 8 |
+| stairs_2_5299211000 | stairs | 3 | 1 | 0 | 3 | 12 | 2 | 1 | 0 | 22 | 8 |
+| stairs_3_5339749000 | stairs | 3 | 1 | 0 | 3 | 12 | 2 | 1 | 0 | 22 | 8 |
+| box_1_399682000 | box | 2 | 0 | 5 | 3 | 12 | 2 | 1 | 7 | 32 | 9 |
+| box_2_986388000 | box | 2 | 0 | 2 | 3 | 12 | 1 | 1 | 7 | 28 | 7 |
+| stand_up_2431270000 | stand-up | 3 | 0 | 19 | 6 | 24 | 1 | 1 | 0 | 54 | 13 |
+{
+ "video_flat_total": 169,
+ "video_flat_mean": 21.125,
+ "video_flat_median": 20.0,
+ "video_flat_min": 18,
+ "video_flat_max": 29,
+ "video_paper_total": 349,
+ "video_paper_mean": 24.928571428571427,
+ "video_paper_median": 22.0,
+ "video_paper_statements": 96,
+ "mocap_total": 12,
+ "mocap_per_clip": 2.0,
+ "n_video_paper_clips": 14,
+ "n_mocap_clips": 6,
+ "category_totals_flat": {
+  "clip trimming (frame range)": 17,
+  "input override (mask / track file / camera)": 2,
+  "keypoint fix (delete, freeze, reorder)": 20,
+  "retargeting: base offset": 24,
+  "retargeting: foot offsets": 96,
+  "retargeting: scale / foot-lift gain": 8,
+  "retargeting: method switch": 0,
+  "RL: RSI transform / motion weight": 2
+ },
+ "category_totals_paper": {
+  "clip trimming (frame range)": 33,
+  "input override (mask / track file / camera)": 5,
+  "keypoint fix (delete, freeze, reorder)": 46,
+  "retargeting: base offset": 45,
+  "retargeting: foot offsets": 180,
+  "retargeting: scale / foot-lift gain": 18,
+  "retargeting: method switch": 6,
+  "RL: RSI transform / motion weight": 16
+ },
+ "clips_with_retargeting_offsets_flat": 8
+}
+mocap per clip: {'pace': 2, 'trot': 2, 'trot2': 2, 'canter': 2, 'right turn0': 2, 'left turn0': 2}
+dead branches: [{'file': 'motion_imitation/retarget_motion/retarget_config_go2.py', 'line': 219, 'clip': 'obstacle_1_301506103500'}]
+shared: {
+ "MoCap path": {
+  "description": "retarget_motion.py: FRAME_DURATION, REF_COORD_ROT, REF_ROOT_ROT; UnitreeGo2ConfigMocap: SIM_ROOT_OFFSET(3), SIM_TOE_OFFSET_LOCAL(12); REF_POS_SCALE",
+  "count": 19
+ },
+ "Video path": {
+  "description": "retarget_motion_fromVision.py: FRAME_DURATION; UnitreeGo2ConfigFromVisionDepthCam defaults: SIM_ROOT_OFFSET(3), SIM_ROOT_OFFSET_LOCAL(3), SIM_TOE_OFFSET_LOCAL(12), REF_POS_SCALE(1, inherited), feet_z_amplification default(1); 3d_recon.py plane RANSAC (distance 0.01, n=3, iters 1000)",
+  "count": 24
+ }
+}

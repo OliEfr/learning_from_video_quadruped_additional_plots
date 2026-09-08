@@ -1,0 +1,59 @@
+| source | filter | M1 torso [% h] | M1 paws [% h] | M1 paws [mm] | M2 paws [mm/fr²] | M3 seg CV [%] | M4 stance [% h] | M4 [mm] | PSD power >5 Hz [1e-4] |
+|---|---|---|---|---|---|---|---|---|---|
+| MoCap | unfiltered (baseline) | 0.42 | 1.35 | 5.94 | 27.36 | 1.21 | 0.71 | 3.15 | 1.14 |
+| Video | unfiltered | 1.84 | 3.67 | 9.31 | 29.87 | 21.05 | 2.49 | 6.85 | 4.71 |
+| Video | B only (6 Hz zero-phase) | 0.37 | 1.01 | 2.55 | 14.08 | 20.88 | 2.62 | 7.20 | 0.81 |
+| Video | A+B (method) | 0.37 | 0.99 | 2.50 | 13.74 | 20.88 | 2.61 | 7.18 | 0.79 |
+| Video (corrected intrinsics) | unfiltered | 0.91 | 2.51 | 12.76 | 40.42 | 7.80 | 2.04 | 11.64 | 2.04 |
+| Video (corrected intrinsics) | B only (6 Hz zero-phase) | 0.20 | 0.68 | 3.41 | 18.40 | 7.69 | 2.03 | 11.68 | 0.35 |
+| Video (corrected intrinsics) | A+B (method) | 0.20 | 0.67 | 3.39 | 18.23 | 7.69 | 2.02 | 11.67 | 0.34 |
+| source | net displ. [%] | path length [%] | mean speed [%] | p95 speed [%] | stride freq. [%] | peak clearance raw [mm] | filt [mm] | [%] | stance frac raw [%] | filt [%] | contact onsets | onset shift [ms] |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Video | -0.0 | -5.6 | -5.6 | -10.0 | 0.0 | 63.1 | 61.9 | -1.3 | 44.0 | 44.1 | 85->73 | 36.3 |
+| Video (corrected intrinsics) | -0.0 | -4.9 | -4.9 | -9.1 | 0.0 | 102.0 | 96.3 | -6.1 | 44.4 | 42.4 | 92->72 | 60.8 |
+stage A: {'flagged': 14, 'paper_rule_jumps': 2, 'n_valid': 3730, 'n_calls': 16}
+{
+ "m1_body_pct Video unfiltered / MoCap": 4.342187485797347,
+ "m1_body_pct Video filtered / MoCap": 0.8734580677780828,
+ "m1_body_pct Video (corrected intrinsics) unfiltered / MoCap": 2.13788773820526,
+ "m1_body_pct Video (corrected intrinsics) filtered / MoCap": 0.47484843454445025,
+ "m1_body_pct MoCap (if filtered, reference only) / MoCap": 0.6864786403548931,
+ "m1_feet_pct Video unfiltered / MoCap": 2.721066092322581,
+ "m1_feet_pct Video filtered / MoCap": 0.7342909973482964,
+ "m1_feet_pct Video (corrected intrinsics) unfiltered / MoCap": 1.8593471728630433,
+ "m1_feet_pct Video (corrected intrinsics) filtered / MoCap": 0.4971524400709264,
+ "m1_feet_pct MoCap (if filtered, reference only) / MoCap": 0.5616762746208512,
+ "m1_feet_mm Video unfiltered / MoCap": 1.5664430832599199,
+ "m1_feet_mm Video filtered / MoCap": 0.42111837071873565,
+ "m1_feet_mm Video (corrected intrinsics) unfiltered / MoCap": 2.1476330725687736,
+ "m1_feet_mm Video (corrected intrinsics) filtered / MoCap": 0.570660984549722,
+ "m1_feet_mm MoCap (if filtered, reference only) / MoCap": 0.561424048554991,
+ "m2_feet_mm Video unfiltered / MoCap": 1.091855899068161,
+ "m2_feet_mm Video filtered / MoCap": 0.5022936094926805,
+ "m2_feet_mm Video (corrected intrinsics) unfiltered / MoCap": 1.477554388484067,
+ "m2_feet_mm Video (corrected intrinsics) filtered / MoCap": 0.6664562706720717,
+ "m2_feet_mm MoCap (if filtered, reference only) / MoCap": 0.8520049074422229,
+ "m3_cv_pct Video unfiltered / MoCap": 17.41888850106068,
+ "m3_cv_pct Video filtered / MoCap": 17.280929397978483,
+ "m3_cv_pct Video (corrected intrinsics) unfiltered / MoCap": 6.4568855017568545,
+ "m3_cv_pct Video (corrected intrinsics) filtered / MoCap": 6.361054687911406,
+ "m3_cv_pct MoCap (if filtered, reference only) / MoCap": 0.969876418328313,
+ "m4_pct Video unfiltered / MoCap": 3.5063901796882755,
+ "m4_pct Video filtered / MoCap": 3.66544335918942,
+ "m4_pct Video (corrected intrinsics) unfiltered / MoCap": 2.864166233307033,
+ "m4_pct Video (corrected intrinsics) filtered / MoCap": 2.84452777881253,
+ "m4_pct MoCap (if filtered, reference only) / MoCap": 1.6569229934369905,
+ "m4_mm Video unfiltered / MoCap": 2.1762841865294784,
+ "m4_mm Video filtered / MoCap": 2.2806243181470878,
+ "m4_mm Video (corrected intrinsics) unfiltered / MoCap": 3.699254884655908,
+ "m4_mm Video (corrected intrinsics) filtered / MoCap": 3.7083948829759668,
+ "m4_mm MoCap (if filtered, reference only) / MoCap": 1.6722572471481338,
+ "psd_hi Video unfiltered / MoCap": 4.131212068542428,
+ "psd_hi Video filtered / MoCap": 0.6925598953727771,
+ "psd_hi Video (corrected intrinsics) unfiltered / MoCap": 1.7849079078825543,
+ "psd_hi Video (corrected intrinsics) filtered / MoCap": 0.30021579588490493,
+ "psd_hi MoCap (if filtered, reference only) / MoCap": 0.6534478262416117
+}
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_filter_effect.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips_corrected_filtered.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_trajectory_grid_all_clips_corrected_filtered_14rows.pdf

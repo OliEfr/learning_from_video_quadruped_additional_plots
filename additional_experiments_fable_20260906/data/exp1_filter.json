@@ -1,0 +1,800 @@
+{
+  "settings": {
+    "fc_hz": 6.0,
+    "butter_order": 4,
+    "zero_phase": true,
+    "hampel_half_window": 2,
+    "hampel_k": 3.0,
+    "hampel_min_m": 0.05,
+    "stance_z_m": 0.02
+  },
+  "stageA": {
+    "flagged": 14,
+    "paper_rule_jumps": 2,
+    "n_valid": 3730,
+    "n_calls": 16
+  },
+  "summary": {
+    "MoCap": {
+      "raw": {
+        "m1_body_pct": 0.4244518345017921,
+        "m1_feet_pct": 1.3505488343228913,
+        "m1_feet_mm": 5.941805979273878,
+        "m2_feet_mm": 27.358959884295274,
+        "m3_cv_pct": 1.2085509446739098,
+        "m4_pct": 0.7113980213503147,
+        "m4_mm": 3.146509624999999,
+        "psd_hi": 0.00011412335778218344,
+        "psd_lo": 0.02122956463272956
+      },
+      "filt": {
+        "m1_body_pct": 0.4244518345017921,
+        "m1_feet_pct": 1.3505488343228913,
+        "m1_feet_mm": 5.941805979273878,
+        "m2_feet_mm": 27.358959884295274,
+        "m3_cv_pct": 1.2085509446739098,
+        "m4_pct": 0.7113980213503147,
+        "m4_mm": 3.146509624999999,
+        "psd_hi": 0.00011412335778218344,
+        "psd_lo": 0.02122956463272956
+      },
+      "mocap_filtered_reference_only": {
+        "m1_body_pct": 0.29137711824493034,
+        "m1_feet_pct": 0.7585712379560148,
+        "m1_feet_mm": 3.335872768612193,
+        "m2_feet_mm": 23.309968083934486,
+        "m3_cv_pct": 1.1721450615876308,
+        "m4_pct": 1.1787317390609156,
+        "m4_mm": 5.261773523627605,
+        "psd_hi": 7.457366006616148e-05,
+        "psd_lo": 0.02122790491009995
+      }
+    },
+    "Video": {
+      "raw": {
+        "m1_body_pct": 1.8430494440974083,
+        "m1_feet_pct": 3.674932639101807,
+        "m1_feet_mm": 9.307500878306001,
+        "m2_feet_mm": 29.87204174203697,
+        "m3_cv_pct": 21.05161415312639,
+        "m4_pct": 2.494439035912414,
+        "m4_mm": 6.847699139650297,
+        "psd_hi": 0.0004714677929723417,
+        "psd_lo": 0.052613272574337754
+      },
+      "filt": {
+        "m1_body_pct": 0.3707408792287979,
+        "m1_feet_pct": 0.991695850522535,
+        "m1_feet_mm": 2.502203653118657,
+        "m2_feet_mm": 13.742230712248123,
+        "m3_cv_pct": 20.884883548770034,
+        "m4_pct": 2.6075891530990045,
+        "m4_mm": 7.176006368058871,
+        "psd_hi": 7.903726072521897e-05,
+        "psd_lo": 0.052307556529993963
+      },
+      "filt_B_only": {
+        "m1_body_pct": 0.3707413473820855,
+        "m1_feet_pct": 1.012553336056735,
+        "m1_feet_mm": 2.5524604199642553,
+        "m2_feet_mm": 14.078385884114828,
+        "m3_cv_pct": 20.884883548770034,
+        "m4_pct": 2.616347892608177,
+        "m4_mm": 7.196574759763792,
+        "psd_hi": 8.079383180485022e-05,
+        "psd_lo": 0.052608661761158776
+      }
+    },
+    "Video (corrected intrinsics)": {
+      "raw": {
+        "m1_body_pct": 0.9074303724401097,
+        "m1_feet_pct": 2.5111391569117467,
+        "m1_feet_mm": 12.76081903187547,
+        "m2_feet_mm": 40.424351241400025,
+        "m3_cv_pct": 7.803475072799518,
+        "m4_pct": 2.037562191193007,
+        "m4_mm": 11.639741099898075,
+        "psd_hi": 0.00020369968377952926,
+        "psd_lo": 0.01586131873080882
+      },
+      "filt": {
+        "m1_body_pct": 0.20155028915269604,
+        "m1_feet_pct": 0.6714286484185708,
+        "m1_feet_mm": 3.3907568501358565,
+        "m2_feet_mm": 18.23355037395424,
+        "m3_cv_pct": 7.687658652197732,
+        "m4_pct": 2.0235914335232392,
+        "m4_mm": 11.668500192584624,
+        "psd_hi": 3.426163468563596e-05,
+        "psd_lo": 0.015794520621551674
+      },
+      "filt_B_only": {
+        "m1_body_pct": 0.2015506625168948,
+        "m1_feet_pct": 0.6760631931336839,
+        "m1_feet_mm": 3.4137368814437496,
+        "m2_feet_mm": 18.400284494768126,
+        "m3_cv_pct": 7.687658652197732,
+        "m4_pct": 2.026526773824891,
+        "m4_mm": 11.683896959009987,
+        "psd_hi": 3.455304010456384e-05,
+        "psd_lo": 0.015845983866644552
+      }
+    }
+  },
+  "ratios": {
+    "m1_body_pct Video unfiltered / MoCap": 4.342187485797347,
+    "m1_body_pct Video filtered / MoCap": 0.8734580677780828,
+    "m1_body_pct Video (corrected intrinsics) unfiltered / MoCap": 2.13788773820526,
+    "m1_body_pct Video (corrected intrinsics) filtered / MoCap": 0.47484843454445025,
+    "m1_body_pct MoCap (if filtered, reference only) / MoCap": 0.6864786403548931,
+    "m1_feet_pct Video unfiltered / MoCap": 2.721066092322581,
+    "m1_feet_pct Video filtered / MoCap": 0.7342909973482964,
+    "m1_feet_pct Video (corrected intrinsics) unfiltered / MoCap": 1.8593471728630433,
+    "m1_feet_pct Video (corrected intrinsics) filtered / MoCap": 0.4971524400709264,
+    "m1_feet_pct MoCap (if filtered, reference only) / MoCap": 0.5616762746208512,
+    "m1_feet_mm Video unfiltered / MoCap": 1.5664430832599199,
+    "m1_feet_mm Video filtered / MoCap": 0.42111837071873565,
+    "m1_feet_mm Video (corrected intrinsics) unfiltered / MoCap": 2.1476330725687736,
+    "m1_feet_mm Video (corrected intrinsics) filtered / MoCap": 0.570660984549722,
+    "m1_feet_mm MoCap (if filtered, reference only) / MoCap": 0.561424048554991,
+    "m2_feet_mm Video unfiltered / MoCap": 1.091855899068161,
+    "m2_feet_mm Video filtered / MoCap": 0.5022936094926805,
+    "m2_feet_mm Video (corrected intrinsics) unfiltered / MoCap": 1.477554388484067,
+    "m2_feet_mm Video (corrected intrinsics) filtered / MoCap": 0.6664562706720717,
+    "m2_feet_mm MoCap (if filtered, reference only) / MoCap": 0.8520049074422229,
+    "m3_cv_pct Video unfiltered / MoCap": 17.41888850106068,
+    "m3_cv_pct Video filtered / MoCap": 17.280929397978483,
+    "m3_cv_pct Video (corrected intrinsics) unfiltered / MoCap": 6.4568855017568545,
+    "m3_cv_pct Video (corrected intrinsics) filtered / MoCap": 6.361054687911406,
+    "m3_cv_pct MoCap (if filtered, reference only) / MoCap": 0.969876418328313,
+    "m4_pct Video unfiltered / MoCap": 3.5063901796882755,
+    "m4_pct Video filtered / MoCap": 3.66544335918942,
+    "m4_pct Video (corrected intrinsics) unfiltered / MoCap": 2.864166233307033,
+    "m4_pct Video (corrected intrinsics) filtered / MoCap": 2.84452777881253,
+    "m4_pct MoCap (if filtered, reference only) / MoCap": 1.6569229934369905,
+    "m4_mm Video unfiltered / MoCap": 2.1762841865294784,
+    "m4_mm Video filtered / MoCap": 2.2806243181470878,
+    "m4_mm Video (corrected intrinsics) unfiltered / MoCap": 3.699254884655908,
+    "m4_mm Video (corrected intrinsics) filtered / MoCap": 3.7083948829759668,
+    "m4_mm MoCap (if filtered, reference only) / MoCap": 1.6722572471481338,
+    "psd_hi Video unfiltered / MoCap": 4.131212068542428,
+    "psd_hi Video filtered / MoCap": 0.6925598953727771,
+    "psd_hi Video (corrected intrinsics) unfiltered / MoCap": 1.7849079078825543,
+    "psd_hi Video (corrected intrinsics) filtered / MoCap": 0.30021579588490493,
+    "psd_hi MoCap (if filtered, reference only) / MoCap": 0.6534478262416117
+  },
+  "motion_checks": {
+    "MoCap": {
+      "pace": {
+        "raw": {
+          "net_disp": 0.6877421023174313,
+          "path_len": 0.6901204672151129,
+          "speed_mean": 1.0896638956028095,
+          "speed_p95": 1.2163793460399306,
+          "stride_hz": 1.58203125,
+          "peak_clearance": 0.0691715,
+          "n_swings": 4,
+          "stance_frac": 0.5,
+          "hip_height": 0.4350415
+        },
+        "filt": {
+          "net_disp": 0.6877421023174313,
+          "path_len": 0.6901204672151129,
+          "speed_mean": 1.0896638956028095,
+          "speed_p95": 1.2163793460399306,
+          "stride_hz": 1.58203125,
+          "peak_clearance": 0.0691715,
+          "n_swings": 4,
+          "stance_frac": 0.5,
+          "hip_height": 0.4350415
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      },
+      "trot": {
+        "raw": {
+          "net_disp": 0.9514673067031783,
+          "path_len": 0.953042915134572,
+          "speed_mean": 1.7869554658773223,
+          "speed_p95": 2.0973421134476444,
+          "stride_hz": 1.81640625,
+          "peak_clearance": 0.1070545,
+          "n_swings": 4,
+          "stance_frac": 0.29411764705882354,
+          "hip_height": 0.4383845
+        },
+        "filt": {
+          "net_disp": 0.9514673067031783,
+          "path_len": 0.953042915134572,
+          "speed_mean": 1.7869554658773223,
+          "speed_p95": 2.0973421134476444,
+          "stride_hz": 1.81640625,
+          "peak_clearance": 0.1070545,
+          "n_swings": 4,
+          "stance_frac": 0.29411764705882354,
+          "hip_height": 0.4383845
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      },
+      "trot2": {
+        "raw": {
+          "net_disp": 0.9357124443973162,
+          "path_len": 0.939516469848559,
+          "speed_mean": 1.761593380966048,
+          "speed_p95": 1.9750464552669613,
+          "stride_hz": 1.875,
+          "peak_clearance": 0.09056499999999999,
+          "n_swings": 4,
+          "stance_frac": 0.36764705882352944,
+          "hip_height": 0.4260525
+        },
+        "filt": {
+          "net_disp": 0.9357124443973162,
+          "path_len": 0.939516469848559,
+          "speed_mean": 1.761593380966048,
+          "speed_p95": 1.9750464552669613,
+          "stride_hz": 1.875,
+          "peak_clearance": 0.09056499999999999,
+          "n_swings": 4,
+          "stance_frac": 0.36764705882352944,
+          "hip_height": 0.4260525
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      },
+      "canter": {
+        "raw": {
+          "net_disp": 1.4986467434739246,
+          "path_len": 1.4994345829495892,
+          "speed_mean": 3.2130741063205486,
+          "speed_p95": 3.612134013141251,
+          "stride_hz": 1.81640625,
+          "peak_clearance": 0.21592983333333335,
+          "n_swings": 3,
+          "stance_frac": 0.23333333333333334,
+          "hip_height": 0.4567065
+        },
+        "filt": {
+          "net_disp": 1.4986467434739246,
+          "path_len": 1.4994345829495892,
+          "speed_mean": 3.2130741063205486,
+          "speed_p95": 3.612134013141251,
+          "stride_hz": 1.81640625,
+          "peak_clearance": 0.21592983333333335,
+          "n_swings": 3,
+          "stance_frac": 0.23333333333333334,
+          "hip_height": 0.4567065
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      },
+      "right turn0": {
+        "raw": {
+          "net_disp": 1.562529089945208,
+          "path_len": 1.9347539304225339,
+          "speed_mean": 0.7843597015226489,
+          "speed_p95": 1.0608779407825901,
+          "stride_hz": 1.40625,
+          "peak_clearance": 0.07106364285714285,
+          "n_swings": 14,
+          "stance_frac": 0.51,
+          "hip_height": 0.42961150000000004
+        },
+        "filt": {
+          "net_disp": 1.562529089945208,
+          "path_len": 1.9347539304225339,
+          "speed_mean": 0.7843597015226489,
+          "speed_p95": 1.0608779407825901,
+          "stride_hz": 1.40625,
+          "peak_clearance": 0.07106364285714285,
+          "n_swings": 14,
+          "stance_frac": 0.51,
+          "hip_height": 0.42961150000000004
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 15,
+        "n_onsets_filt": 15
+      },
+      "left turn0": {
+        "raw": {
+          "net_disp": 0.07161831487126737,
+          "path_len": 0.14502476321562732,
+          "speed_mean": 0.19776104074858275,
+          "speed_p95": 0.3802706460792088,
+          "stride_hz": 1.34765625,
+          "peak_clearance": 0.06911333333333333,
+          "n_swings": 3,
+          "stance_frac": 0.6956521739130435,
+          "hip_height": 0.443075
+        },
+        "filt": {
+          "net_disp": 0.07161831487126737,
+          "path_len": 0.14502476321562732,
+          "speed_mean": 0.19776104074858275,
+          "speed_p95": 0.3802706460792088,
+          "stride_hz": 1.34765625,
+          "peak_clearance": 0.06911333333333333,
+          "n_swings": 3,
+          "stance_frac": 0.6956521739130435,
+          "hip_height": 0.443075
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      }
+    },
+    "Video": {
+      "walk": {
+        "raw": {
+          "net_disp": 1.621344730250155,
+          "path_len": 1.6280337886504668,
+          "speed_mean": 1.878500525365923,
+          "speed_p95": 2.2429401666001105,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.06175226544250063,
+          "n_swings": 9,
+          "stance_frac": 0.3055555555555556,
+          "hip_height": 0.2476151577134773
+        },
+        "filt": {
+          "net_disp": 1.6213256290511837,
+          "path_len": 1.6241608157660006,
+          "speed_mean": 1.8740317104992315,
+          "speed_p95": 2.207886924918352,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.06137463967805669,
+          "n_swings": 7,
+          "stance_frac": 0.25,
+          "hip_height": 0.25012752209053574
+        },
+        "onset_shift_mean_s": 0.07619047619047621,
+        "n_onsets_raw": 7,
+        "n_onsets_filt": 5
+      },
+      "slow": {
+        "raw": {
+          "net_disp": 0.484345224350316,
+          "path_len": 0.6815282393406582,
+          "speed_mean": 0.3006742232385257,
+          "speed_p95": 0.5965694622167471,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.05583341561681117,
+          "n_swings": 25,
+          "stance_frac": 0.3007246376811594,
+          "hip_height": 0.2485942494782271
+        },
+        "filt": {
+          "net_disp": 0.4843381092453707,
+          "path_len": 0.6062218835247454,
+          "speed_mean": 0.2674508309667995,
+          "speed_p95": 0.4791751509695223,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.055721401072700356,
+          "n_swings": 21,
+          "stance_frac": 0.3695652173913043,
+          "hip_height": 0.24551375274933968
+        },
+        "onset_shift_mean_s": 0.06458333333333333,
+        "n_onsets_raw": 16,
+        "n_onsets_filt": 13
+      },
+      "turn L": {
+        "raw": {
+          "net_disp": 0.6215939428969028,
+          "path_len": 0.8042108014592348,
+          "speed_mean": 0.5483255464494783,
+          "speed_p95": 0.9330462365105766,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.056748431808032955,
+          "n_swings": 12,
+          "stance_frac": 0.38333333333333336,
+          "hip_height": 0.2641522120645049
+        },
+        "filt": {
+          "net_disp": 0.6215827619791342,
+          "path_len": 0.795732497986272,
+          "speed_mean": 0.54254488499064,
+          "speed_p95": 0.8843081834438578,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.05393929757178523,
+          "n_swings": 9,
+          "stance_frac": 0.3888888888888889,
+          "hip_height": 0.2643250977236429
+        },
+        "onset_shift_mean_s": 0.037037037037037056,
+        "n_onsets_raw": 9,
+        "n_onsets_filt": 7
+      },
+      "turn R": {
+        "raw": {
+          "net_disp": 0.4681583469497844,
+          "path_len": 0.591173395022416,
+          "speed_mean": 0.4124465546668019,
+          "speed_p95": 0.7793291196384236,
+          "stride_hz": 1.11328125,
+          "peak_clearance": 0.040721433515483615,
+          "n_swings": 10,
+          "stance_frac": 0.44886363636363635,
+          "hip_height": 0.24824544232777096
+        },
+        "filt": {
+          "net_disp": 0.4681512375016783,
+          "path_len": 0.547562947600115,
+          "speed_mean": 0.38202066111635924,
+          "speed_p95": 0.6677947068889143,
+          "stride_hz": 1.11328125,
+          "peak_clearance": 0.04088167414349564,
+          "n_swings": 9,
+          "stance_frac": 0.4602272727272727,
+          "hip_height": 0.249867438676479
+        },
+        "onset_shift_mean_s": 0.008333333333333352,
+        "n_onsets_raw": 8,
+        "n_onsets_filt": 8
+      },
+      "slow turn": {
+        "raw": {
+          "net_disp": 0.4600065327636818,
+          "path_len": 0.621291095913265,
+          "speed_mean": 0.4334589041255338,
+          "speed_p95": 0.7093355561215429,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.03379238754389326,
+          "n_swings": 14,
+          "stance_frac": 0.5284090909090909,
+          "hip_height": 0.24034953040284207
+        },
+        "filt": {
+          "net_disp": 0.45999789600908014,
+          "path_len": 0.5580846309911005,
+          "speed_mean": 0.38936137045890734,
+          "speed_p95": 0.6907192734570942,
+          "stride_hz": 1.171875,
+          "peak_clearance": 0.03453925956176029,
+          "n_swings": 8,
+          "stance_frac": 0.5454545454545454,
+          "hip_height": 0.2387782496058481
+        },
+        "onset_shift_mean_s": 0.06944444444444445,
+        "n_onsets_raw": 12,
+        "n_onsets_filt": 9
+      },
+      "L-R turn": {
+        "raw": {
+          "net_disp": 0.4380105215676233,
+          "path_len": 0.9014790543528246,
+          "speed_mean": 0.37561627264701025,
+          "speed_p95": 0.6828449192019621,
+          "stride_hz": 1.5234375,
+          "peak_clearance": 0.06410695822002245,
+          "n_swings": 17,
+          "stance_frac": 0.6061643835616438,
+          "hip_height": 0.240212032284873
+        },
+        "filt": {
+          "net_disp": 0.4380081018742273,
+          "path_len": 0.8680761268304349,
+          "speed_mean": 0.3616983861793479,
+          "speed_p95": 0.536001742130175,
+          "stride_hz": 1.5234375,
+          "peak_clearance": 0.06084390575022618,
+          "n_swings": 17,
+          "stance_frac": 0.571917808219178,
+          "hip_height": 0.24070132294327962
+        },
+        "onset_shift_mean_s": 0.030303030303030307,
+        "n_onsets_raw": 22,
+        "n_onsets_filt": 20
+      },
+      "start-stop 1": {
+        "raw": {
+          "net_disp": 0.07026257403265705,
+          "path_len": 0.13048419254793425,
+          "speed_mean": 0.15055868370915493,
+          "speed_p95": 0.25221777029754094,
+          "stride_hz": 1.0546875,
+          "peak_clearance": 0.1338486878815685,
+          "n_swings": 5,
+          "stance_frac": 0.14814814814814814,
+          "hip_height": 0.31487581944911613
+        },
+        "filt": {
+          "net_disp": 0.07026217360322559,
+          "path_len": 0.1203284156765185,
+          "speed_mean": 0.1388404796267521,
+          "speed_p95": 0.20509862554801844,
+          "stride_hz": 1.0546875,
+          "peak_clearance": 0.1276341820232803,
+          "n_swings": 5,
+          "stance_frac": 0.14814814814814814,
+          "hip_height": 0.31446626482422746
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 4,
+        "n_onsets_filt": 4
+      },
+      "start-stop 2": {
+        "raw": {
+          "net_disp": 0.47201596134793256,
+          "path_len": 0.5008678338530212,
+          "speed_mean": 0.34150079580887815,
+          "speed_p95": 0.6848623640623799,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.05834691202317733,
+          "n_swings": 6,
+          "stance_frac": 0.8,
+          "hip_height": 0.24460599627469506
+        },
+        "filt": {
+          "net_disp": 0.4720082398590472,
+          "path_len": 0.484117800015029,
+          "speed_mean": 0.33008031819206524,
+          "speed_p95": 0.7091594545553807,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.06000277441954097,
+          "n_swings": 6,
+          "stance_frac": 0.7944444444444444,
+          "hip_height": 0.24500520126602465
+        },
+        "onset_shift_mean_s": 0.004761904761904761,
+        "n_onsets_raw": 7,
+        "n_onsets_filt": 7
+      }
+    },
+    "Video (corrected intrinsics)": {
+      "walk": {
+        "raw": {
+          "net_disp": 1.9547658895494344,
+          "path_len": 1.9600513232117178,
+          "speed_mean": 2.2615976806289053,
+          "speed_p95": 2.6403555852428555,
+          "stride_hz": 2.2265625,
+          "peak_clearance": 0.08000042264763223,
+          "n_swings": 10,
+          "stance_frac": 0.32407407407407407,
+          "hip_height": 0.48281745142614363
+        },
+        "filt": {
+          "net_disp": 1.9547365216792632,
+          "path_len": 1.9569343045268421,
+          "speed_mean": 2.258001120607895,
+          "speed_p95": 2.600176502262035,
+          "stride_hz": 2.2265625,
+          "peak_clearance": 0.07705305135934948,
+          "n_swings": 8,
+          "stance_frac": 0.3055555555555556,
+          "hip_height": 0.4809830443620773
+        },
+        "onset_shift_mean_s": 0.08333333333333334,
+        "n_onsets_raw": 10,
+        "n_onsets_filt": 6
+      },
+      "slow": {
+        "raw": {
+          "net_disp": 0.4763107457169555,
+          "path_len": 0.5851221988302938,
+          "speed_mean": 0.2581421465427766,
+          "speed_p95": 0.49621443712596164,
+          "stride_hz": 1.2890625,
+          "peak_clearance": 0.08880059346530768,
+          "n_swings": 20,
+          "stance_frac": 0.36231884057971014,
+          "hip_height": 0.5001206186629783
+        },
+        "filt": {
+          "net_disp": 0.4763039642322933,
+          "path_len": 0.5222369233510381,
+          "speed_mean": 0.23039864265486967,
+          "speed_p95": 0.38896717427287875,
+          "stride_hz": 1.2890625,
+          "peak_clearance": 0.07675643558737692,
+          "n_swings": 23,
+          "stance_frac": 0.3188405797101449,
+          "hip_height": 0.5014769013033674
+        },
+        "onset_shift_mean_s": 0.04285714285714285,
+        "n_onsets_raw": 14,
+        "n_onsets_filt": 13
+      },
+      "turn L": {
+        "raw": {
+          "net_disp": 0.6441665681863845,
+          "path_len": 0.7845042402949789,
+          "speed_mean": 0.5348892547465764,
+          "speed_p95": 0.8095489509464648,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.040522924049203955,
+          "n_swings": 13,
+          "stance_frac": 0.6444444444444445,
+          "hip_height": 0.49525681948551814
+        },
+        "filt": {
+          "net_disp": 0.6441567442812184,
+          "path_len": 0.7747338192850947,
+          "speed_mean": 0.528227604058019,
+          "speed_p95": 0.7706422377735471,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.03683946331455602,
+          "n_swings": 10,
+          "stance_frac": 0.65,
+          "hip_height": 0.4928456201819479
+        },
+        "onset_shift_mean_s": 0.08125,
+        "n_onsets_raw": 16,
+        "n_onsets_filt": 10
+      },
+      "turn R": {
+        "raw": {
+          "net_disp": 0.4205969261503881,
+          "path_len": 0.5328322814704486,
+          "speed_mean": 0.37174345218868504,
+          "speed_p95": 0.7578868569413157,
+          "stride_hz": 1.34765625,
+          "peak_clearance": 0.04368435748250994,
+          "n_swings": 14,
+          "stance_frac": 0.42613636363636365,
+          "hip_height": 0.49757110374629887
+        },
+        "filt": {
+          "net_disp": 0.42058614739135175,
+          "path_len": 0.4959045936047698,
+          "speed_mean": 0.34597994902658347,
+          "speed_p95": 0.6156607543657253,
+          "stride_hz": 1.34765625,
+          "peak_clearance": 0.04304534214195502,
+          "n_swings": 11,
+          "stance_frac": 0.39204545454545453,
+          "hip_height": 0.49775512549345047
+        },
+        "onset_shift_mean_s": 0.11555555555555554,
+        "n_onsets_raw": 15,
+        "n_onsets_filt": 8
+      },
+      "slow turn": {
+        "raw": {
+          "net_disp": 0.4101628757268115,
+          "path_len": 0.5563232003846935,
+          "speed_mean": 0.38813246538466994,
+          "speed_p95": 0.6239416348037033,
+          "stride_hz": 1.2890625,
+          "peak_clearance": 0.044488298028988474,
+          "n_swings": 14,
+          "stance_frac": 0.5397727272727273,
+          "hip_height": 0.4865018857417355
+        },
+        "filt": {
+          "net_disp": 0.4101550162098343,
+          "path_len": 0.4930162874305016,
+          "speed_mean": 0.34396485169569874,
+          "speed_p95": 0.5852922823508167,
+          "stride_hz": 1.2890625,
+          "peak_clearance": 0.04129025113766168,
+          "n_swings": 9,
+          "stance_frac": 0.5681818181818182,
+          "hip_height": 0.48553040238136475
+        },
+        "onset_shift_mean_s": 0.07555555555555557,
+        "n_onsets_raw": 15,
+        "n_onsets_filt": 12
+      },
+      "L-R turn": {
+        "raw": {
+          "net_disp": 0.9103624869808269,
+          "path_len": 1.198377588370839,
+          "speed_mean": 0.49932399515451625,
+          "speed_p95": 0.8346954301606087,
+          "stride_hz": 1.5234375,
+          "peak_clearance": 0.11674972997139284,
+          "n_swings": 20,
+          "stance_frac": 0.3732876712328767,
+          "hip_height": 0.49843248132063644
+        },
+        "filt": {
+          "net_disp": 0.9103550126862554,
+          "path_len": 1.1751567352056855,
+          "speed_mean": 0.4896486396690356,
+          "speed_p95": 0.8031567562961996,
+          "stride_hz": 1.5234375,
+          "peak_clearance": 0.10311562825814767,
+          "n_swings": 22,
+          "stance_frac": 0.3321917808219178,
+          "hip_height": 0.4991698063304851
+        },
+        "onset_shift_mean_s": 0.0638888888888889,
+        "n_onsets_raw": 12,
+        "n_onsets_filt": 13
+      },
+      "start-stop 1": {
+        "raw": {
+          "net_disp": 0.20415344541760166,
+          "path_len": 0.2400375776710682,
+          "speed_mean": 0.2769664357743094,
+          "speed_p95": 0.5221931300244479,
+          "stride_hz": 1.0546875,
+          "peak_clearance": 0.27923392886862847,
+          "n_swings": 5,
+          "stance_frac": 0.09259259259259259,
+          "hip_height": 0.6530518041487908
+        },
+        "filt": {
+          "net_disp": 0.2041510416733376,
+          "path_len": 0.23228843478827732,
+          "speed_mean": 0.2680251170633969,
+          "speed_p95": 0.4466460041942426,
+          "stride_hz": 1.0546875,
+          "peak_clearance": 0.2657793444674869,
+          "n_swings": 5,
+          "stance_frac": 0.09259259259259259,
+          "hip_height": 0.6516764257842815
+        },
+        "onset_shift_mean_s": 0.0,
+        "n_onsets_raw": 3,
+        "n_onsets_filt": 3
+      },
+      "start-stop 2": {
+        "raw": {
+          "net_disp": 0.6124248028022454,
+          "path_len": 0.657304781009246,
+          "speed_mean": 0.4481623506881224,
+          "speed_p95": 1.058085924897468,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.12264701641981592,
+          "n_swings": 6,
+          "stance_frac": 0.7888888888888889,
+          "hip_height": 0.5134506176371332
+        },
+        "filt": {
+          "net_disp": 0.6124153974426051,
+          "path_len": 0.6328136494298152,
+          "speed_mean": 0.4314638518839649,
+          "speed_p95": 1.040791024750075,
+          "stride_hz": 0.703125,
+          "peak_clearance": 0.12613209379638615,
+          "n_swings": 6,
+          "stance_frac": 0.7333333333333333,
+          "hip_height": 0.5142480565955501
+        },
+        "onset_shift_mean_s": 0.02380952380952382,
+        "n_onsets_raw": 7,
+        "n_onsets_filt": 7
+      }
+    }
+  },
+  "motion_checks_aggregate": {
+    "Video": {
+      "net_disp_change_pct": -0.0013250233250760525,
+      "path_len_change_pct": -5.5905993957444595,
+      "speed_mean_change_pct": -5.590599395744463,
+      "speed_p95_change_pct": -10.004933627743567,
+      "stride_hz_change_pct": 0.0,
+      "peak_clearance_change_pct": -1.2566995531537186,
+      "stance_frac_raw": 0.440149848194071,
+      "stance_frac_filt": 0.44108079065922273,
+      "onset_shift_mean_s": 0.03633169492544493,
+      "n_onsets_raw": 85,
+      "n_onsets_filt": 73,
+      "peak_clearance_raw_mm": 63.14381150643625,
+      "peak_clearance_filt_mm": 61.8671417776057
+    },
+    "Video (corrected intrinsics)": {
+      "net_disp_change_pct": -0.0015580383134177294,
+      "path_len_change_pct": -4.919223684300646,
+      "speed_mean_change_pct": -4.919223684300654,
+      "speed_p95_change_pct": -9.097700604770973,
+      "stride_hz_change_pct": 0.0,
+      "peak_clearance_change_pct": -6.080422206789883,
+      "stance_frac_raw": 0.44393945034020976,
+      "stance_frac_filt": 0.4240926393426021,
+      "onset_shift_mean_s": 0.06078125000000001,
+      "n_onsets_raw": 92,
+      "n_onsets_filt": 72,
+      "peak_clearance_raw_mm": 102.01590886668494,
+      "peak_clearance_filt_mm": 96.251451257865
+    }
+  }
+}
