@@ -1,0 +1,187 @@
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_key_result.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_key_result_aed.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_key_result_ms.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_key_result_aed_ms.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_coverage_vs_performance.pdf
+key-result fits (Pearson r): {
+ "key_result": {
+  "MoCap": {
+   "spearman_rho": 0.6102674635653516,
+   "pearson_r": 0.5279104090358617,
+   "slope": 0.2177098094937148,
+   "intercept": 0.6115248124807046
+  },
+  "Video (extended)": {
+   "spearman_rho": 0.31320635678961056,
+   "pearson_r": 0.24950510361745412,
+   "slope": 0.07847486941718786,
+   "intercept": 0.3555327833827736
+  }
+ },
+ "key_result_aed": {
+  "MoCap": {
+   "spearman_rho": 0.24077876883188779,
+   "pearson_r": 0.32112230851359436,
+   "slope": 0.3255129065023871,
+   "intercept": 2.720897519295882
+  },
+  "Video (extended)": {
+   "spearman_rho": 0.7774158673283901,
+   "pearson_r": 0.7511906430011698,
+   "slope": 1.7049009889663467,
+   "intercept": 2.300635384313895
+  }
+ },
+ "key_result_ms": {
+  "MoCap": {
+   "spearman_rho": 0.4448724077640507,
+   "pearson_r": 0.3896772505598988,
+   "slope": 0.13443244647798935,
+   "intercept": 0.6760566670401573
+  },
+  "Video (extended)": {
+   "spearman_rho": 0.2530426586342194,
+   "pearson_r": 0.2164896015632044,
+   "slope": 0.07354679508552955,
+   "intercept": 0.3664309289214257
+  }
+ },
+ "key_result_aed_ms": {
+  "MoCap": {
+   "spearman_rho": 0.135118797394401,
+   "pearson_r": 0.25640890794939397,
+   "slope": 0.21742632335520104,
+   "intercept": 2.808320328532612
+  },
+  "Video (extended)": {
+   "spearman_rho": 0.7844982680570088,
+   "pearson_r": 0.7156701944572887,
+   "slope": 1.7544357433054436,
+   "intercept": 2.4914889638387416
+  }
+ }
+}
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_agent_expert_distance_grid.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_joint_speed_vs_base_speed.pdf
+| dataset | rho(cmd dist, agent-expert dist) | rho(cmd dist, err vel) | rho(cmd dist, err yaw) | rho(agent-expert dist, err vel) | rho(agent-expert dist, err yaw) | agent-expert dist covered | uncovered | err vel covered | uncovered | err yaw covered | uncovered |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| MoCap | 0.24 | 0.25 | 0.71 | 0.58 | 0.01 | 2.88 | 2.93 | 0.06 | 0.07 | 0.28 | 0.34 |
+| Video | 0.59 | 0.62 | 0.18 | 0.14 | -0.28 | 2.54 | 3.28 | 0.04 | 0.06 | 0.20 | 0.22 |
+| Video (ext.) | 0.78 | 0.38 | 0.16 | 0.50 | 0.21 | 2.24 | 3.16 | 0.04 | 0.05 | 0.10 | 0.11 |
+| pooled (441 cells) | 0.49 | 0.43 | 0.37 | 0.30 | -0.11 | 2.50 | 3.12 | 0.05 | 0.06 | 0.18 | 0.23 |
+
+MoCap: covered cells 14/147; agent-expert dist clipped lo/hi (0.006802721088435374, 0.006802721088435374), err vel clipped lo/hi (0.0, 0.11564625850340136), err yaw clipped lo/hi (0.0, 0.5238095238095238); best imitation cell vx=-0.0 vy=0.0 (2.00)
+   orientation check (un-flipped CSV) rho(cmd, .): {'agent_expert_distances': 0.3673266611752102, 'error_vel_xy': 0.19520314233200045, 'error_vel_yaw': 0.4998919325074507}
+Video: covered cells 22/147; agent-expert dist clipped lo/hi (0.02040816326530612, 0.08843537414965986), err vel clipped lo/hi (0.0, 0.05442176870748299), err yaw clipped lo/hi (0.0, 0.013605442176870748); best imitation cell vx=0.5 vy=0.0 (2.00)
+   orientation check (un-flipped CSV) rho(cmd, .): {'agent_expert_distances': 0.5012226719619024, 'error_vel_xy': 0.5606863843381934, 'error_vel_yaw': 0.31853348468073117}
+Video (extended): covered cells 24/147; agent-expert dist clipped lo/hi (0.10204081632653061, 0.05442176870748299), err vel clipped lo/hi (0.006802721088435374, 0.0), err yaw clipped lo/hi (0.0, 0.0); best imitation cell vx=-0.2 vy=-0.1 (2.00)
+   orientation check (un-flipped CSV) rho(cmd, .): {'agent_expert_distances': 0.8104330479869207, 'error_vel_xy': 0.4530799293577984, 'error_vel_yaw': 0.24069659175596733}
+
+| dataset | clip | frames | LOO NN dist mean | median | max |
+|---|---|---|---|---|---|
+| MoCap | canter | 29 | 10.05 | 10.06 | 14.97 |
+| MoCap | left turn0 | 46 | 4.38 | 4.11 | 7.20 |
+| MoCap | pace | 39 | 3.67 | 3.69 | 5.15 |
+| MoCap | right turn0 | 150 | 4.38 | 4.24 | 8.49 |
+| MoCap | trot2 | 33 | 3.74 | 3.79 | 4.83 |
+| MoCap | trot | 33 | 4.04 | 3.79 | 7.81 |
+| Video | slow | 69 | 4.95 | 3.74 | 22.92 |
+| Video | turn L | 45 | 5.08 | 4.87 | 11.06 |
+| Video | turn R | 44 | 4.99 | 4.24 | 31.16 |
+| Video | walk | 27 | 9.50 | 9.46 | 13.22 |
+| Video (ext.) | L-R turn | 73 | 4.37 | 4.15 | 9.16 |
+| Video (ext.) | slow | 69 | 4.63 | 3.25 | 22.92 |
+| Video (ext.) | slow turn | 44 | 3.15 | 3.01 | 8.01 |
+| Video (ext.) | start-stop 1 | 27 | 2.43 | 2.38 | 4.03 |
+| Video (ext.) | start-stop 2 | 45 | 3.10 | 3.07 | 5.46 |
+| Video (ext.) | turn L | 45 | 4.51 | 3.98 | 9.61 |
+| Video (ext.) | turn R | 44 | 4.03 | 3.15 | 31.16 |
+| Video (ext.) | walk | 27 | 9.08 | 9.29 | 11.73 |
+within-set LOO mean: {'MoCap': 5.0425393129790805, 'Video': 6.130171278820463, 'Video (extended)': 4.412515507351713}
+cross-set: {
+ "MoCap -> Video (extended)": {
+  "mean": 4.930298026935965,
+  "median": 4.55138999649188
+ },
+ "Video (extended) -> MoCap": {
+  "mean": 5.528579973066809,
+  "median": 4.92873337624709
+ },
+ "Video -> MoCap": {
+  "mean": 6.316398503062835,
+  "median": 5.273137874251703
+ },
+ "MoCap -> Video": {
+  "mean": 5.29211553593499,
+  "median": 4.839943941812958
+ }
+}
+default standing pose: {
+ "MoCap": {
+  "dist": 1.9113038158858562,
+  "dist_hip_sign_flipped": 1.8781525023475543,
+  "nearest_qdot_norm": 1.783010458822683,
+  "min_expert_qdot_norm": 1.8156618754878342,
+  "p5_expert_qdot_norm": 3.1122211410378973
+ },
+ "Video": {
+  "dist": 2.397298136912601,
+  "dist_hip_sign_flipped": 2.3286885487854807,
+  "nearest_qdot_norm": 1.8013269009878008,
+  "min_expert_qdot_norm": 2.397461251386558,
+  "p5_expert_qdot_norm": 3.6234521368043104
+ },
+ "Video (extended)": {
+  "dist": 1.150280849796013,
+  "dist_hip_sign_flipped": 1.204493494736266,
+  "nearest_qdot_norm": 0.6140709213825414,
+  "min_expert_qdot_norm": 0.9435934446571785,
+  "p5_expert_qdot_norm": 2.5859116337493395
+ }
+}
+share of squared NN distance from joint velocities: {'MoCap': 0.948350889307072, 'Video': 0.9609705738113755, 'Video (extended)': 0.9382984079437252}
+
+| dataset | clip | frames | MotionWeight | AMP mass [%] | per-frame density (rel. to min) | mean speed [m/s] | mean |yaw rate| [rad/s] | RMS |qdot| [rad/s] |
+|---|---|---|---|---|---|---|---|---|
+| MoCap | canter | 29 | 1.00 | 16.67 | 5.17 | 2.09 | 0.16 | 14.08 |
+| MoCap | left turn0 | 46 | 1.00 | 16.67 | 3.26 | 0.13 | 1.83 | 5.12 |
+| MoCap | pace | 39 | 1.00 | 16.67 | 3.85 | 0.71 | 0.24 | 7.96 |
+| MoCap | right turn0 | 150 | 1.00 | 16.67 | 1.00 | 0.51 | 0.71 | 6.82 |
+| MoCap | trot2 | 33 | 1.00 | 16.67 | 4.55 | 1.15 | 0.12 | 10.73 |
+| MoCap | trot | 33 | 1.00 | 16.67 | 4.55 | 1.17 | 0.20 | 11.14 |
+| Video | slow | 69 | 1.00 | 25.00 | 1.00 | 0.22 | 0.11 | 10.64 |
+| Video | turn L | 45 | 1.00 | 25.00 | 1.53 | 0.42 | 1.70 | 8.67 |
+| Video | turn R | 44 | 1.00 | 25.00 | 1.57 | 0.33 | 1.71 | 9.92 |
+| Video | walk | 27 | 1.00 | 25.00 | 2.56 | 1.55 | 0.28 | 13.91 |
+| Video (ext.) | L-R turn | 73 | 1.00 | 11.11 | 1.00 | 0.33 | 2.12 | 8.05 |
+| Video (ext.) | slow | 69 | 1.00 | 11.11 | 1.06 | 0.22 | 0.11 | 10.64 |
+| Video (ext.) | slow turn | 44 | 1.00 | 11.11 | 1.66 | 0.34 | 1.74 | 7.15 |
+| Video (ext.) | start-stop 1 | 27 | 1.00 | 11.11 | 2.70 | 0.12 | 0.51 | 3.96 |
+| Video (ext.) | start-stop 2 | 45 | 1.00 | 11.11 | 1.62 | 0.29 | 0.69 | 5.60 |
+| Video (ext.) | turn L | 45 | 1.00 | 11.11 | 1.62 | 0.42 | 1.70 | 8.67 |
+| Video (ext.) | turn R | 44 | 1.00 | 11.11 | 1.66 | 0.33 | 1.71 | 9.92 |
+| Video (ext.) | walk | 27 | 2.00 | 22.22 | 5.41 | 1.55 | 0.28 | 13.91 |
+rho(speed, |qdot|): {'MoCap': 0.6826091645933815, 'Video': 0.21986698735301108, 'Video (extended)': 0.27154914896667803}
+AMP-weighted |qdot| percentiles: {
+ "MoCap": {
+  "p5": 3.4177005386955717,
+  "p25": 5.882530805019214,
+  "p50": 8.652679665964758,
+  "p75": 11.704286479247678,
+  "p95": 15.621086730378268
+ },
+ "Video": {
+  "p5": 3.6184914178977956,
+  "p25": 5.706999756220426,
+  "p50": 8.771049517617605,
+  "p75": 12.962016654818802,
+  "p95": 16.3278221672457
+ },
+ "Video (extended)": {
+  "p5": 2.5615070672750444,
+  "p25": 4.987256524493201,
+  "p50": 7.281274486049815,
+  "p75": 11.806990793800933,
+  "p95": 15.503379745071717
+ }
+}

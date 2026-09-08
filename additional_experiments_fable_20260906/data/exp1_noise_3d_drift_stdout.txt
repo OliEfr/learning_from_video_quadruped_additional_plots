@@ -1,0 +1,19 @@
+/home/admin_07/Downloads/additional_experiments_fable_20260906/scripts/exp1_noise_3d_drift.py:191: RuntimeWarning: All-NaN slice encountered
+  z = np.nanmax(np.stack([robust_z(c) for c in cols]), axis=0)
+/home/admin_07/Downloads/additional_experiments_fable_20260906/scripts/exp1_noise_3d_drift.py:191: RuntimeWarning: All-NaN slice encountered
+  z = np.nanmax(np.stack([robust_z(c) for c in cols]), axis=0)
+MoCap  hip height: median 0.44 m (range 0.43-0.46), n=6 clips
+Video  hip height: median 0.50 m (range 0.48-0.65), n=8 clips
+MoCap  stance cores n=26, median contact duration 0.33 s, net paw drift xy median 13 mm (mean 20), 3D median 14 mm (mean 22); torso off-path drift 3D median 2 mm (mean 2, n=6 support phases)
+Video  stance cores n=49, median contact duration 0.33 s, net paw drift xy median 29 mm (mean 60), 3D median 31 mm (mean 61); torso off-path drift 3D median 5 mm (mean 5, n=9 support phases)
+MoCap  position error (RMS off the best-fit stationary point) paws median 6.1 mm (mean 8.0, n=26 stance cores); torso off its own smooth path median 1.2 mm (mean 1.2, n=6 support phases)
+Video  position error (RMS off the best-fit stationary point) paws median 12.6 mm (mean 22.7, n=49 stance cores); torso off its own smooth path median 3.1 mm (mean 3.3, n=9 support phases)
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_noise_3d_drift.pdf
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_drift_pct.pdf
+(a) noise: video clips by worst robust z: walk 6.2, slow 1.7, L-R turn 0.8, turn R 0.7, turn L 0.6, slow turn 0.4, start-stop 1 0.1, start-stop 2 -0.8
+(b) drift: video clips by worst robust z: slow 7.2, turn L 4.1, turn R 1.7, start-stop 2 0.0, slow turn -0.2, L-R turn -0.3, walk -0.7, start-stop 1 nan
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_noise_3d_drift_nooutlier.pdf
+  fig_exp1_noise_3d_drift_nooutlier: left out slow, turn L, walk
+drift %: video clips by worst robust z: slow 10.2, turn L 3.3, walk 3.2, slow turn 0.8, turn R 0.7, L-R turn 0.0, start-stop 2 -0.0, start-stop 1 nan
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp1_drift_pct_nooutlier.pdf
+  fig_exp1_drift_pct_nooutlier: left out slow, turn L, walk

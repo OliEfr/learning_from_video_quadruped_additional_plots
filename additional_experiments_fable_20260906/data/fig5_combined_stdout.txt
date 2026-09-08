@@ -1,2 +1,4 @@
 coverage: 529 occupied bins, counts 1..19 (median 2)
 saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig5_combined_data_and_performance.pdf
+coverage: 529 occupied bins, counts 1..19 (median 2)
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig5_combined_data_and_performance_4col.pdf

@@ -53,8 +53,13 @@ DATASET_KEYS = [
     "fromVision_motions_DepthCam_extendedWithoutReverse",
 ]
 METRICS = ["error_vel_xy", "error_vel_yaw", "mean_mechanical_cot"]
-CBAR_LIMITS = {"error_vel_xy": (0.0, 0.1), "error_vel_yaw": (0.0, 0.4), "mean_mechanical_cot": (0.8, 2.0)}
-CBAR_TICKS = {"error_vel_xy": [0.0, 0.05, 0.1], "error_vel_yaw": [0.0, 0.2, 0.4], "mean_mechanical_cot": [0.8, 1.4, 2.0]}
+CBAR_LIMITS = {"error_vel_xy": (0.0, 0.1), "error_vel_yaw": (0.0, 0.4), "mean_mechanical_cot": (0.8, 2.0), "agent_expert_distances": (2.0, 4.0)}
+CBAR_TICKS = {"error_vel_xy": [0.0, 0.05, 0.1], "error_vel_yaw": [0.0, 0.2, 0.4], "mean_mechanical_cot": [0.8, 1.4, 2.0],
+              "agent_expert_distances": [2.0, 3.0, 4.0]}
+# 4-column variant (Exp. 4): adds the paper's own AMP-space metric "agent_expert_distances" (play.py), i.e. the per-step
+# nearest-neighbour distance of the agent's (joint pos, joint vel) to the expert set, averaged over the episode.
+METRICS_4COL = METRICS + ["agent_expert_distances"]
+TITLE_OVERRIDE = {"agent_expert_distances": "Agent–Expert Dist. ↓\n(AMP obs. space)"}
 FIG5_X = np.arange(-1.0, 1.001, 0.1)  # target_velocity_x, 21 cells
 FIG5_Y = np.arange(-0.3, 0.301, 0.1)  # target_velocity_y, 7 cells
 ROW_LABELS = ["MoCap", "Video w.\nDepth Cam.", "Video w.\nDepth Cam.\n(extended)"]
@@ -127,7 +132,11 @@ def colour_bar(fig, mappable, x, w, ticks, labels=None):
     cb.outline.set_linewidth(0.4)
 
 
-def main():
+def main(metrics=METRICS, name="fig5_combined_data_and_performance"):
+    n_met = len(metrics)
+    MET_W = (DOUBLE_W - M_R - MET_X0 - (n_met - 1) * MET_GAP) / n_met
+    MET_X = [MET_X0 + i * (MET_W + MET_GAP) for i in range(n_met)]
+    MET_MID = (MET_X[0] + MET_X[-1] + MET_W) / 2
     D = {src: dataset_frames(src)[0] for src in SOURCES}
 
     # one shared log colour scale for both coverage columns; empty bins are masked, so it starts at 1
@@ -164,7 +173,7 @@ def main():
                 ax.set_xticklabels([])
 
         # ---------------- Trained Policies (paper Fig. 5) ----------------
-        for m, metric in enumerate(METRICS):
+        for m, metric in enumerate(metrics):
             ax = fig.add_axes(rect(MET_X[m], ROW_Y[r], MET_W, PANEL_H))
             df = load_fig5(DATASET_KEYS[r], metric)
             vmin, vmax_m = CBAR_LIMITS[metric]
@@ -194,9 +203,9 @@ def main():
     colour_bar(fig, cov_mesh, COV_MID - cb_cov_w / 2, cb_cov_w,
                [1, 2, 5, 10, vmax], ["1", "2", "5", "10", f"{int(vmax)}"])
 
-    for m, metric in enumerate(METRICS):
+    for m, metric in enumerate(metrics):
         fig.text(fx(MET_X[m] + MET_W / 2), fy(Y_TITLE_BOT),
-                 plot_DEFINITIONS.METRIC_FIELD_PLOT_TITLE_MAPPING[metric],
+                 TITLE_OVERRIDE.get(metric, plot_DEFINITIONS.METRIC_FIELD_PLOT_TITLE_MAPPING[metric]),
                  fontsize=6.2, ha="center", va="bottom", linespacing=1.15)
         colour_bar(fig, met_mesh[metric], MET_X[m] + 0.1 * MET_W, 0.8 * MET_W, CBAR_TICKS[metric])
 
@@ -218,9 +227,10 @@ def main():
              plot_DEFINITIONS.XY_FIELD_XY_LABEL_MAPPING["target_velocity_y"],
              fontsize=6.2, rotation=90, ha="left", va="center")
 
-    savefig(fig, "fig5_combined_data_and_performance")
+    savefig(fig, name)
     plt.close(fig)
 
 
 if __name__ == "__main__":
     main()
+    main(METRICS_4COL, "fig5_combined_data_and_performance_4col")

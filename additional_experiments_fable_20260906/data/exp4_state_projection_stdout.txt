@@ -1,0 +1,5 @@
+no policy rollouts in /home/admin_07/Downloads/additional_experiments_fable_20260906/data/policy_rollouts - expert data only (see module docstring for the accepted formats)
+saved /home/admin_07/Downloads/additional_experiments_fable_20260906/figures/fig_exp4_amp_state_projection.pdf
+(q, q̇), 24-D {'MoCap frames inside Video (ext.) hull': 0.994, 'Video (ext.) frames inside MoCap hull': 0.551, 'MoCap hull area': 24.455, 'Video (ext.) hull area': 59.966, 'explained_var': [0.11124456056578493, 0.09705491956695074]}
+q only, 12-D {'MoCap frames inside Video (ext.) hull': 0.942, 'Video (ext.) frames inside MoCap hull': 0.455, 'MoCap hull area': 16.019, 'Video (ext.) hull area': 32.404, 'explained_var': [0.2147997034466766, 0.15491352882082413]}
+q̇ only, 12-D {'MoCap frames inside Video (ext.) hull': 1.0, 'Video (ext.) frames inside MoCap hull': 0.909, 'MoCap hull area': 34.968, 'Video (ext.) hull area': 75.698, 'explained_var': [0.17290011204991604, 0.14974133466927436]}

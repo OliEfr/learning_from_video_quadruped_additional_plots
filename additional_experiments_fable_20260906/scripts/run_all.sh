@@ -19,14 +19,21 @@ echo "== Exp 1 (paper figure): paw height raw/filtered + torso-length + body res
 $PY exp1_noise_paper_figure.py > ../data/exp1_noise_paper_stdout.txt
 echo "== Exp 1 (Fig. 7 replacement): trajectory grid + paw-height trace + stance scatter, single column"
 $PY exp1_fig7_replacement.py > ../data/exp1_fig7_replacement_stdout.txt
+$PY exp1_noise_3d_drift.py > ../data/exp1_noise_3d_drift_stdout.txt
 echo "== Exp 1d: top-view overlay of torso-centre trajectories, Video vs MoCap (author's follow-up)"
 $PY exp1_com_topview.py > ../data/exp1_com_stdout.txt
+echo "== Exp 1 (author's follow-up): leg penetration per depth source, MoCap-floor and 0.10 L criteria, corrected intrinsics"
+$PY exp1_leg_penetration.py > ../data/exp1_leg_penetration_stdout.txt
 echo "== Exp 2: coverage of the target distribution (figures + data/exp2_coverage.json)"
 $PY exp2_coverage.py > ../data/exp2_stdout.txt
 echo "== Exp 2 (author's follow-up): expert-data coverage, 2 base-velocity columns, linear + log colour"
 $PY exp2_state_coverage_2col.py > ../data/exp2_2col_stdout.txt
-echo "== Fig. 5 replacement: expert data content (a) + policy performance (b) in one double-column figure"
+echo "== Fig. 5 replacement: expert data content (a) + policy performance (b) in one double-column figure (+ 4-column variant with the agent-expert distance)"
 $PY fig5_replacement_combined.py > ../data/fig5_combined_stdout.txt
+echo "== Exp 4: AMP-specific evidence (coverage -> agent-expert distance -> tracking error; expert-set calibration; discriminator view)"
+$PY exp4_amp_evidence.py > ../data/exp4_stdout.txt
+echo "== Exp 4b: 2-D PCA projection of the AMP discriminator state space (expert sets; policy rollouts overlaid if present in data/policy_rollouts/)"
+$PY exp4_state_projection.py > ../data/exp4_state_projection_stdout.txt
 echo "== Exp 3: manual intervention parsed from source (figure + data/exp3_findings.csv, exp3_summary.json)"
 $PY exp3_manual_intervention.py > ../data/exp3_stdout.txt
 echo "== Sanity checks (data/checks_report.md)"

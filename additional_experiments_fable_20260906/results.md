@@ -179,3 +179,161 @@ Category totals for the flat set (169): foot offsets 96 (57 %), base offsets 24,
 * "Once the six keypoints are available, the video path still requires per-clip hand-tuning in the pipeline scripts: on average 21 hand-set numbers or switches per flat-walking clip (range 18-29; 349 for the 14 clips behind our results), of which 57 % are per-clip foot-offset tables for the kinematic retargeting and 14 % are per-clip base offsets; three of the eight flat clips additionally needed hand-typed frame ranges in which depth values were discarded. The MoCap path needs two numbers per clip (the start and end frame of the segment) and no special cases."
 * "Per clip, the video path therefore involves roughly ten times as many hand-set constants as the MoCap path; most of them compensate embodiment and reconstruction offsets in the retargeting (Sec. III-A, 'local base offsets and feet offsets for each trajectory') rather than the vision stage itself."
 * Honest addition recommended (see notes.md, item 2): "The paw keypoints of the clips used here were annotated per frame in a notebook because TAP tracking of paws was not reliable; only the two torso keypoints were tracked automatically."
+
+
+---------------------------------------------------------------------------------------------------
+
+## Experiment 4 - Does the AMP mechanism explain why coverage matters? (author's follow-up)
+
+Script `scripts/exp4_amp_evidence.py`; numbers `data/exp4_amp_evidence.json`, tables `data/exp4_tables.md`, console `data/exp4_stdout.txt`.
+Fig. 5 shows *that* the expert sets cover the command box poorly and *that* the policies track poorly in some cells. This experiment
+inserts the AMP mechanism between the two, using only what the implementation in the IsaacLab repo does:
+
+* **What the discriminator sees.** `get_amp_observations()` (`manager_based_rl_env.py:255`) returns joint positions + joint velocities (24-D);
+  `AMPLoader` default `amp_data = ["JOINT_POS", "JOINT_VEL"]`. The commanded base velocity never enters the discriminator - it only sees the
+  gait that produces it. A command without expert support therefore forces (q, qdot) transitions that are outside D, the style reward
+  `r_style = 2 * max(0, 1 - 0.25 (D-1)^2)` (`amp_discriminator.py`, `amp_reward_coef = 2.0`) drops, and the task reward
+  (`60 exp(-|v_cmd - v|^2 / 0.22^2) + 20 exp(-(w_cmd - w)^2 / 0.22^2)`, `parameters.set_velocity_rewards_amp`) and the style reward pull in
+  different directions; they are mixed 0.5/0.5 (`amp_task_reward_lerp = 0.5`). RSI additionally starts every episode in an expert state.
+* **The paper already measures this per target cell.** `play.py:469` accumulates the Euclidean nearest-neighbour distance between the agent's
+  AMP observation and the 10x-interpolated expert set at every step and divides by the episode length (`agent_expert_distances`,
+  title "Imitation score" in `plot_DEFINITIONS.py`). It is the fourth heatmap column of the shipped Fig. 5 PDF and was recovered from it
+  (`data/fig5_recovered/*__agent_expert_distances.csv`, colour-bar range 2..4, so values are clipped: 1-10 % of cells at each end, see JSON).
+
+### Figures
+* `fig5_combined_data_and_performance_4col.pdf`: the combined Fig. 5 with the agent-expert distance as fourth "Trained Policies" column
+  (`fig5_replacement_combined.py`, `METRICS_4COL`; the 3-column file is unchanged).
+* `fig_exp4_agent_expert_distance_grid.pdf` (single column, 3 rows): the same heatmaps with the Exp.-2 covered cells overlaid as white dots.
+  The dark (well-imitated) region coincides with the covered cells for both video sets; for MoCap the minimum sits at the standing command
+  (see caveat below).
+* `fig_exp4_coverage_vs_performance.pdf` (double column, 2 x 3 panels; MoCap and Video (extended) only, author's request - the Video set
+  stays in the tables): one marker per evaluation cell (147 per dataset). Every y quantity is "higher = worse". Top row: command distance ->
+  agent-expert distance; agent-expert distance -> tracking error vel.; agent-expert distance -> tracking error yaw. Bottom row: command distance ->
+  combined tracking error; agent-expert distance -> combined tracking error; agent-expert distance -> cost of transport. Combined tracking error =
+  mean of the two Fig. 5 errors, each divided by its colour-bar maximum (0.1 m/s, 0.4 rad), i.e. 0..1 with equal weight. Spearman rho per set in
+  the legend, over both sets in the title; dotted lines = colour-bar clip limits of the recovered data.
+* `fig_exp4_joint_speed_vs_base_speed.pdf` (single column; MoCap and Video (extended) only): per expert clip, mean base speed vs. RMS joint speed ||qdot|| (the discriminator's
+  dominant input), marker size = AMP sampling mass; faint = per frame; grey = command range; star = Go2 default standing pose (qdot = 0).
+
+* `fig_exp4_key_result.pdf` (single column, one panel; the paper-ready condensation of the 2 x 3 figure): x = distance of the target command
+  to the closest expert frame (unitless: each component divided by half the command range, 1.0 m/s, 0.3 m/s, 1.57 rad/s; 0 = the dog did
+  exactly this, 1 = off by a full half-range), y = combined tracking error (vel. and yaw, each divided by its Fig.-5 colour-bar maximum, then
+  averaged; higher = worse), marker colour = "Expert Imitation" = minus the agent-expert distance in AMP observation space (same numbers as
+  Fig. 5's imitation column with the sign flipped so that higher = better, colour bar -4 .. -2; yellow = the policy's (q, qdot) stay close to the
+  expert data, purple = far away), marker shape = dataset, straight line = least-squares fit per dataset. Legend: Spearman rank correlation rho of the plotted points
+  (MoCap 0.61, Video (extended) 0.31; Pearson r 0.53 / 0.25 is stored alongside in the JSON). Supporting numbers for the caption:
+  covered -> uncovered cell means MoCap 0.67 -> 0.76, Video (extended) 0.34 -> 0.40 (both p < 1e-3; covered = the cell contains at least one
+  expert frame, Exp. 2 rule). Reads: (i) error rises with the coverage gap for both sets, (ii) the extended video set is lower everywhere and
+  flatter, (iii) the far-from-data cells are the purple ones, i.e. the policy leaves the expert distribution exactly where the command is
+  uncovered. Caveat: the Video (extended) x-range is shorter because its data cover more of the box.
+* `fig_exp4_key_result_ms.pdf` (variant with a physical x unit): x = planar distance in m/s between the target (vx, vy) and the closest expert
+  frame whose yaw rate is within +-0.25 rad/s of the grid's yaw rate 0 (the Exp.-2 slice). No normalisation, so vy differences count the
+  same as vx differences although the vy command range is 3.3x narrower. rho = 0.44 / 0.25 (r 0.39 / 0.22). Same picture, slightly weaker fits because a
+  0.3 m/s lateral gap is "far" for the task but only 0.3 on this axis. Use this one if the unitless axis is hard to explain; use the
+  normalised one if the yaw-rate dimension or the different command ranges matter to the argument.
+* `fig_exp4_key_result_aed.pdf`, `fig_exp4_key_result_aed_ms.pdf` (companions, same layout): y = agent-expert distance, colour = combined tracking
+  error; legend rho of the plotted points (normalised / m/s x: MoCap 0.24 / 0.14, Video (extended) 0.78 / 0.78; Pearson r in the JSON). Covered -> uncovered means: MoCap 2.88 -> 2.93 (n.s.),
+  Video (extended) 2.24 -> 3.16 (p < 1e-9). Reads: for the video policy the coverage gap drives the robot out of the expert distribution
+  almost linearly; the MoCap policy sits at 2.5-3.5 everywhere. Dotted lines = colour-bar clip limits of the recovered Fig. 5 data; the fits
+  are computed on the clipped values and drawn only inside the axes. All fits (r, slope, intercept) are in `exp4_amp_evidence.json` under
+  `cells.key_result_fits`.
+* `fig_exp4_amp_state_projection.pdf` (double column, 3 panels; `scripts/exp4_state_projection.py`, numbers `data/exp4_state_projection.json`):
+  2-D PCA projection of the state the discriminator consumes. Every dimension is standardised by the pooled expert mean/std (as the AMP
+  Normalizer does), PCA is fitted on the pooled expert frames of MoCap + Video (extended). Panels: (q, qdot) 24-D, q only, qdot only. Dots =
+  expert frames, outline = convex hull (the region the discriminator has ever seen as expert), star = Go2 default standing pose with qdot = 0.
+  **Policy side:** no rollouts are on this machine, so the policy overlay is empty. Drop the eval joint logs into `data/policy_rollouts/`
+  (`play.py` with `record_episode_jpos`, files `x_*_y_*_yaw_*.th`, shape (T, num_envs, 12) in Isaac Lab joint order, or any (T, 12) .npy /
+  .npz with q, qd) and re-run the script: they are projected with the same standardisation and PCA and drawn with their own hull, without
+  re-training or re-evaluating anything.
+  Numbers (2-D, first two PCs): 99 % of MoCap frames lie inside the Video (extended) hull in the (q, qdot) projection but only 55 % of
+  Video (extended) frames lie inside the MoCap hull; the Video (extended) hull is 2.5x larger (60 vs 24). In q-only 94 % / 46 %, in qdot-only
+  100 % / 91 % - the extra coverage of the extended video set is mostly in joint *positions* (postures: standing, start-stop, pivots), while
+  the joint-velocity ranges of the two sets largely coincide. In the 2-D picture the standing pose falls inside both hulls for (q, qdot) and qdot-only
+  (qdot = 0 is the centre of the velocity distribution once projected; a convex hull over-approximates), and on the edge of the MoCap hull
+  in q-only - the full-dimensional nearest-neighbour distances (1.91 MoCap vs 1.15 Video (extended)) are the statement to quote. The first two PCs carry only 21 % (24-D) / 37 % (q) / 32 % (qdot) of the variance, so this is a coarse
+  picture; the nearest-neighbour numbers above are the full-dimensional statement.
+
+### Headline numbers (vx-vy grid at yaw rate 0; Spearman rho, all p < 0.05 unless marked)
+
+| | MoCap | Video | Video (extended) | pooled (441 cells) |
+|---|---|---|---|---|
+| rho(command distance to expert data, agent-expert distance) | 0.24 | 0.59 | **0.78** | 0.49 |
+| rho(command distance, tracking error vel.) | 0.25 | 0.62 | 0.38 | 0.43 |
+| rho(command distance, tracking error yaw) | **0.71** | 0.18 | 0.16 | 0.37 |
+| rho(agent-expert distance, tracking error vel.) | 0.58 | 0.14 (n.s.) | 0.50 | 0.30 |
+| rho(agent-expert distance, tracking error yaw) | 0.01 (n.s.) | -0.28 | 0.21 | -0.11 |
+| rho(command distance, combined tracking error) | 0.61 | 0.44 | 0.31 | 0.44 |
+| rho(agent-expert distance, combined tracking error) | 0.38 | -0.13 (n.s.) | 0.40 | 0.04 (n.s.) |
+| rho(command distance, cost of transport) | 0.30 | -0.01 (n.s.) | -0.02 (n.s.) | 0.15 |
+| rho(agent-expert distance, cost of transport) | -0.20 | 0.35 | -0.01 (n.s.) | 0.12 |
+| agent-expert distance, covered / uncovered cells | 2.88 / 2.93 (n.s.) | 2.54 / 3.28 | 2.24 / 3.16 | 2.50 / 3.12 |
+| tracking error vel. [m/s], covered / uncovered | 0.06 / 0.07 (n.s.) | 0.04 / 0.06 | 0.04 / 0.05 | 0.048 / 0.060 |
+| tracking error yaw [rad], covered / uncovered | 0.28 / 0.34 | 0.20 / 0.22 (n.s.) | 0.10 / 0.11 | 0.18 / 0.23 |
+
+(covered = cell contains an expert frame, Exp. 2 rule; one-sided Mann-Whitney U, uncovered > covered. Orientation check: reading the Fig. 5
+CSVs un-flipped changes rho(command distance, agent-expert distance) to 0.37 / 0.50 / 0.81 - same conclusion.)
+
+*Scale of the agent-expert distance, measured on the expert data themselves (24-D, same 10x interpolation as `play.py`):*
+
+| | MoCap | Video | Video (extended) |
+|---|---|---|---|
+| leave-one-clip-out NN distance, mean over clips (range) | 5.0 (3.7 pace .. 10.1 canter) | 6.1 (5.0 .. 9.5 walk) | 4.4 (2.4 start-stop 1 .. 9.1 walk) |
+| nearest other set (mean) | -> Video (ext) 4.9 | -> MoCap 6.3 | -> MoCap 5.5 |
+| Go2 default standing pose (qdot = 0) -> nearest expert frame | 1.91 | 2.40 | **1.15** |
+| smallest expert \|\|qdot\|\| / AMP-weighted 5th percentile [rad/s] | 1.8 / 3.4 | 2.4 / 3.6 | 0.9 / 2.6 |
+| share of the squared NN distance carried by the 12 joint velocities | 95 % | 96 % | 94 % |
+
+So an agent-expert distance of ~2 means "as close as a gait cycle of the set is to the rest of the set", ~3 is at the level of the closest
+clip-to-clip distances, and 4+ (clipped) is "as far as a different clip or a different dataset". The metric is essentially a
+joint-*velocity* distance (94-96 %), and the standing robot is trivially close to the slowest expert frame (1.9 for MoCap although MoCap has
+no standing frames) - see caveat.
+
+*What the discriminator sees per clip and how AMP samples it (`data/exp4_tables.md`, third table):* the AMP loader draws a clip with
+probability MotionWeight / sum and a time uniformly within it, so the per-frame density is MotionWeight / frames. In MoCap the fastest clip,
+canter (2.09 m/s, outside the command range, RMS ||qdot|| 14.1 rad/s), has 5.2x the per-frame density of right turn0 and 17 % of the expert
+mass; in Video (extended) walk (1.55 m/s, outside the range, 13.9 rad/s, MotionWeight 2) has 5.4x the density of L-R turn and 22 % of the mass.
+Both sets put their highest sampling density on the one clip that lies outside the command range. Base speed and ||qdot|| are monotone in
+MoCap (rho 0.68) but only weakly in the video sets (0.22 / 0.27) because the retargeted video joint velocities carry the reconstruction noise
+of Exp. 1 (RMS joint acceleration 1.9-2.4x MoCap).
+
+### Reading
+* Which metrics respond to coverage: velocity tracking does (both sets), the combined error does (0.61 MoCap, 0.31 Video (ext)), yaw only
+  for MoCap (0.71) - the yaw error of the Video (extended) policy is small and flat (0.10 mean) so there is little left to correlate. Cost of
+  transport does **not** follow coverage or the agent-expert distance in any consistent direction (rho between -0.20 and 0.35, signs differ
+  between sets): CoT is governed by the commanded speed itself (Fig. 5 shows the CoT ridge at vx ~ 0 for every dataset, where the
+  denominator |v| is small), not by how far the policy is from the expert data. Do not claim an energy-efficiency effect of coverage.
+* For the video sets the chain holds cell by cell: where the target command is far from any expert frame, the policy's (q, qdot) are far from
+  the expert set (rho 0.59 / 0.78), and where they are far the velocity tracking is worse (rho 0.50 for Video (extended)). The additional
+  clips move the well-imitated region onto the low-speed / standing part of the box (agent-expert distance in covered cells 2.24 vs 3.16;
+  standing pose 1.15 vs 2.40 from the expert set) - this is the mechanism behind the paper's "start-stop motion improves tracking and
+  imitation for a standing command".
+* For MoCap the coverage link shows in the yaw error (rho 0.71: the yaw error is worst exactly where the command is far from the data,
+  i.e. negative vx), not in the agent-expert distance, whose MoCap minimum sits at the standing command although MoCap has no standing
+  frames (rho(agent-expert distance, yaw error) = 0.01; 52 % of MoCap yaw cells are clipped at 0.4 rad, so the rank statistics there are weak).
+* Sampling: 45 % (MoCap) / 22 % (Video ext) of the discriminator's expert samples come from clips faster than the 1 m/s command limit, and
+  those clips have the highest per-frame density. Down-weighting them (MotionWeight) is a zero-cost lever the paper does not use.
+
+### Caveats
+* The Fig. 5 values are recovered from the PDF colour map (quantised, clipped at the colour-bar limits). If the evaluation YAMLs
+  (`logs/rsl_rl/unitree_go2_AMPflat/*/eval_*/*.yaml`, key `agent_expert_distances`) are still on the training machine, re-plot from them;
+  the 4-column script only needs the CSVs replaced.
+* The agent-expert distance is a nearest-neighbour distance dominated by joint velocities; a slow or standing robot scores well against any
+  set that contains slow frames. Call it "agent-expert distance" rather than "imitation score" in the paper, or normalise per dimension.
+* Cell-wise correlations are across 147 cells of the same three policies (seed-averaged); they show consistency of the mechanism, not
+  causality. A clean causal test would be an ablation that adds the base velocity to the discriminator input, or re-trains with the
+  fast clips down-weighted - both need the simulator.
+
+### Paste-ready sentences
+* "AMP's discriminator observes joint positions and velocities only; the commanded velocity enters it solely through the gait that
+  produces it. Consequently, for target commands that lie outside the expert data, the policy has to produce state transitions the
+  discriminator has never seen as expert samples, and the style reward competes with the task reward."
+* "This is visible in the evaluation: the per-episode nearest-neighbour distance between the agent's and the expert's (q, qdot) grows with
+  the distance of the target command to the nearest expert frame (Spearman rho = 0.59 and 0.78 for the two video sets, 0.49 pooled over
+  all 441 cells), is 25 % larger in uncovered than in covered cells (3.12 vs 2.50), and correlates with the velocity tracking error
+  (rho = 0.50 for Video (extended))."
+* "The additional start-stop clips bring the expert data within 1.15 of the standing pose in AMP observation space (MoCap: 1.91, Video: 2.40),
+  and the smallest expert joint speed drops from 1.8-2.4 rad/s to 0.9 rad/s; the standing command is the cell with the largest improvement."
+* "For MoCap the yaw tracking error is largest exactly where the target command is far from the expert data (rho = 0.71 over the
+  vx-vy grid), consistent with the missing backward-walking and slow-turning demonstrations."
+* "The AMP loader samples clips by MotionWeight and time uniformly within a clip, so short fast clips dominate the expert samples per frame:
+  45 % (MoCap) and 22 % (Video (extended)) of the expert samples are faster than the 1 m/s command limit."

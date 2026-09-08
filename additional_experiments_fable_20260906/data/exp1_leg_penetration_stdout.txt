@@ -1,0 +1,19 @@
+MoCap physical floor: smallest pairwise paw distance over 7307 frames of 5 full clips = 0.049 L (p0.1 0.057, p1 0.112, median 0.337); old criterion 0.1 L
+
+source                               <floor pooled% <floor max clip% <0.10L pooled% <0.10L max%  min L  crossing%  worst clip (<floor)
+MoCap (5 full clips)                            0.0              0.0            0.7         1.1  0.049       20.5  dog_walk00 (n=7307)
+MoCap (6 windows)                               0.0              0.0            0.0         0.0  0.100       33.9  pace (n=330)
+Camera depth, as used (4)                       0.0              0.0            1.1         4.4  0.052       25.7  walk_869488000 (n=183)
+Camera depth, corrected intr. (4)               0.0              0.0            1.1         3.6  0.086       21.2  walk_869488000 (n=189)
+Camera depth, as used (8)                       0.0              0.0            0.5         4.4  0.052       20.2  walk_869488000 (n=366)
+Camera depth, corrected intr. (8)               0.0              0.0            0.5         3.6  0.086       16.2  walk_869488000 (n=382)
+DepthAnythingV2 (4)                             0.5              1.4            1.1         2.9  0.041       33.5  slow_1313807000 (n=185)
+AnimalAvatar (4)                                0.0              0.0           17.6        29.6  0.050       41.5  walk_869488000 (n=193)
+
+per clip, % frames below MoCap floor:
+  Camera depth, as used (4)          {'walk_869488000': 0.0, 'slow_1313807000': 0.0, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0}
+  Camera depth, corrected intr. (4)  {'walk_869488000': 0.0, 'slow_1313807000': 0.0, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0}
+  Camera depth, as used (8)          {'walk_869488000': 0.0, 'slow_1313807000': 0.0, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0, 'slow_turn_1771233000': 0.0, 'left_right_turn_2058226999': 0.0, 'start_stop_1271493000': 0.0, 'start_stop_785558000': 0.0}
+  Camera depth, corrected intr. (8)  {'walk_869488000': 0.0, 'slow_1313807000': 0.0, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0, 'slow_turn_1771233000': 0.0, 'left_right_turn_2058226999': 0.0, 'start_stop_1271493000': 0.0, 'start_stop_785558000': 0.0}
+  DepthAnythingV2 (4)                {'walk_869488000': 0.0, 'slow_1313807000': 1.4, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0}
+  AnimalAvatar (4)                   {'walk_869488000': 0.0, 'slow_1313807000': 0.0, 'turn_left_1771233000': 0.0, 'turn_right_1771233000': 0.0}
