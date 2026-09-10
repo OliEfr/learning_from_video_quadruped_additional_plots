@@ -94,6 +94,8 @@ Do **not** headline M1, M2 or the >5 Hz power after filtering: with the filter t
 
 Consistency note: the expert files behind the paper's results were produced *without* stages A/B; if the filter is described as part of the method, either regenerate the expert data with it or state that the filter was added after the reported experiments.
 
+*Paste-ready method text.* `paper_postprocessing.tex` holds a drop-in replacement (full and compact variant) for the "Post-Processing." paragraph of Sec. III-A - method description only, no numbers. The quantitative effect of the filter and the Fig. 7 caption are still to be written; the numbers are in the tables above.
+
 ### Paste-ready sentences
 * "At a common 30 Hz sampling rate and after normalising by the animals' hip height, the high-frequency residual (above ~5 Hz) of the video keypoints is 2.8x that of MoCap for the paws (3.8 % vs. 1.4 % of hip height, 9.7 mm vs. 5.9 mm) and 4.3x for the torso keypoints (1.8 % vs. 0.4 %); in the units of the retargeted robot this corresponds to 2.0x (paws) and 3.0x (torso)."
 * "The power spectrum of the video keypoints shows a flat noise floor above ~6 Hz that lies more than an order of magnitude above MoCap; integrated above 5 Hz the video keypoints carry 4.7x the MoCap power."
@@ -312,6 +314,17 @@ of Exp. 1 (RMS joint acceleration 1.9-2.4x MoCap).
   frames (rho(agent-expert distance, yaw error) = 0.01; 52 % of MoCap yaw cells are clipped at 0.4 rad, so the rank statistics there are weak).
 * Sampling: 45 % (MoCap) / 22 % (Video ext) of the discriminator's expert samples come from clips faster than the 1 m/s command limit, and
   those clips have the highest per-frame density. Down-weighting them (MotionWeight) is a zero-cost lever the paper does not use.
+
+### Imitation vs cost of transport (author's follow-up, 2026-09-10): does imitating noisy keypoints still give efficient gaits?
+Figure `fig_exp4_imitation_vs_cot.pdf`: CoT vs agent-expert distance per command cell, colour = commanded speed, cells with |v| >= 0.3 m/s only (122 per set; the |v| -> 0 ridge, where CoT diverges and is clipped at 2.0, is left out). Raw rho(agent-expert distance, CoT) is uninformative (-0.20 / 0.35 / -0.01) because CoT is dominated by the commanded speed (rho(speed, CoT) = -0.75 / -0.50 / -0.54). Conditioning on speed:
+
+| | MoCap | Video | Video (extended) |
+|---|---|---|---|
+| partial Spearman rho(agent-expert distance, CoT | speed), 147 cells | 0.30 | 0.50 | 0.60 |
+| Spearman rho, cells with |v| >= 0.3 | 0.07 | 0.55 | 0.36 |
+| mean CoT, better-imitated half vs worse half (|v| >= 0.3) | 1.21 vs 1.23 | 1.05 vs 1.40 | 1.02 vs 1.16 |
+
+Reading: for the video sets, the cells in which the policy stays closest to the (noisy) expert data are the cells with the LOWEST cost of transport - imitating the video keypoints more closely makes the gait more efficient, not less. Together with the expert-side roughness (retargeted video joint trajectories 6.8-8.5x rougher than MoCap: SG residual 2.2 / 1.7 deg vs 0.25 deg; joint accelerations 103 / 83 vs 44 rad/s^2, `exp1_metrics.json`) and the policy-level CoT (Fig. 4: 1.59 / 1.31 vs 1.51 MoCap), this is the evidence that the discriminator learns the gait, not the noise. Correlational (same three policies), colour-map values.
 
 ### Caveats
 * The Fig. 5 values are recovered from the PDF colour map (quantised, clipped at the colour-bar limits). If the evaluation YAMLs

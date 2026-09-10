@@ -1,0 +1,57 @@
+% =============================================================================
+% FIGURE REFERENCES MISSING IN THE TEXT of Learning_Locomotion_from_Vision__ICRA2027_ (6).pdf - audit and paste-ready sentences
+% Audit (grep "Figure N" in the extracted body text, captions excluded):
+%   Fig. 1  1x   Fig. 2  2x   Fig. 3  4x   Fig. 4  2x   Fig. 6  2x   Fig. 9  1x
+%   Fig. 5  3x - but all three refer to the RIGHT part (policy heat maps: "improves tracking over a wide range of target commands", "poor yaw tracking during backward walking"); the LEFT part (expert dataset distributions, the 13.2 % -> 25.0 % coverage numbers of the caption) is never discussed. The Fig. 9 caption's "reflected in data coverage (Figure 5. (left)" is the only pointer and is inside a caption.
+%   Fig. 7  0x - never cited. Both halves (post-processed trajectories / paw height + noise) are unsupported.
+%   Fig. 8  0x - never cited. Its claim (coverage -> tracking -> imitation) appears nowhere in the prose.
+% Numbers below are from results.md (Exp. 1, 2, 4) and the paper's own captions; Exp. 4 values are recovered from the Fig. 5 colour maps, so quote them as "rank correlation" and re-read them from the evaluation YAMLs if those are still available.
+% Each block: WHERE (anchor sentence in the current PDF) -> INSERT (one to three sentences). Pick one variant per figure.
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% FIG. 5 (LEFT) - expert dataset distributions
+% -----------------------------------------------------------------------------
+% WHERE: Sec. IV-A, 2nd paragraph, currently "The Video (extended) dataset improves the overall command tracking accuracy and energy efficiency across a wide range of target commands (Figure 5)." Insert BEFORE it, so that data (left) is discussed before policy (right):
+% (a) short:
+Figure~5 (left) shows the velocity distribution of each expert dataset over the commanded target range. The MoCap clips are straight and fast: the data lie at $0.7$--$2.1\,$m/s with $45\%$ of the samples faster than the $1\,$m/s command limit, and the set contains no standing and no backward motion. The video clips instead concentrate on $0$--$0.7\,$m/s and on turning, and the extended set adds near-standing and slow left-right turning samples; over the command box, the covered fraction of target commands rises from $13.2\%$ (MoCap) to $25.0\%$ (Video (extended)).
+% (b) mechanistic (adds the AMP argument, pairs with the Fig. 8 sentences below):
+Figure~5 (left) shows the velocity distribution of each expert dataset over the commanded target range. Note that the AMP discriminator observes joint positions and velocities only; a target command that has no expert counterpart forces the policy into state transitions the discriminator has never seen as expert samples, so that the style reward competes with the task reward. Coverage of the command range by the expert data is therefore a direct requirement. The MoCap clips are straight and fast ($0.7$--$2.1\,$m/s, no standing or backward motion), whereas the video clips concentrate on $0$--$0.7\,$m/s and on turning; the extended set raises the covered fraction of the command box from $13.2\%$ to $25.0\%$, almost exclusively through slow and turning behaviour.
+% (c) one-clause option, if space is tight - append to the existing "Recall that for us, it is comparatively easy to collect that additional data using video recordings":
+Recall that for us, it is comparatively easy to collect that additional data using video recordings; Figure~5 (left) shows how these clips fill the slow and turning part of the command range that neither MoCap nor the initial video set covers.
+% WHERE (2nd hook): Sec. IV-A, "This is likely because the expert data contains a limited number of turning motions, as capturing controlled turning behaviors in animals is more challenging than straight walking." -> replace "This is likely because" by a reference, since the left column of Fig. 5 is the evidence:
+This is visible in the expert distributions of Figure~5 (left): both MoCap and the initial video set contain few turning samples, as capturing controlled turning behaviours in animals is more challenging than straight walking.
+% WHERE (3rd hook): "As shown in Figure 5, this error primarily arises from poor yaw tracking during backward walking." -> tie it to the data:
+As shown in Figure~5, this error primarily arises from poor yaw tracking during backward walking, a region of the command range for which none of the datasets contains demonstrations (Figure~5, left).
+
+% -----------------------------------------------------------------------------
+% FIG. 7 - post-processed trajectories, paw height, keypoint noise
+% -----------------------------------------------------------------------------
+% WHERE: Sec. IV-A, 1st paragraph, "This performance is achieved despite the inherently noisier nature of vision data." This sentence currently has no evidence. Two choices:
+% (a) full: replace the sentence by the results paragraph in paper_postprocessing_results.tex (cites Fig. 7 twice, with the numbers).
+% (b) minimal, one sentence in place:
+This performance is achieved despite the inherently noisier nature of vision data: during ground contact the reconstructed keypoints scatter by $2.0$--$2.6\times$ the MoCap values ($0.7\%$ and $2.4\%$ of hip height for torso and paws, Figure~7).
+% WHERE (2nd hook, method side): Sec. III-A "Post-Processing." paragraph, last sentence - the top half of Fig. 7 (trajectories after post-processing) and the raw/filtered paw trace are method illustrations; one clause there covers them:
+Figure~7 shows the resulting trajectories next to the MoCap data and the paw height before and after filtering.
+% WHERE (3rd hook, optional): Sec. V Discussion, "Our results highlight that accurate depth values are a key enabler for learning deployable policies." ->
+Our results highlight that accurate depth values are a key enabler for learning deployable policies: the measured depth yields keypoint noise within a factor of two to three of MoCap after post-processing (Figure~7), whereas the reconstruction models of Figure~6 produce physically infeasible limb configurations that no temporal filter can repair.
+
+% -----------------------------------------------------------------------------
+% FIG. 8 - coverage -> tracking error -> expert imitation
+% -----------------------------------------------------------------------------
+% WHERE: Sec. IV-A, after the yaw paragraph ending "... the yaw tracking error is reduced." (before "We observe a significant yaw tracking error in our setting with the MoCap dataset"). This is where the mechanism behind Fig. 5 belongs:
+% (a) short:
+Figure~8 makes the link between data coverage and policy performance explicit: for every target command, the tracking error grows with the distance of the command to the nearest expert frame (rank correlation $\rho = 0.61$ for MoCap and $0.31$ for Video (extended)), and the states visited by the agent move away from the expert data at the same time ($\rho = 0.38$ and $0.40$ between tracking error and expert imitation). The policy cannot imitate what the data does not contain, and where it cannot imitate, task tracking suffers as well.
+% (b) with the AMP explanation (use if variant (b) of Fig. 5 was NOT used, otherwise the discriminator argument is already made):
+Figure~8 explains why coverage matters for AMP. The discriminator sees only joint positions and velocities, so a target command without expert support forces the agent into transitions that are penalised by the style reward. Accordingly, the tracking error of every target command grows with its distance to the nearest expert frame ($\rho = 0.61$ MoCap, $0.31$ Video (extended)), and it is positively correlated with the distance between the agent's joint states and the expert data ($\rho = 0.38$ and $0.40$): far from the data, the policy neither imitates nor tracks well.
+% (c) one clause, appended to the standing-command sentence "including a start-stop motion improves tracking and imitation for a standing command":
+..., and including a start-stop motion improves tracking and imitation for a standing command; Figure~8 shows that this coupling of coverage, tracking and imitation holds across the whole command range.
+% NOTE on Fig. 8 numbers: the rho values above are those printed in the figure and caption. results.md Exp. 4 gives, on the same recovered grids, rho(command distance, agent-expert distance) = 0.78 for Video (extended) and rho(agent-expert distance, tracking error vel.) = 0.50 - i.e. the mechanism is strongest for the video sets. Do NOT claim an effect of coverage on the cost of transport (rho between -0.20 and 0.35 with changing sign); CoT follows the commanded speed, not the data distance.
+
+% -----------------------------------------------------------------------------
+% CAPTION FIXES that go with the above
+% -----------------------------------------------------------------------------
+% Fig. 7 caption: "Noise is computed as the keypoint movement in stance phases" -> the panel shows an RMS position error, computed on the UNFILTERED reconstruction, while the top rows are filtered. Suggested caption:
+% Fig. 7: Top: example trajectories for MoCap and Video after post-processing. Bottom left: paw keypoints of the walking clip before and after filtering. Bottom right: noise of the reconstructed trajectories before filtering, measured as the RMS deviation of a planted paw from its mean position during stance and of the torso from its own smooth path during support, in percent of hip height (MoCap $0.44\,$m, Video $0.50\,$m). Dots represent the clips and the bar the mean.
+% Fig. 8 caption: "Expert imitation is measured as the negative distance between the agent's joint states (q, qdot) and the nearest expert frame" - keep, but this distance is 94-96 % joint velocity; "imitation" is generous. Consider "agent-expert distance" in the axis label or add "(dominated by joint velocities)" to the caption.
+% Fig. 9 caption: "reflected in data coverage (Figure 5. (left)" - missing closing parenthesis; and once Fig. 5 (left) is discussed in Sec. IV-A this pointer can stay as is.

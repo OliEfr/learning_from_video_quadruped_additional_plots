@@ -39,6 +39,7 @@ import json
 import os
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 from scipy.stats import mannwhitneyu, spearmanr
@@ -319,13 +320,14 @@ def fig_coverage_vs_performance(P, res, fname):
     plt.close(fig)
 
 
-def _key_panel(P, kx, ky, kc, xlabel, ylabel, clabel, clim, cticks, ylim, xlim, fname, clip_y=(), legend_loc="lower right", cmap="viridis"):
+def _key_panel(P, kx, ky, kc, xlabel, ylabel, clabel, clim, cticks, ylim, xlim, fname, clip_y=(), legend_loc="lower right", cmap="viridis", sources=None):
     """Coverage on x, one policy metric on y, another as marker colour; straight least-squares line per dataset,
     Pearson correlation coefficient r of the plotted points in the legend."""
     fig, ax = plt.subplots(figsize=(COL_W, 1.84))  # 20 % lower than the first version (2.3 in)
     sc = None
     out = {}
-    for src in PLOT_SOURCES:
+    handles, labels = [], []
+    for src in (sources or PLOT_SOURCES):
         m = P["src"] == src
         x, y = P[kx][m], P[ky][m]
         sc = ax.scatter(x, y, c=P[kc][m], cmap=cmap, vmin=clim[0], vmax=clim[1], s=11, marker=MARKERS[src],
@@ -337,8 +339,11 @@ def _key_panel(P, kx, ky, kc, xlabel, ylabel, clabel, clim, cticks, ylim, xlim, 
         r = float(np.corrcoef(x, y)[0, 1])
         rho = float(spearmanr(x, y)[0])
         out[src] = {"spearman_rho": rho, "pearson_r": r, "slope": float(a), "intercept": float(b)}
-        ax.plot(xx[keep], yy[keep], color=COLORS[src], lw=1.6, zorder=3,
-                label=f"{SHORT[src].replace('ext.', 'extended')} (correlation ρ = {rho:.2f})")
+        ax.plot(xx[keep], yy[keep], color=COLORS[src], lw=1.6, zorder=3)
+        # legend key = line + the marker shape of that set (author's request), "corr." abbreviated
+        handles.append(Line2D([], [], color=COLORS[src], lw=1.6, marker=MARKERS[src], markersize=4.5,
+                              markerfacecolor="white", markeredgecolor=COLORS[src], markeredgewidth=0.8))
+        labels.append(f"{SHORT[src].replace('ext.', 'extended')} (corr. ρ = {rho:.2f})")
     cb = fig.colorbar(sc, ax=ax, pad=0.02, fraction=0.05, ticks=cticks)
     cb.set_label(clabel, fontsize=plt.rcParams["axes.labelsize"])  # same size as the axis labels
     cb.ax.tick_params(labelsize=plt.rcParams["ytick.labelsize"], length=2)
@@ -351,7 +356,7 @@ def _key_panel(P, kx, ky, kc, xlabel, ylabel, clabel, clim, cticks, ylim, xlim, 
         ax.axhline(yv, color="0.6", lw=0.4, ls=":")
     ax.grid(alpha=0.25, lw=0.35)
     ax.tick_params(length=2, pad=1.5)
-    ax.legend(frameon=False, fontsize=5.5, loc=legend_loc, handletextpad=0.5, borderaxespad=0.3, labelspacing=0.3)
+    ax.legend(handles, labels, frameon=False, fontsize=5.5, loc=legend_loc, handletextpad=0.5, borderaxespad=0.3, labelspacing=0.3, handlelength=2.6)
     # tight crop with 2 px margin (instead of the 0.1 in default of common.savefig)
     pad = 2 / 72
     fig.savefig(os.path.join(FIG, fname + ".pdf"), bbox_inches="tight", pad_inches=pad)
@@ -379,6 +384,9 @@ def fig_key_results(P, res):
         fits[f"key_result_aed{suffix}"] = _key_panel(P, kx, "aed", "comb", xlab, r"$\bf{Agent\text{-}Expert\ Distance}$" + " [1]", CB_COMB,
                                                      (0.0, 1.0), [0, 0.5, 1], (1.85, 4.3), xlim, f"fig_exp4_key_result_aed{suffix}",
                                                      clip_y=(2.0, 4.0), legend_loc="upper left")
+    # author's request: the same panel with all three expert sets (MoCap, Video, Video (extended))
+    fits["key_result_3sets"] = _key_panel(P, "cmd", "comb", "imit", XLAB_NORM, r"$\bf{Tracking\ Error}$" + "\nYaw and Vel. Normalized [1]", CB_IMIT,
+                                          (-4.0, -2.0), [-4, -3, -2], (0, 1.12), (-0.03, 1.55), "fig_exp4_key_result_3sets", cmap="viridis_r", sources=SOURCES)
     res["key_result_fits"] = fits
     return fits
 

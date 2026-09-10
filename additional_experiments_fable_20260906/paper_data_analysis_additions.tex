@@ -1,0 +1,24 @@
+% Candidate additions to the "Data Analysis" subsection, each tied to something visible in fig5_combined_data_and_performance or fig_exp4_key_result. Kept in a separate file so an unsaved editor buffer of paper_data_analysis_minimal.tex is not overwritten. Numbers: results.md Exp. 2 and Exp. 4, Fig. 5 caption.
+
+% (1) FIX, not addition - "positive yaw" cannot be read from Fig. 5: the policy heat maps are over (vx, vy) at zero yaw command, so they show no yaw-rate dependence at all. What the figure does show is that no dataset contains backward locomotion (left: no data at vx < 0) and that the MoCap yaw error saturates over the whole vx < 0 half (right). Replace the sentence by:
+For backward walking commands ($v_x < 0$), for which the MoCap data contain no demonstrations, the downstream policy exhibits poor yaw tracking.
+
+% (2) after the coverage numbers - where the extra coverage comes from (Exp. 2: 83 vs 56 of 441 vx-yaw cells, +64 cells MoCap lacks, mostly |yaw rate| > 0.5 rad/s; near-standing samples 0 % -> 4 %):
+The additional clips contribute almost exclusively turning and slow or standing behaviour; on the $v_x$-$\omega_z$ grid they add 64 command cells that the MoCap data do not cover, predominantly at yaw rates above $0.5\,$rad/s.
+
+% (3) after the coverage sentence - the policy-side numbers of the Fig. 5 caption, so that the text and the caption carry the same figures:
+Averaged over the command grid, this reduces the velocity tracking error by $24\%$, the yaw tracking error by $67\%$, and the cost of transport by $11\%$ compared to MoCap.
+
+% (4) one sentence so that the yellow CoT column at vx = 0 is not read as poor efficiency (Exp. 4: CoT does not follow coverage, rho between -0.20 and 0.35 with changing sign; the ridge is the small |v| in the denominator):
+The elevated cost of transport around $v_x \approx 0$ is common to all datasets and reflects the small velocity in the denominator of the metric rather than the expert data.
+
+% (5) Fig. 8, second paragraph - the two regression lines differ in level AND slope, which is the actual argument for broad coverage:
+The policy trained on the extended video data not only tracks better at every distance, its error also grows more slowly with the distance to the expert data ($\rho = 0.31$ vs. $0.61$ for MoCap), i.e., broader coverage makes the policy less sensitive to the remaining gaps.
+
+% (6) Fig. 8, imitation - a number for the colour dimension (Exp. 4: agent-expert distance in uncovered vs covered cells 3.12 vs 2.50 pooled, 3.16 vs 2.24 for Video (extended)):
+In command cells without expert support, the distance between the agent's and the expert's joint states is $25\%$ larger than in covered cells.
+
+% (7) optional, mechanism behind the standing command (Exp. 4: Go2 standing pose to nearest expert frame 1.15 for Video (extended) vs 1.91 MoCap / 2.40 Video), ties back to the start-stop clip mentioned in Sec. IV-A:
+The start-stop clip alone halves the distance of the robot's standing pose to the nearest expert frame, which is why the extended dataset improves tracking and imitation for the standing command.
+
+% Do NOT add: any claim that coverage improves the cost of transport (not supported, see (4)), or that the correlation in Fig. 8 is causal (same three policies, 147 cells each).

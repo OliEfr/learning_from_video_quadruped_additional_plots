@@ -1,0 +1,8 @@
+% Author's version (2026-09-09) + one sentence on the slope of the Fig. 8 regression lines (marked with %% ADDED).
+\subsection{Expert Data and Policy Performance}
+
+We find that the motion capture data cover the target command range of the robot insufficiently, and the yaw command range only in a skewed manner (\autoref{fig:results_distribution}). Since AMP's objective matches the demonstrations' style distribution with the agent's distribution via the style reward component, the style and task reward components compete for commands outside the demonstrated range. Specifically, in the region where almost no yaw expert data exists (positive yaw), the downstream policy also shows poor tracking. Our extended video dataset covers the target command range more broadly ($13.2\%$ for MoCap vs. $25.0\%$ for Video (extended)), leading to improved downstream policy performance.
+
+In \autoref{fig:deep_data_analytics}, we show that data coverage is linked to downstream policy performance and imitation quality. The closer a target command lies to a command observed in the expert frames, the better the velocity tracking. This is intuitive, since the velocity tracking reward and the style reward agree for such commands. %% ADDED:
+The policy trained on the extended video data not only tracks better at every distance, its error also grows more slowly with the distance to the expert data ($\rho = 0.31$ vs. $0.61$ for MoCap), i.e., broader coverage makes the policy less sensitive to the remaining gaps.
+Since the AMP discriminator receives only the joint states ($q$, $\dot{q}$) as input, we also show that imitation quality increases similarly: the closer a target command lies to a command observed in the expert frames, the better the imitation.
