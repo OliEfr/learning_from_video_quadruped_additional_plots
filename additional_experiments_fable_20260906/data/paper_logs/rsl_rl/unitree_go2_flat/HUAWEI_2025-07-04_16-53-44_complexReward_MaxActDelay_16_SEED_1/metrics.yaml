@@ -1,0 +1,20 @@
+episode length in s (target): 10.0
+episode_lengths: 500.0
+episodes_per_env: 2
+error_vel_xy: 0.07700403034687042
+error_vel_yaw: 0.09454087913036346
+heading_error: 0.3629073202610016
+heading_target: -0.005037630442529917
+mean_mechanical_cot: 1.8826663494110107
+mean_power: 121.16781616210938
+mean_speed: 0.513404369354248
+mean_vel_x: 0.002325420267879963
+mean_vel_y: -0.0008364912937395275
+mean_yaw: 0.0034415870904922485
+num_envs: 10000
+num_eval_steps: 10000000.0
+target_speed: 0.5389068722724915
+target_velocity_x: 0.0009349823230877519
+target_velocity_y: -0.0019609229639172554
+target_yaw: 0.004049532115459442
+total_episodes (real): 20000

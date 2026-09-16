@@ -1,0 +1,445 @@
+--- git status ---
+On branch add_latent_action_wrapper
+Your branch is ahead of 'origin/add_latent_action_wrapper' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .vscode/launch.json
+	modified:   all_metrics_comparison.png
+	modified:   oliver_notes.md
+	modified:   plots_metrics.py
+	modified:   run_train.sh
+	modified:   source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+	modified:   source/standalone/workflows/rsl_rl/train.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	AMP_for_hardware_rew_comparison.png
+	datasets/fromVision_motions_AlignedDepthAnything/
+	datasets/fromVision_motions_DepthCam/
+	rsl_rl/
+	selected_metrics_comparison.png
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/.vscode/launch.json b/.vscode/launch.json
+index ba2dcd78..308e41e9 100644
+--- a/.vscode/launch.json
++++ b/.vscode/launch.json
+@@ -34,6 +34,8 @@
+                 "--headless",
+                 "--seed",
+                 "42",
++                "--log_dir",
++                "debug"
+             ],
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/train.py",
+             "console": "integratedTerminal",
+@@ -48,7 +50,7 @@
+                 "Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0",
+                 "--num_envs",
+                 "25",
+-                // "--load_run", "2025-05-11_16-37-05",
++                // "--load_run", "2025-05-14_11-31-38",
+             ], // load last checkpoint from specific run like such: ["--load_run", "2025-04-30_09-13-56"]
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/play.py",
+             "console": "integratedTerminal"
+@@ -75,7 +77,9 @@
+             "args": [
+                 "--task",
+                 "Isaac-Velocity-Rough-Unitree-Go2-v0",
+-                "--headless"
++                "--headless",
++                "--log_dir",
++                "debug"
+             ],
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/train.py",
+             "console": "integratedTerminal",
+diff --git a/all_metrics_comparison.png b/all_metrics_comparison.png
+index 358f1e30..6502e8c6 100644
+Binary files a/all_metrics_comparison.png and b/all_metrics_comparison.png differ
+diff --git a/oliver_notes.md b/oliver_notes.md
+index 16066405..fcb188b9 100644
+--- a/oliver_notes.md
++++ b/oliver_notes.md
+@@ -33,5 +33,6 @@
+  - different command ranges
+  - they use some empirical normalization
+  - different sim dt
++ - Different PD gains?
+ 
+ 
+diff --git a/plots_metrics.py b/plots_metrics.py
+index fac6dfa8..54b2961b 100644
+--- a/plots_metrics.py
++++ b/plots_metrics.py
+@@ -4,6 +4,9 @@ import numpy as np
+ import os
+ import re
+ from collections import defaultdict
++import glob
++
++
+ 
+ NAME_MAP={
+     "2025-05-15_01-35-47": "AMP, MoCap",
+@@ -14,25 +17,39 @@ NAME_MAP={
+     
+ }
+ 
+-DEBUG_METRICS = [
+-    "episode length in s (target)",
+-    "episode_lengths",
+-    "episodes_per_env",
+-    "heading_target",
+-    "num_envs",
+-    "num_eval_steps",
+-    "target_speed",
+-    "target_velocity_x",
+-    "target_velocity_y",
+-    "target_yaw",
+-    "total_episodes (real)",
+-    "mean_speed",
+-    "mean_vel_x",
+-    "mean_vel_y",
+-    "mean_yaw",
+-    "mean_power"
++# Define the specific metrics you want to plot
++metrics_to_plot = [
++    "heading_error",
++    "error_vel_xy",
++    "error_vel_yaw",
++    "mean_mechanical_cot"
+ ]
+ 
++def find_seed_metrics(run_path):
++    """Find all metrics.yaml files for a given run_path with SEED_* suffix."""
++    base_dir = os.path.dirname(run_path)
++    run_name = os.path.basename(run_path)
++    pattern = os.path.join(base_dir, f"{run_name}_SEED_*/metrics.yaml")
++    return sorted(glob.glob(pattern))
++
++def compute_mean_and_range(metric_dicts):
++    """Compute mean and range for each metric."""
++    aggregated = defaultdict(list)
++    for name, data in metric_dicts:
++        for k, v in data.items():
++            aggregated[k].append(v)
++    
++    stats = {}
++    for k, values in aggregated.items():
++        arr = np.array(values)
++        stats[k] = {
++            "mean": np.mean(arr),
++            "min": np.min(arr),
++            "max": np.max(arr),
++            "range": (np.min(arr), np.max(arr)),
++        }
++    return stats
++
+ def load_yaml_files(file_paths):
+     """Load multiple YAML files and return their contents as a list of dictionaries."""
+     yaml_data = []
+@@ -50,133 +67,122 @@ def load_yaml_files(file_paths):
+     return yaml_data
+ 
+ def organize_metrics(yaml_data):
+-    """Organize metrics by category for plotting. All metrics are already the mean."""
+     global NAME_MAP
+     organized_metrics = defaultdict(list)
+     for experiment_name, data in yaml_data:
+         for key, value in data.items():
+-            assert experiment_name in NAME_MAP.keys(), f"Please specify a display name for {experiment_name}"
+-            organized_metrics[key].append((NAME_MAP[experiment_name], value))
++            # experiment_name = experiment_name.split('_SEED_')[0]
++            
++            # assert experiment_name in NAME_MAP.keys(), f"Please specify a display name for {experiment_name}"
++            organized_metrics[key].append((f"{NAME_MAP[experiment_name]}\n{experiment_name}" , value))
+     return organized_metrics
+ 
+ def plot_metrics(organized_metrics):
+-    """Create a single figure with subplots for all metrics."""
+-    # Determine grid dimensions
+-    n_metrics = len(organized_metrics)
++    """Create a single figure with subplots for selected metrics."""
++    # Filter metrics to only include those in metrics_to_plot
++    filtered_metrics = {
++        metric: values
++        for metric, values in organized_metrics.items()
++        if metric.split('/')[-1] in metrics_to_plot
++    }
++
++    n_metrics = len(filtered_metrics)
+     if n_metrics == 0:
+-        print("No metrics found to plot")
++        print("No selected metrics found to plot.")
+         return
+-    
+-    metric_names = [base_metric.split('/')[-1] for base_metric in organized_metrics] # Get the last part of the metric path]
+-    
+-    # Calculate grid dimensions: try to make it somewhat square but ensure no empty spaces
++
++    # Calculate subplot grid
+     cols = int(np.ceil(np.sqrt(n_metrics)))
+     rows = int(np.ceil(n_metrics / cols))
+-    
+-    # Create figure and subplots
++
+     fig = plt.figure(figsize=(5 * cols, 4 * rows))
+-    fig.suptitle("All Metrics Comparison", fontsize=16, y=0.995)
+-    
+-    # Get a list of all experiment names for consistent coloring
+-    all_experiment_names = set()
+-    for values in organized_metrics.values():
+-        all_experiment_names.update([v[0] for v in values])
+-    all_experiment_names = sorted(list(all_experiment_names))
+-    
+-    # Simplify experiment names for display (use just the timestamp part)
+-    display_names = {}
+-    for exp in all_experiment_names:
+-        # Extract just the timestamp from the folder name
+-        if '_' in exp:
+-            display_names[exp] = exp.split('_', 1)[1]
+-        else:
+-            display_names[exp] = exp
+-    
+-    # Create a color map for experiments
++    fig.suptitle("Selected Metrics Comparison", fontsize=16, y=0.995)
++
++    # Collect all experiment names for consistent coloring
++    all_experiment_names = sorted({
++        v[0] for values in filtered_metrics.values() for v in values
++    })
++
+     cmap = plt.cm.get_cmap('tab10', len(all_experiment_names))
+     color_map = {exp: cmap(i) for i, exp in enumerate(all_experiment_names)}
+-    
+-    # Sort metrics to ensure a consistent order
+-    sorted_metrics = sorted(organized_metrics.items())
+-    
+-    # Plot each metric in its own subplot using plt.subplot to ensure no gaps
++
++    display_names = {
++        exp: exp
++        for exp in all_experiment_names
++    } # You potentially customize dislpay names here
++
++    sorted_metrics = sorted(filtered_metrics.items())
++
+     for i, (base_metric, values) in enumerate(sorted_metrics):
+-        if not values:
+-            continue
+-    
+-        
+-        if metric_names[i] in DEBUG_METRICS:
+-            print(f"Skipping debug metric: {metric_names[i]}")
+-            continue
+-        
+-        # Calculate row and column position (0-indexed)
+-        row = i // cols
+-        col = i % cols
+-        
+-        # Create a subplot at position (row, col)
+-        ax = plt.subplot2grid((rows, cols), (row, col))
+-        
+-        # Extract experiment names and values
++        metric_name = base_metric# .split('/')[-1]
++        ax = plt.subplot(rows, cols, i + 1)
++
+         experiments = [v[0] for v in values]
+-        means = [v[1] for v in values]
+-        
+-        # Plot the bar chart (no error bars)
+-        x_pos = np.arange(len(experiments))
+-        bars = ax.bar(x_pos, means, align='center', alpha=0.7, 
+-                    color=[color_map[exp] for exp in experiments])
+-        
+-        # Use shorter display names for x-tick labels
++        means = []
++        errors = []
++        for exp_name, val in values:
++            if isinstance(val, dict) and "mean" in val:
++                means.append(val["mean"])
++                errors.append([
++                    val["mean"] - val["range"][0],
++                    val["range"][1] - val["mean"]
++                ])
++            else:
++                means.append(val)
++                errors.append([0, 0])  # fallback
++
++                x_pos = np.arange(len(experiments))
++        ax.bar(x_pos, means, yerr=np.array(errors).T, align='center', alpha=0.7,
++            capsize=5, color=[color_map[exp] for exp in experiments])
++
+         if len(experiments) > 5:
+             ax.set_xticks(x_pos[::2])
+-            ax.set_xticklabels([display_names[experiments[i]] for i in range(0, len(experiments), 2)], 
+-                             rotation=45, ha='right', fontsize=8)
++            ax.set_xticklabels(
++                [display_names[experiments[i]] for i in range(0, len(experiments), 2)],
++                rotation=45, ha='right', fontsize=8)
+         else:
+             ax.set_xticks(x_pos)
+-            ax.set_xticklabels([display_names[exp] for exp in experiments], 
+-                             rotation=45, ha='right', fontsize=8)
+-        
+-        # Make the plot prettier
+-        ax.set_title(metric_names[i], fontsize=10)
+-        ax.set_ylabel(metric_names[i], fontsize=8)
++            ax.set_xticklabels(
++                [display_names[exp] for exp in experiments],
++                rotation=45, ha='right', fontsize=8)
++
++        ax.set_title(metric_name, fontsize=10)
++        ax.set_ylabel(metric_name, fontsize=8)
+         ax.grid(axis='y', linestyle='--', alpha=0.7)
+-        
+-                
+-        # Remove x-label to save space
+         ax.set_xlabel('')
+-        
+-    # Add a legend with all experiment names (using the display names)
+-    handles = [plt.Rectangle((0,0),1,1, color=color_map[exp]) for exp in all_experiment_names]
+-    fig.legend(handles, [display_names[exp] for exp in all_experiment_names], 
+-              loc='lower center', bbox_to_anchor=(0.5, 0.0), 
+-              ncol=min(5, len(all_experiment_names)))
+-    
+-    # Adjust layout
++
++    handles = [plt.Rectangle((0, 0), 1, 1, color=color_map[exp]) for exp in all_experiment_names]
++    fig.legend(handles, [display_names[exp] for exp in all_experiment_names],
++               loc='lower center', bbox_to_anchor=(0.5, 0.0),
++               ncol=min(5, len(all_experiment_names)))
++
+     plt.tight_layout()
+     plt.subplots_adjust(bottom=0.1 + 0.02 * (len(all_experiment_names) // 5))
+-    
+-    # Save the figure
+-    plt.savefig("all_metrics_comparison.png", dpi=300, bbox_inches='tight')
+-    print(f"Saved figure with {n_metrics} metrics as 'all_metrics_comparison.png'")
++    plt.savefig("selected_metrics_comparison.png", dpi=300, bbox_inches='tight')
++    print(f"Saved figure with {n_metrics} selected metrics as 'selected_metrics_comparison.png'")
+     plt.close()
+ 
+ def main():
+-    file_paths = [
+-        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-14_12-38-41/metrics.yaml",
+-        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-14_19-13-20/metrics.yaml",
+-        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-15_01-35-47/metrics.yaml",
+-        "logs/rsl_rl/unitree_go2_flat/2025-05-15_08-40-09/metrics.yaml",
+-        "logs/rsl_rl/unitree_go2_flat/2025-05-15_08-31-45/metrics.yaml",
++    base_paths = [
++        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-14_12-38-41",
++        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-14_19-13-20",
++        "logs/rsl_rl/unitree_go2_AMPflat/2025-05-15_01-35-47",
++        "logs/rsl_rl/unitree_go2_flat/2025-05-15_08-40-09",
++        "logs/rsl_rl/unitree_go2_flat/2025-05-15_08-31-45",
+     ]
+-    
+-    # Load the YAML files
+-    yaml_data = load_yaml_files(file_paths)
+-    
+-    # Organize metrics by category
+-    organized_metrics = organize_metrics(yaml_data)
+-    
+-    # Generate consolidated plot with all metrics as subplots
++
++    all_yaml_data = []
++
++    for base in base_paths:
++        seed_metric_files = find_seed_metrics(base)
++        seeds = [int(re.search(r"_SEED_(\d+)", path).group(1)) for path in seed_metric_files]
++        print(f"Found seeds for {os.path.basename(base)}: {sorted(seeds)}")
++        
++        yaml_data = load_yaml_files(seed_metric_files)
++        all_yaml_data.extend(yaml_data)
++
++    organized_metrics = organize_metrics(all_yaml_data)
+     plot_metrics(organized_metrics)
+-    
+     print(f"Generated a consolidated figure with {len(organized_metrics)} metrics.")
+ 
+ if __name__ == "__main__":
+diff --git a/run_train.sh b/run_train.sh
+index 87948b0e..a574e47e 100755
+--- a/run_train.sh
++++ b/run_train.sh
+@@ -1,17 +1,20 @@
+-./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/manuallyGenerated/*' agent.amp_motion_folder='datasets/manuallyGenerated/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed 42
++#!/bin/bash
+ 
+-./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_3/*' agent.amp_motion_folder='datasets/fromVision_motions_3/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed 42
++seeds=(1 2 3)
+ 
+-./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/mocap_AMP_for_hardware/*' agent.amp_motion_folder='datasets/mocap_AMP_for_hardware/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed 42
+-
+-
+-
+-./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-SimpleReward-Unitree-Go2-v0 --headless --seed 42 
+-
+-./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0 --headless --seed 42
++current_datetime=$(date +"%Y-%m-%d_%H-%M-%S")
+ 
++for seed in "${seeds[@]}"; do
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/manuallyGenerated/*' agent.amp_motion_folder='datasets/manuallyGenerated/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_manuallyGenerated"
+ 
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_fromVision_motions_DepthCam"
+ 
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_AlignedDepthAnything/*' agent.amp_motion_folder='datasets/fromVision_motions_AlignedDepthAnything/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_fromVision_motions_AlignedDepthAnything"
++    
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/mocap_AMP_for_hardware/*' agent.amp_motion_folder='datasets/mocap_AMP_for_hardware/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_mocap_AMP_for_hardware"
+ 
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-SimpleReward-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_simpleReward"
+ 
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0 --headless --seed $seed --log_dir "${current_datetime}_complexReward"
+ 
++done
+diff --git a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+index 1ec25cdd..bb94bd64 100644
+--- a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
++++ b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+@@ -149,7 +149,7 @@ def main():
+     
+     
+     # Recorded jpos path
+-    recording_path = "datasets/fromVision_motions/fromVision_amp.txt" # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
++    recording_path = "datasets/manuallyGenerated/fast/fast_amp.txt" # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
+     with open(recording_path, "r") as f:
+         motion_json = json.load(f)
+         motion_data = np.array(motion_json["Frames"])
+@@ -169,10 +169,9 @@ def main():
+     
+     recording_dt = float(motion_json["FrameDuration"])
+     
+-    assert recording_dt == 0.03334 or recording_dt == 0.01667 # should be 30Hz (video) or 60Hz (mocap)
+-    
+-    recording_dt *= 3 if recording_dt == 0.01667 else 1 # slow down a little
++    assert recording_dt == 0.03334 or recording_dt == 0.01667 or recording_dt == 0.021 # should be 30Hz (video) or 60Hz (mocap)
+     
++    # recording_dt *= 3 if recording_dt == 0.01667 else 1 # slow down a little
+     
+     
+     # Now we are ready!
+diff --git a/source/standalone/workflows/rsl_rl/train.py b/source/standalone/workflows/rsl_rl/train.py
+index 46cc3cd5..e49d31ff 100644
+--- a/source/standalone/workflows/rsl_rl/train.py
++++ b/source/standalone/workflows/rsl_rl/train.py
+@@ -25,7 +25,12 @@ parser.add_argument("--num_envs", type=int, default=None, help="Number of enviro
+ parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+ parser.add_argument("--seed", type=int, default=None, help="Seed used for the environment")
+ parser.add_argument("--max_iterations", type=int, default=None, help="RL Policy training iterations.")
+-parser.add_argument("--log_dir", type=str, required=True, help="Name of log dir. Should be YYYY-MM-DD_HH-MM-SS to stay consistent with default IsaacLab. You can run expriments with multiple seeds by setting the same log_dir for them. The seed will then automatically be appended to the log dir name.")
++parser.add_argument(
++    "--log_dir",
++    type=str,
++    required=True,
++    help="Name of log dir. Should be/include YYYY-MM-DD_HH-MM-SS to stay consistent with default IsaacLab. The used seed will then automatically be appended to the log dir name. This way you can run similar expriments with multiple seeds. ",
++)
+ # append RSL-RL cli arguments
+ cli_args.add_rsl_rl_args(parser)
+ # append AppLauncher cli args

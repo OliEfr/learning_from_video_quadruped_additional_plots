@@ -1,0 +1,312 @@
+{
+ "MoCap (paper)": {
+  "mean": {
+   "error_vel_xy": 0.06239856034517288,
+   "error_vel_yaw": 0.6450014114379883,
+   "mean_mechanical_cot": 1.5135471820831299
+  },
+  "n": 3,
+  "source": "paper logs.zip metrics.yaml",
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.06330526620149612,
+    "error_vel_yaw": 0.5899317264556885,
+    "mean_mechanical_cot": 1.51398503780365
+   },
+   "2": {
+    "error_vel_xy": 0.06301727145910263,
+    "error_vel_yaw": 0.6626177430152893,
+    "mean_mechanical_cot": 1.5474439859390259
+   },
+   "3": {
+    "error_vel_xy": 0.06087314337491989,
+    "error_vel_yaw": 0.6824547648429871,
+    "mean_mechanical_cot": 1.4792125225067139
+   }
+  }
+ },
+ "Video (paper)": {
+  "mean": {
+   "error_vel_xy": 0.05652684966723124,
+   "error_vel_yaw": 0.212961807847023,
+   "mean_mechanical_cot": 1.5887773434321086
+  },
+  "n": 3,
+  "source": "paper logs.zip metrics.yaml",
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.05399833247065544,
+    "error_vel_yaw": 0.1896352469921112,
+    "mean_mechanical_cot": 1.5599533319473267
+   },
+   "2": {
+    "error_vel_xy": 0.05785330384969711,
+    "error_vel_yaw": 0.22142422199249268,
+    "mean_mechanical_cot": 1.688600778579712
+   },
+   "3": {
+    "error_vel_xy": 0.05772891268134117,
+    "error_vel_yaw": 0.22782595455646515,
+    "mean_mechanical_cot": 1.517777919769287
+   }
+  }
+ },
+ "Video (extended) (paper)": {
+  "mean": {
+   "error_vel_xy": 0.04806786527236303,
+   "error_vel_yaw": 0.1291900152961413,
+   "mean_mechanical_cot": 1.3112417062123616
+  },
+  "n": 3,
+  "source": "paper logs.zip metrics.yaml",
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.04705556482076645,
+    "error_vel_yaw": 0.1237926259636879,
+    "mean_mechanical_cot": 1.2578564882278442
+   },
+   "2": {
+    "error_vel_xy": 0.04748423025012016,
+    "error_vel_yaw": 0.1281614601612091,
+    "mean_mechanical_cot": 1.2463711500167847
+   },
+   "3": {
+    "error_vel_xy": 0.04966380074620247,
+    "error_vel_yaw": 0.13561595976352692,
+    "mean_mechanical_cot": 1.429497480392456
+   }
+  }
+ },
+ "E2 Video (added clips only)": {
+  "mean": {
+   "error_vel_xy": 0.19531317551930746,
+   "error_vel_yaw": 0.13058708856503168,
+   "mean_mechanical_cot": 1.9335476954778035
+  },
+  "range": {
+   "error_vel_xy": [
+    0.1818169504404068,
+    0.2136041224002838
+   ],
+   "error_vel_yaw": [
+    0.11933010071516037,
+    0.13732056319713593
+   ],
+   "mean_mechanical_cot": [
+    1.8484832048416138,
+    2.0692996978759766
+   ]
+  },
+  "per_seed": {
+   "2": {
+    "error_vel_xy": 0.1818169504404068,
+    "error_vel_yaw": 0.13732056319713593,
+    "mean_mechanical_cot": 2.0692996978759766,
+    "episodes": 20000
+   },
+   "3": {
+    "error_vel_xy": 0.2136041224002838,
+    "error_vel_yaw": 0.13511060178279877,
+    "mean_mechanical_cot": 1.8828601837158203,
+    "episodes": 20000
+   },
+   "4": {
+    "error_vel_xy": 0.19051845371723175,
+    "error_vel_yaw": 0.11933010071516037,
+    "mean_mechanical_cot": 1.8484832048416138,
+    "episodes": 20000
+   }
+  },
+  "n": 3,
+  "rel_to_video_ext_paper_pct": {
+   "error_vel_xy": 306.32795821620186,
+   "error_vel_yaw": 1.0814096319192164,
+   "mean_mechanical_cot": 47.45928887992955
+  }
+ },
+ "E1b Video (extended, half, coverage-matched)": {
+  "mean": {
+   "error_vel_xy": 0.05345297232270241,
+   "error_vel_yaw": 0.13068120429913202,
+   "mean_mechanical_cot": 1.1480299631754558
+  },
+  "range": {
+   "error_vel_xy": [
+    0.051938220858573914,
+    0.05435959994792938
+   ],
+   "error_vel_yaw": [
+    0.12471725791692734,
+    0.1339060366153717
+   ],
+   "mean_mechanical_cot": [
+    1.090590476989746,
+    1.2243192195892334
+   ]
+  },
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.05435959994792938,
+    "error_vel_yaw": 0.13342031836509705,
+    "mean_mechanical_cot": 1.1291801929473877,
+    "episodes": 20000
+   },
+   "2": {
+    "error_vel_xy": 0.051938220858573914,
+    "error_vel_yaw": 0.12471725791692734,
+    "mean_mechanical_cot": 1.2243192195892334,
+    "episodes": 20000
+   },
+   "3": {
+    "error_vel_xy": 0.05406109616160393,
+    "error_vel_yaw": 0.1339060366153717,
+    "mean_mechanical_cot": 1.090590476989746,
+    "episodes": 20000
+   }
+  },
+  "n": 3,
+  "rel_to_video_ext_paper_pct": {
+   "error_vel_xy": 11.20313336118878,
+   "error_vel_yaw": 1.1542602573213427,
+   "mean_mechanical_cot": -12.447113469900025
+  }
+ },
+ "E1 Video (extended, half)": {
+  "mean": {
+   "error_vel_xy": 0.057521661122639976,
+   "error_vel_yaw": 0.18061494827270508,
+   "mean_mechanical_cot": 1.3472613096237183
+  },
+  "range": {
+   "error_vel_xy": [
+    0.05597763508558273,
+    0.05941042676568031
+   ],
+   "error_vel_yaw": [
+    0.13636331260204315,
+    0.22859631478786469
+   ],
+   "mean_mechanical_cot": [
+    1.2021033763885498,
+    1.544169545173645
+   ]
+  },
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.05597763508558273,
+    "error_vel_yaw": 0.22859631478786469,
+    "mean_mechanical_cot": 1.544169545173645,
+    "episodes": 20000
+   },
+   "2": {
+    "error_vel_xy": 0.057176921516656876,
+    "error_vel_yaw": 0.13636331260204315,
+    "mean_mechanical_cot": 1.2021033763885498,
+    "episodes": 20000
+   },
+   "3": {
+    "error_vel_xy": 0.05941042676568031,
+    "error_vel_yaw": 0.1768852174282074,
+    "mean_mechanical_cot": 1.29551100730896,
+    "episodes": 20001
+   }
+  },
+  "n": 3,
+  "rel_to_video_ext_paper_pct": {
+   "error_vel_xy": 19.667600790485857,
+   "error_vel_yaw": 39.80565592370493,
+   "mean_mechanical_cot": 2.746984270001792
+  }
+ },
+ "E3 Video (extended minus turning)": {
+  "mean": {
+   "error_vel_xy": 0.05234268680214882,
+   "error_vel_yaw": 0.1450132131576538,
+   "mean_mechanical_cot": 1.3448818524678547
+  },
+  "range": {
+   "error_vel_xy": [
+    0.049583740532398224,
+    0.05439012497663498
+   ],
+   "error_vel_yaw": [
+    0.13324032723903656,
+    0.15830421447753906
+   ],
+   "mean_mechanical_cot": [
+    1.276267647743225,
+    1.392012119293213
+   ]
+  },
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.053054194897413254,
+    "error_vel_yaw": 0.15830421447753906,
+    "mean_mechanical_cot": 1.392012119293213,
+    "episodes": 20000
+   },
+   "2": {
+    "error_vel_xy": 0.05439012497663498,
+    "error_vel_yaw": 0.13324032723903656,
+    "mean_mechanical_cot": 1.3663657903671265,
+    "episodes": 20000
+   },
+   "3": {
+    "error_vel_xy": 0.049583740532398224,
+    "error_vel_yaw": 0.1434950977563858,
+    "mean_mechanical_cot": 1.276267647743225,
+    "episodes": 20000
+   }
+  },
+  "n": 3,
+  "rel_to_video_ext_paper_pct": {
+   "error_vel_xy": 8.89330430124932,
+   "error_vel_yaw": 12.248003706200603,
+   "mean_mechanical_cot": 2.56551832481486
+  }
+ },
+ "E0 Video (extended), re-run seed": {
+  "mean": {
+   "error_vel_xy": 0.04705556482076645,
+   "error_vel_yaw": 0.1237926259636879,
+   "mean_mechanical_cot": 1.2578564882278442
+  },
+  "range": {
+   "error_vel_xy": [
+    0.04705556482076645,
+    0.04705556482076645
+   ],
+   "error_vel_yaw": [
+    0.1237926259636879,
+    0.1237926259636879
+   ],
+   "mean_mechanical_cot": [
+    1.2578564882278442,
+    1.2578564882278442
+   ]
+  },
+  "per_seed": {
+   "1": {
+    "error_vel_xy": 0.04705556482076645,
+    "error_vel_yaw": 0.1237926259636879,
+    "mean_mechanical_cot": 1.2578564882278442,
+    "episodes": 20000
+   }
+  },
+  "n": 1,
+  "rel_to_video_ext_paper_pct": {
+   "error_vel_xy": -2.105981711192425,
+   "error_vel_yaw": -4.177868792786351,
+   "mean_mechanical_cot": -4.071348381582927
+  }
+ },
+ "excluded": {
+  "fromVision_motions_DepthCam_extAddedOnly_SEED_1": {
+   "error_vel_xy": 0.5441327095031738,
+   "error_vel_yaw": 0.6910517811775208,
+   "mean_mechanical_cot": 19.942087173461914,
+   "episodes": 23760,
+   "reason": "diverged at iter ~9.7k (critic blow-up), collapsed policy"
+  }
+ }
+}

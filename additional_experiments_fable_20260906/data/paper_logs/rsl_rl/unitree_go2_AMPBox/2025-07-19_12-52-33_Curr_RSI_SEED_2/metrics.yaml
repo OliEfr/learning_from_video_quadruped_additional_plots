@@ -1,0 +1,26 @@
+agent_expert_distances: 0.6065694093704224
+amp_motion_folder: datasets/fromVision_motions_DepthCam_obstacle/*
+curriculum_state: 6.521000385284424
+episode length in s (target): 10.0
+episode_lengths: 490.4996337890625
+episodes_per_env: 20
+error_vel_xy: 0.10239049047231674
+error_vel_yaw: 0.26463747024536133
+heading_error: 0.12060847133398056
+heading_target: 1.570643663406372
+mean_mechanical_cot: 1.3307112455368042
+mean_power: 79.30587768554688
+mean_speed: 0.4885018765926361
+mean_vel_x: 0.4493822753429413
+mean_vel_x_w: -0.008095530793070793
+mean_vel_y: -0.017001286149024963
+mean_vel_y_w: 0.4474432170391083
+mean_yaw: 0.014403142035007477
+num_envs: 1000
+num_eval_steps: 10000000.0
+real_curriculum_state: 0.19563001155853268
+target_speed: 0.5028894543647766
+target_velocity_x: 0.00011943059507757425
+target_velocity_y: 0.49950796365737915
+target_yaw: 0.0
+total_episodes (real): 20103

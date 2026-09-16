@@ -1,0 +1,70 @@
+seed: 2
+device: cuda:0
+num_steps_per_env: 24
+max_iterations: 25000
+empirical_normalization: false
+policy:
+  class_name: ActorCritic
+  init_noise_std: 1.0
+  actor_hidden_dims:
+  - 128
+  - 128
+  - 128
+  critic_hidden_dims:
+  - 128
+  - 128
+  - 128
+  activation: elu
+  vel_dependent_actor_latent_dim: 0
+algorithm:
+  class_name: AMPPPO
+  value_loss_coef: 1.0
+  use_clipped_value_loss: true
+  clip_param: 0.2
+  entropy_coef: 0.01
+  num_learning_epochs: 5
+  num_mini_batches: 6
+  learning_rate: 0.001
+  schedule: adaptive
+  gamma: 0.99
+  lam: 0.95
+  desired_kl: 0.01
+  max_grad_norm: 1.0
+  amp_replay_buffer_size: 1000000
+save_interval: 50
+experiment_name: unitree_go2_AMPflat
+run_name: ''
+logger: tensorboard
+neptune_project: isaaclab
+wandb_project: isaaclab
+resume: false
+load_run: .*
+load_checkpoint: model_.*.pt
+runner_class: rsl_rl.runners.amp_on_policy_runner:AMPOnPolicyRunner
+amp_replay_buffer_size: {}
+policy_class_name: ActorCritic
+amp_reward_coef: 2.0
+amp_motion_folder: datasets/fromVision_motions_DepthCam/*
+amp_motion_files:
+- datasets/fromVision_motions_DepthCam/slow_1313807000_amp.txt
+- datasets/fromVision_motions_DepthCam/walk_869488000_amp.txt
+- datasets/fromVision_motions_DepthCam/turn_left_1771233000_amp.txt
+- datasets/fromVision_motions_DepthCam/turn_right_1771233000_amp.txt
+amp_num_preload_transitions: 2000000
+amp_task_reward_lerp: 0.3
+amp_discr_hidden_dims:
+- 1024
+- 512
+min_normalized_std:
+- 0.05
+- 0.05
+- 0.05
+- 0.05
+- 0.02
+- 0.02
+- 0.02
+- 0.02
+- 0.05
+- 0.05
+- 0.05
+- 0.05

@@ -1,0 +1,22 @@
+agent_expert_distances: 2.8452835083007812
+amp_motion_folder: datasets/fromVision_motions_AlignedDepthAnything/*
+episode length in s (target): 10.0
+episode_lengths: 499.74554443359375
+episodes_per_env: 2
+error_vel_xy: 0.16356903910636902
+error_vel_yaw: 0.12892270088195801
+heading_error: 0.5587658882141113
+heading_target: 0.011825681664049625
+mean_mechanical_cot: 2.404470682144165
+mean_power: 149.42132568359375
+mean_speed: 0.5272291302680969
+mean_vel_x: 0.004798720590770245
+mean_vel_y: -0.0013772445963695645
+mean_yaw: 0.03435700014233589
+num_envs: 10000
+num_eval_steps: 10000000.0
+target_speed: 0.5397083759307861
+target_velocity_x: -0.006029084790498018
+target_velocity_y: -0.001740036765113473
+target_yaw: -0.09360203891992569
+total_episodes (real): 20000

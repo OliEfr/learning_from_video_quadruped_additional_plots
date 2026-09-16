@@ -1,0 +1,24 @@
+curriculum_state: 5.909000396728516
+episode length in s (target): 10.0
+episode_lengths: 499.8382873535156
+episodes_per_env: 20
+error_vel_xy: 0.061941858381032944
+error_vel_yaw: 0.15969839692115784
+heading_error: 0.5819357633590698
+heading_target: 1.5706430673599243
+mean_mechanical_cot: 7.640056133270264
+mean_power: 544.4330444335938
+mean_speed: 0.5000006556510925
+mean_vel_x: 0.4018031358718872
+mean_vel_x_w: 0.0057408614084124565
+mean_vel_y: 0.23451657593250275
+mean_vel_y_w: 0.5156605839729309
+mean_yaw: -0.13471293449401855
+num_envs: 1000
+num_eval_steps: 10000000.0
+real_curriculum_state: 0.17727001190185546
+target_speed: 0.5030140280723572
+target_velocity_x: -6.338986713672057e-05
+target_velocity_y: 0.49962958693504333
+target_yaw: 0.0
+total_episodes (real): 20000

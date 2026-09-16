@@ -1,0 +1,22 @@
+agent_expert_distances: 2.2261157035827637
+amp_motion_folder: datasets/from_AnimalAvatar/*
+episode length in s (target): 10.0
+episode_lengths: 499.5223083496094
+episodes_per_env: 2
+error_vel_xy: 0.4831438958644867
+error_vel_yaw: 0.2711638808250427
+heading_error: 0.6279478669166565
+heading_target: 0.012413930147886276
+mean_mechanical_cot: 5.252260684967041
+mean_power: 91.63343811035156
+mean_speed: 0.19810789823532104
+mean_vel_x: -0.008080766536295414
+mean_vel_y: 0.028610894456505775
+mean_yaw: -0.005392647348344326
+num_envs: 10000
+num_eval_steps: 10000000.0
+target_speed: 0.5403448939323425
+target_velocity_x: 0.0032411350402981043
+target_velocity_y: -0.0020349102560430765
+target_yaw: 0.010155213065445423
+total_episodes (real): 20000

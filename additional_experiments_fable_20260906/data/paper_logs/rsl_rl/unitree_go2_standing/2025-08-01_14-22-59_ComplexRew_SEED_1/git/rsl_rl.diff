@@ -1,0 +1,97 @@
+--- git status ---
+On branch newest
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   rsl_rl/datasets/motion_loader.py
+	modified:   rsl_rl/datasets/rsi_data.py
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/rsl_rl/datasets/motion_loader.py b/rsl_rl/datasets/motion_loader.py
+index 7dcd46a..b5dadc1 100644
+--- a/rsl_rl/datasets/motion_loader.py
++++ b/rsl_rl/datasets/motion_loader.py
+@@ -157,7 +157,10 @@ class AMPLoader:
+                 # For reference state initialization we require to transform the root trajectory in our simulation frame. This is done in the following.
+                 if self.transform_root_trajectory:
+                     motion_text_file_name = motion_file #.split('/')[-1]
+-                    
++                    rsi_data_ = rsi_data.rsi_params.get(
++                        motion_text_file_name, rsi_data.default_rsi_data
++                    )
++
+                     base_pos = AMPLoader.get_root_pos_batch(motion_data)
+                     base_rot = AMPLoader.get_root_rot_batch(motion_data)
+                     base_vel = AMPLoader.get_linear_vel_batch(motion_data)
+@@ -174,7 +177,7 @@ class AMPLoader:
+                         pitch=torch.tensor(0, device=self.device),
+                         yaw=math_utils.deg2rad(
+                             torch.tensor(
+-                                rsi_data.rsi_params[motion_text_file_name][
++                                rsi_data_[
+                                     "reference_trajectory_yaw_rot"
+                                 ],
+                                 device=self.device,
+@@ -188,7 +191,7 @@ class AMPLoader:
+                     # transforms
+                     base_pos = (
+                         base_pos
+-                        * rsi_data.rsi_params[motion_text_file_name][
++                        * rsi_data_[
+                             "reference_trajectory_scaling"
+                         ]
+                     )
+@@ -199,8 +202,8 @@ class AMPLoader:
+                         .float()
+                         .T,
+                     ).squeeze(-1)
+-                    
+-                    base_pos += rsi_data.rsi_params[motion_text_file_name][
++
++                    base_pos += rsi_data_[
+                         "reference_trajectory_offset"
+                     ]
+ 
+diff --git a/rsl_rl/datasets/rsi_data.py b/rsl_rl/datasets/rsi_data.py
+index b8808cf..a670a45 100644
+--- a/rsl_rl/datasets/rsi_data.py
++++ b/rsl_rl/datasets/rsi_data.py
+@@ -1,25 +1,31 @@
+ import torch
+ 
++default_rsi_data = {
++        "reference_trajectory_yaw_rot": 0,
++        "reference_trajectory_offset": torch.tensor([0, 0, 0.25], device = "cuda"),
++        "reference_trajectory_scaling": torch.tensor([1.0, 1.0, 1.0], device = "cuda")
++}
+ 
+ rsi_params = {
+     "datasets/fromVision_motions_DepthCam_obstacle/obstacle_2_3126098000_amp.txt": {
+         "reference_trajectory_yaw_rot": 210,
+-        "reference_trajectory_offset": torch.tensor([0.0, 0.4, 0.25], device = "cuda"),
+-        "reference_trajectory_scaling": torch.tensor([1.0, 1.8, 1.0], device = "cuda"),
++        "reference_trajectory_offset": torch.tensor([0.0, 0.4, 0.19], device = "cuda"),
++        "reference_trajectory_scaling": torch.tensor([1.0, 1.5, 1.0], device = "cuda"),
+     },
+     "datasets/fromVision_motions_DepthCam_obstacle/obstacle_3_3015061000_amp.txt": {
+         "reference_trajectory_yaw_rot": 90,
+         "reference_trajectory_offset": torch.tensor([0.0, 0.0, 0.19], device = "cuda"),
+-        "reference_trajectory_scaling": torch.tensor([1.0, 1.2, 1.2], device = "cuda"), # can easily increase z scaling to, say, 1.5
++        "reference_trajectory_scaling": torch.tensor([1.0, 1.2, 1.1], device = "cuda"), # can easily increase z scaling to, say, 1.5
+     },
+     "datasets/fromVision_motions_DepthCam_obstacle/obstacle_3_3015061000_amp_increased_feet_z.txt": {
+         "reference_trajectory_yaw_rot": 90,
+         "reference_trajectory_offset": torch.tensor([0.0, -0.08, 0.15], device = "cuda"),
+-        "reference_trajectory_scaling": torch.tensor([1.0, 1.4, 1.5], device = "cuda"), # can easily increase z scaling to, say, 1.5. 1.7 seems about max and is high enough for 30cm step size.
++        "reference_trajectory_scaling": torch.tensor([1.0, 1.4, 1.2], device = "cuda"), # can easily increase z scaling to, say, 1.5. 1.7 seems about max and is high enough for 30cm step size.
+     },
+     "datasets/fromVision_motions_DepthCam_obstacle/slow_1313807000_amp.txt": {
+         "reference_trajectory_yaw_rot": 110,
+         "reference_trajectory_offset": torch.tensor([0.0, -0.5, 0.02], device = "cuda"),
+         "reference_trajectory_scaling": torch.tensor([1.0, 1.0, 1.0], device = "cuda"),
+     },
++    "datasets/fromVision_motions_DepthCam_standUp_feetZAmpl/stand_up_2431270000_amp.txt": default_rsi_data
+ }

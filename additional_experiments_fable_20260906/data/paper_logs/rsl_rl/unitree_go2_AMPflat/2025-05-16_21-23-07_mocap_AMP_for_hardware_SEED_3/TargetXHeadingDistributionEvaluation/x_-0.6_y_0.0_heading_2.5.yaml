@@ -1,0 +1,22 @@
+agent_expert_distances: 2.4033241271972656
+amp_motion_folder: datasets/mocap_AMP_for_hardware/*
+episode length in s (target): 10.0
+episode_lengths: 500.0
+episodes_per_env: 1
+error_vel_xy: 0.05925222113728523
+error_vel_yaw: 1.3139983415603638
+heading_error: 1.7316750288009644
+heading_target: 2.4949991703033447
+mean_mechanical_cot: 1.3096798658370972
+mean_power: 110.00001525878906
+mean_speed: 0.591086745262146
+mean_vel_x: -0.5895189046859741
+mean_vel_y: 0.002555215498432517
+mean_yaw: -0.02696128562092781
+num_envs: 5000
+num_eval_steps: 2500000.0
+target_speed: 0.5988031029701233
+target_velocity_x: -0.5988031029701233
+target_velocity_y: 0.0
+target_yaw: -0.2282310277223587
+total_episodes (real): 5000

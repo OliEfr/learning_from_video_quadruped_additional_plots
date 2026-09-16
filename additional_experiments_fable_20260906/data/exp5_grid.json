@@ -1,0 +1,332 @@
+{
+ "note": "Exp. 5, grid evaluation of E1 (Video (extended, half)): coverage-vs-error link with REAL per-cell yamls.\n\nReads <run>/TargetXYDistributionEvaluation/x_<vx>_y_<vy>_yaw_0.0.yaml (147 cells, 5000 envs x 1 episode each) for every\nE1 seed, averages the seeds, and computes the same cell-level statistics as Exp. 4 (exp4_amp_evidence.analysis_cells):\nSpearman rho between the distance of the command to the nearest expert frame and the tracking errors, covered/uncovered\nmeans, and the key-result regression (combined normalised tracking error vs command distance).\nThe paper sets (MoCap, Video, Video (extended)) enter with the Fig.-5 values recovered from the figure colours (Exp. 4),\nso their statistics carry the recovery noise; the E1 numbers are exact.\nOutputs: data/exp5_grid.md, data/exp5_grid.json, figures/fig_exp5_grid_key_result(.pdf/.png)",
+ "E1 Video (ext., half)": {
+  "rho_cmd_evel": 0.20700194183560133,
+  "evel_covered_mean": 0.05108022541066425,
+  "evel_uncovered_mean": 0.0625072372193905,
+  "evel_uncovered_gt_covered_p": 0.004562674712261698,
+  "rho_cmd_eyaw": 0.679249559875783,
+  "eyaw_covered_mean": 0.10889766401507787,
+  "eyaw_uncovered_mean": 0.17082417937030958,
+  "eyaw_uncovered_gt_covered_p": 2.1523872120622885e-05,
+  "rho_cmd_comb": 0.6029399542119699,
+  "comb_covered_mean": 0.3915232070721686,
+  "comb_uncovered_mean": 0.5260664103098396,
+  "comb_uncovered_gt_covered_p": 1.1854849482010691e-05,
+  "rho_cmd_cot": -0.17292159366523357,
+  "cot_covered_mean": 2.573765138785044,
+  "cot_uncovered_mean": 1.175050381560959,
+  "cot_uncovered_gt_covered_p": 0.9966042454696561,
+  "rho_cmd_aed": 0.8193941775155082,
+  "aed_covered_mean": 2.1852397736575866,
+  "aed_uncovered_mean": 3.111493109041436,
+  "aed_uncovered_gt_covered_p": 2.217019543483041e-09,
+  "rho_aed_evel": 0.3701614670303516,
+  "rho_aed_eyaw": 0.6724078005878398,
+  "fit_comb_vs_cmd": {
+   "slope": 0.3618907663656799,
+   "intercept": 0.35274138375821434,
+   "pearson_r": 0.6852263648617252
+  },
+  "fit_comb_vs_cmd_ms": {
+   "slope": 0.338570625639834,
+   "intercept": 0.39941549380505553
+  },
+  "n_covered": 24,
+  "grid_mean": {
+   "evel": 0.060641602638373975,
+   "eyaw": 0.16071372788374116,
+   "cot": 1.403411974577136,
+   "aed": 2.9602680746930528,
+   "comb": 0.5041001730465462
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "per_seed": {
+   "1": {
+    "rho_cmd_evel": 0.1003596551541757,
+    "evel_covered_mean": 0.05334754408492396,
+    "evel_uncovered_mean": 0.059588128731139306,
+    "evel_uncovered_gt_covered_p": 0.08691494085678914,
+    "rho_cmd_eyaw": 0.7425896682256761,
+    "eyaw_covered_mean": 0.10251222147295873,
+    "eyaw_uncovered_mean": 0.22281703840547462,
+    "eyaw_uncovered_gt_covered_p": 5.480523761872266e-09,
+    "rho_cmd_comb": 0.601171901563291,
+    "comb_covered_mean": 0.39487799726581824,
+    "comb_uncovered_mean": 0.5764619416625398,
+    "comb_uncovered_gt_covered_p": 4.251714824034561e-06,
+    "rho_cmd_cot": -0.11989134787569229,
+    "cot_covered_mean": 3.3787459333737693,
+    "cot_uncovered_mean": 1.2803976162662352,
+    "cot_uncovered_gt_covered_p": 0.9890722873211151,
+    "rho_cmd_aed": 0.7597148448420464,
+    "aed_covered_mean": 2.1570265044768653,
+    "aed_uncovered_mean": 3.0638483016471554,
+    "aed_uncovered_gt_covered_p": 6.010697083976543e-09,
+    "rho_aed_evel": 0.3193639543933086,
+    "rho_aed_eyaw": 0.6651618070404763,
+    "fit_comb_vs_cmd": {
+     "slope": 0.48794145492624347,
+     "intercept": 0.342736798508096,
+     "pearson_r": 0.6746704930490837
+    },
+    "fit_comb_vs_cmd_ms": {
+     "slope": 0.5167817428522601,
+     "intercept": 0.3870287416199498
+    },
+    "n_covered": 24,
+    "grid_mean": {
+     "evel": 0.0585692577684919,
+     "eyaw": 0.20317543564098223,
+     "cot": 1.6229850966103223,
+     "aed": 2.9157957633336387,
+     "comb": 0.5468155833936873
+    }
+   },
+   "2": {
+    "rho_cmd_evel": 0.3484725989618358,
+    "evel_covered_mean": 0.046197979672191046,
+    "evel_uncovered_mean": 0.06373257206646891,
+    "evel_uncovered_gt_covered_p": 2.9458086001911394e-05,
+    "rho_cmd_eyaw": 0.2899455228222352,
+    "eyaw_covered_mean": 0.10501328219349186,
+    "eyaw_uncovered_mean": 0.12065730828458701,
+    "eyaw_uncovered_gt_covered_p": 0.07891484045305286,
+    "rho_cmd_comb": 0.4079063687674255,
+    "comb_covered_mean": 0.36225650110282004,
+    "comb_uncovered_mean": 0.4694844956880784,
+    "comb_uncovered_gt_covered_p": 0.00014798284202215635,
+    "rho_cmd_cot": -0.2607273194357343,
+    "cot_covered_mean": 2.2159303625424704,
+    "cot_uncovered_mean": 1.1016399375791472,
+    "cot_uncovered_gt_covered_p": 0.999487169335198,
+    "rho_cmd_aed": 0.8319518847894583,
+    "aed_covered_mean": 2.190103138486544,
+    "aed_uncovered_mean": 3.15040474209359,
+    "aed_uncovered_gt_covered_p": 4.8438317730433315e-09,
+    "rho_aed_evel": 0.46831483426395365,
+    "rho_aed_eyaw": 0.29062932096200195,
+    "fit_comb_vs_cmd": {
+     "slope": 0.21130609111886997,
+     "intercept": 0.3636002933701624,
+     "pearson_r": 0.4269317102824317
+    },
+    "fit_comb_vs_cmd_ms": {
+     "slope": 0.13835700845616417,
+     "intercept": 0.40919845234408775
+    },
+    "n_covered": 24,
+    "grid_mean": {
+     "evel": 0.06086978147148478,
+     "eyaw": 0.11810318157583678,
+     "cot": 1.283564904920098,
+     "aed": 2.993620806810807,
+     "comb": 0.45197788432721986
+    }
+   },
+   "3": {
+    "rho_cmd_evel": 0.17212068092694316,
+    "evel_covered_mean": 0.05369515247487774,
+    "evel_uncovered_mean": 0.06420101086056329,
+    "evel_uncovered_gt_covered_p": 0.006165893096447139,
+    "rho_cmd_eyaw": 0.5371328835125313,
+    "eyaw_covered_mean": 0.11916748837878306,
+    "eyaw_uncovered_mean": 0.1689981914208672,
+    "eyaw_uncovered_gt_covered_p": 0.03311105037986685,
+    "rho_cmd_comb": 0.570042085697663,
+    "comb_covered_mean": 0.4174351228478675,
+    "comb_uncovered_mean": 0.5322527935789004,
+    "comb_uncovered_gt_covered_p": 0.0002121650458656311,
+    "rho_cmd_cot": -0.1285011598123144,
+    "cot_covered_mean": 2.126619120438894,
+    "cot_uncovered_mean": 1.143113590837494,
+    "cot_uncovered_gt_covered_p": 0.9946892912234795,
+    "rho_cmd_aed": 0.7996811460607938,
+    "aed_covered_mean": 2.2085896780093512,
+    "aed_uncovered_mean": 3.1202262833835634,
+    "aed_uncovered_gt_covered_p": 4.148454660780719e-09,
+    "rho_aed_evel": 0.26118066626872893,
+    "rho_aed_eyaw": 0.5754406909005735,
+    "fit_comb_vs_cmd": {
+     "slope": 0.3864247530519266,
+     "intercept": 0.3518870593963849,
+     "pearson_r": 0.6739045614883487
+    },
+    "fit_comb_vs_cmd_ms": {
+     "slope": 0.3605731256110774,
+     "intercept": 0.40201928745112897
+    },
+    "n_covered": 24,
+    "grid_mean": {
+     "evel": 0.06248576867514524,
+     "eyaw": 0.16086256643440447,
+     "cot": 1.303685922200988,
+     "aed": 2.971387653934712,
+     "comb": 0.5135070514187318
+    }
+   }
+  },
+  "rho_cmd_evel_seed_range": [
+   0.1003596551541757,
+   0.3484725989618358
+  ],
+  "rho_cmd_eyaw_seed_range": [
+   0.2899455228222352,
+   0.7425896682256761
+  ],
+  "rho_cmd_comb_seed_range": [
+   0.4079063687674255,
+   0.601171901563291
+  ]
+ },
+ "MoCap (paper, recovered)": {
+  "rho_cmd_evel": 0.24697468978826642,
+  "evel_covered_mean": 0.063867,
+  "evel_uncovered_mean": 0.06587905263157895,
+  "evel_uncovered_gt_covered_p": 0.4073794279766282,
+  "rho_cmd_eyaw": 0.7087915197074415,
+  "eyaw_covered_mean": 0.27968764285714287,
+  "eyaw_uncovered_mean": 0.3435093157894736,
+  "eyaw_uncovered_gt_covered_p": 0.0002533842977698787,
+  "rho_cmd_comb": 0.6102674635653516,
+  "comb_covered_mean": 0.6689445535714286,
+  "comb_uncovered_mean": 0.7587819078947368,
+  "comb_uncovered_gt_covered_p": 0.0008900654243926735,
+  "rho_cmd_cot": 0.29832436075600227,
+  "cot_covered_mean": 0.951674,
+  "cot_uncovered_mean": 1.360438180451128,
+  "cot_uncovered_gt_covered_p": 7.466669712004255e-07,
+  "rho_cmd_aed": 0.24077876883188779,
+  "aed_covered_mean": 2.8839285714285716,
+  "aed_uncovered_mean": 2.9329476390977445,
+  "aed_uncovered_gt_covered_p": 0.3472823733677092,
+  "rho_aed_evel": 0.5810116985728956,
+  "rho_aed_eyaw": 0.012665117766738513,
+  "fit_comb_vs_cmd": {
+   "slope": 0.2177098094937148,
+   "intercept": 0.6115248124807046,
+   "pearson_r": 0.5279104090358617
+  },
+  "fit_comb_vs_cmd_ms": {
+   "slope": 0.13443244647798935,
+   "intercept": 0.6760566670401573
+  },
+  "n_covered": 14,
+  "grid_mean": {
+   "evel": 0.06568742857142856,
+   "eyaw": 0.3374310612244898,
+   "cot": 1.3215082585034013,
+   "aed": 2.928279156462585,
+   "comb": 0.7502259693877551
+  },
+  "source": "Fig. 5 recovered from figure colours (Exp. 4)"
+ },
+ "Video (paper, recovered)": {
+  "rho_cmd_evel": 0.6188695906944276,
+  "evel_covered_mean": 0.04444240909090909,
+  "evel_uncovered_mean": 0.062089080000000005,
+  "evel_uncovered_gt_covered_p": 1.4499457780381099e-08,
+  "rho_cmd_eyaw": 0.17715804013072978,
+  "eyaw_covered_mean": 0.20120736363636366,
+  "eyaw_uncovered_mean": 0.21543129600000002,
+  "eyaw_uncovered_gt_covered_p": 0.3115583762044395,
+  "rho_cmd_comb": 0.4421804237973072,
+  "comb_covered_mean": 0.47372125,
+  "comb_uncovered_mean": 0.5797345200000001,
+  "comb_uncovered_gt_covered_p": 0.0012565055291282828,
+  "rho_cmd_cot": -0.011536506917198057,
+  "cot_covered_mean": 1.459872090909091,
+  "cot_uncovered_mean": 1.3079186799999998,
+  "cot_uncovered_gt_covered_p": 0.8675417710008992,
+  "rho_cmd_aed": 0.592196363236182,
+  "aed_covered_mean": 2.537997136363636,
+  "aed_uncovered_mean": 3.276031312,
+  "aed_uncovered_gt_covered_p": 6.556455901108134e-08,
+  "rho_aed_evel": 0.14459440569996215,
+  "rho_aed_eyaw": -0.280755033006863,
+  "fit_comb_vs_cmd": {
+   "slope": 0.23805684166396704,
+   "intercept": 0.4564185775363944,
+   "pearson_r": 0.43300781461419935
+  },
+  "fit_comb_vs_cmd_ms": {
+   "slope": 0.20768655468330774,
+   "intercept": 0.4999127295116128
+  },
+  "n_covered": 22,
+  "grid_mean": {
+   "evel": 0.05944808163265306,
+   "eyaw": 0.21330254421768707,
+   "cot": 1.3306600068027212,
+   "aed": 3.1655772176870745,
+   "comb": 0.563868588435374
+  },
+  "source": "Fig. 5 recovered from figure colours (Exp. 4)"
+ },
+ "Video (ext.) (paper, recovered)": {
+  "rho_cmd_evel": 0.3750772268395774,
+  "evel_covered_mean": 0.04176433333333333,
+  "evel_uncovered_mean": 0.05117026016260162,
+  "evel_uncovered_gt_covered_p": 0.00028963066290323673,
+  "rho_cmd_eyaw": 0.16237898855267827,
+  "eyaw_covered_mean": 0.10175779166666667,
+  "eyaw_uncovered_mean": 0.11382747967479676,
+  "eyaw_uncovered_gt_covered_p": 0.038210960485195615,
+  "rho_cmd_comb": 0.31320635678961056,
+  "comb_covered_mean": 0.33601890625,
+  "comb_uncovered_mean": 0.39813565040650406,
+  "comb_uncovered_gt_covered_p": 0.0008096382884011798,
+  "rho_cmd_cot": -0.019907627368207073,
+  "cot_covered_mean": 1.3279297083333332,
+  "cot_uncovered_mean": 1.1534870406504065,
+  "cot_uncovered_gt_covered_p": 0.8234291804380908,
+  "rho_cmd_aed": 0.7774158673283901,
+  "aed_covered_mean": 2.238281166666667,
+  "aed_uncovered_mean": 3.1556465772357725,
+  "aed_uncovered_gt_covered_p": 2.7087457169193327e-10,
+  "rho_aed_evel": 0.503503047266971,
+  "rho_aed_eyaw": 0.20578811672410752,
+  "fit_comb_vs_cmd": {
+   "slope": 0.07847486941718786,
+   "intercept": 0.3555327833827736,
+   "pearson_r": 0.24950510361745412
+  },
+  "fit_comb_vs_cmd_ms": {
+   "slope": 0.07354679508552955,
+   "intercept": 0.3664309289214257
+  },
+  "n_covered": 24,
+  "grid_mean": {
+   "evel": 0.04963459863945578,
+   "eyaw": 0.11185691836734692,
+   "cot": 1.1819674761904762,
+   "aed": 3.0058726326530616,
+   "comb": 0.3879941411564626
+  },
+  "source": "Fig. 5 recovered from figure colours (Exp. 4)"
+ },
+ "key_result_fits": {
+  "MoCap": {
+   "spearman_rho": 0.6102674635653516,
+   "pearson_r": 0.5279104090358617,
+   "slope": 0.2177098094937148,
+   "intercept": 0.6115248124807046
+  },
+  "Video (extended)": {
+   "spearman_rho": 0.31320635678961056,
+   "pearson_r": 0.24950510361745412,
+   "slope": 0.07847486941718786,
+   "intercept": 0.3555327833827736
+  },
+  "E1 Video (ext., half)": {
+   "spearman_rho": 0.6029399542119699,
+   "pearson_r": 0.6852263648617252,
+   "slope": 0.3618907663656799,
+   "intercept": 0.35274138375821434
+  }
+ }
+}

@@ -1,0 +1,22 @@
+agent_expert_distances: 2.349165916442871
+amp_motion_folder: datasets/manuallyGenerated/*
+episode length in s (target): 10.0
+episode_lengths: 500.0
+episodes_per_env: 2
+error_vel_xy: 0.06384370476007462
+error_vel_yaw: 0.15093308687210083
+heading_error: 0.5173470973968506
+heading_target: -0.006343604996800423
+mean_mechanical_cot: 1.9978694915771484
+mean_power: 94.2880859375
+mean_speed: 0.5297869443893433
+mean_vel_x: -0.0003993997524958104
+mean_vel_y: 0.0038422055076807737
+mean_yaw: -0.002140187192708254
+num_envs: 10000
+num_eval_steps: 10000000.0
+target_speed: 0.5412412881851196
+target_velocity_x: -0.0038758644368499517
+target_velocity_y: -0.0013178606750443578
+target_yaw: -0.010543321259319782
+total_episodes (real): 20000

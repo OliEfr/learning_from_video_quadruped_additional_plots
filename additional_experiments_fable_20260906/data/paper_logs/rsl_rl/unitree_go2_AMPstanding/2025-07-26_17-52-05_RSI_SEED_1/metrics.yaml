@@ -1,0 +1,27 @@
+agent_expert_distances: 0.9751794934272766
+amp_motion_folder: datasets/fromVision_motions_DepthCam_standUp_feetZAmpl/*
+episode length in s (target): 10.0
+episode_lengths: 499.9329528808594
+episodes_per_env: 20
+error_feet_height: 0.10301531314849854
+error_vel_xy: 0.1276489794254303
+error_vel_yaw: 0.8216753005981445
+heading_error: 1.5711281299591064
+heading_target: 0.0006979469326324761
+mean_mechanical_cot: 2.83902006149292
+mean_power: 82.94309997558594
+mean_speed: 0.1276489794254303
+mean_vel_x: 0.000617114535998553
+mean_vel_x_w: -0.0032640518620610237
+mean_vel_y: -0.0031850673258304596
+mean_vel_y_w: -0.020390639081597328
+mean_yaw: -0.03561191260814667
+num_envs: 1000
+num_eval_steps: 10000000.0
+number_failed_episodes: 0
+successrate: 1.0
+target_speed: 0.0
+target_velocity_x: 0.0
+target_velocity_y: 0.0
+target_yaw: -0.0037603299133479595
+total_episodes (real): 20000

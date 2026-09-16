@@ -1,0 +1,205 @@
+--- git status ---
+On branch add_latent_action_wrapper
+Your branch is up to date with 'origin/add_latent_action_wrapper'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .vscode/launch.json
+	modified:   docker/Dockerfile.base
+	modified:   docker/docker-compose.yaml
+	modified:   run_eval.sh
+	modified:   source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	datasets/fromVision_motions_DepthCam_extendedWithoutReverse/
+	plots/
+	rsl_rl/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/.vscode/launch.json b/.vscode/launch.json
+index d15e959d..4e8cf9a2 100644
+--- a/.vscode/launch.json
++++ b/.vscode/launch.json
+@@ -36,10 +36,10 @@
+             "type": "python",
+             "request": "launch",
+             "args": [
+-                // "env.amp_motion_folder='datasets/mocap_AMP_for_hardware/*'",
+-                // "agent.amp_motion_folder='datasets/mocap_AMP_for_hardware/*'",
++                "env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extended/*'",
++                "agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extended/*'",
+                 "--task",
+-                "Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0",
++                "Isaac-Velocity-AMPFlat-Unitree-Go2-Play-v0",
+                 "--headless",
+                 "--seed",
+                 "42",
+@@ -60,10 +60,12 @@
+                 "--num_envs",
+                 "25",
+                 "--load_run", "2025-05-16_21-23-07_mocap_AMP_for_hardware_SEED_1",
+-                "--amp_motion_folder", "datasets/mocap_AMP_for_hardware/*",
+-                "--x_speed", "0.5",
+-                "--y_speed", "0.5",
+-                "--heading", "0",
++                // "--headless"
++                // "--x_speed", "0.5",
++                // "--y_speed", "0.0",
++                // "--heading", "1.0",
++                // "--evaluate",
++                // "--eval_config", "TargetXHeadingDistribution",
+             ], // load last checkpoint from specific run like such: ["--load_run", "2025-04-30_09-13-56"]
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/play.py",
+             "console": "integratedTerminal"
+@@ -74,14 +76,9 @@
+             "request": "launch",
+             "args": [
+                 "--task",
+-                "Isaac-Velocity-AMPFlat-Unitree-Go2-Play-v0",
+-                "--load_run", "2025-05-16_21-23-07_manuallyGenerated_SEED_2",
+-                "--amp_motion_folder", "datasets/manuallyGenerated/*",
+-                "--x_speed", "0.5",
+-                "--y_speed", "0.0",
+-                "--heading", "0.5",
++                "Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0",
++                "--load_run", "2025-05-16_21-23-07_complexReward_SEED_1",
+                 "--evaluate",
+-                "--eval_config", "TargetXHeadingDistribution",
+             ], // load last checkpoint from specific run like such: ["--load_run", "2025-04-30_09-13-56"]
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/play.py",
+             "console": "integratedTerminal"
+diff --git a/docker/Dockerfile.base b/docker/Dockerfile.base
+index 7bdb0403..c9a2a709 100644
+--- a/docker/Dockerfile.base
++++ b/docker/Dockerfile.base
+@@ -94,6 +94,47 @@ RUN echo "export ISAACLAB_PATH=${ISAACLAB_PATH}" >> ${HOME}/.bashrc && \
+     echo "alias tensorboard='${ISAACLAB_PATH}/_isaac_sim/python.sh ${ISAACLAB_PATH}/_isaac_sim/tensorboard'" >> ${HOME}/.bashrc && \
+     echo "export TZ=$(date +%Z)" >> ${HOME}/.bashrc
+ 
++
++
++# This overwrites the existing entrypoint that starts Isaac Sim.
++# ENTRYPOINT ["bash"]
++
++
++# create a new user and set the owner of the Isaac Lab directory to this user
++RUN useradd -ms /bin/bash isaac && \
++    chown -R isaac:isaac ${ISAACLAB_PATH} && \
++    echo "isaac    ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
++    chmod 0440 /etc/sudoers
++
++# switch to the new user
++# USER isaac
++
++
++# # Clear .bashrc
++# RUN > /root/.bashrc
++# # Clear .bash_profile (if it exists)
++# RUN > /root/.bash_profile
++# # Clear .bash_login (if it exists)
++# RUN > /root/.bash_login
++# # Clear .profile (for sh or dash shells)
++# RUN > /root/.profile
++
++# # You might also find these in /etc/
++# RUN > /etc/bash.bashrc
++# RUN > /etc/profile
++
++
++# RUN > /root/.bashrc \
++#     && > /root/.bash_profile \
++#     && > /root/.bash_login \
++#     && > /root/.profile \
++#     && > /etc/bash.bashrc \
++#     && > /etc/profile
++
++# RUN echo ":" > /isaac-sim/runheadless.native.sh
++
++
+ # make working directory as the Isaac Lab directory
+ # this is the default directory when the container is run
+ WORKDIR ${ISAACLAB_PATH}
++
+diff --git a/docker/docker-compose.yaml b/docker/docker-compose.yaml
+index 5e694040..d566e5e7 100644
+--- a/docker/docker-compose.yaml
++++ b/docker/docker-compose.yaml
+@@ -136,3 +136,35 @@ volumes:
+   isaac-lab-docs:
+   isaac-lab-logs:
+   isaac-lab-data:
++  
++
++
++
++# Define host paths for persistent data (equivalent to Docker named volumes)
++# You'll need to create these directories on your host machine.
++# ENROOT_VOLUMES_BASE_PATH="${HOME}/enroot_volumes/isaac_lab" # Or any other path you prefer
++# mkdir -p \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-kit" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-ov" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-pip" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-gl" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-compute" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-carb-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-data" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-docs-volume" \ # Renamed to avoid conflict with bind mount
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-docs-build" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-data"
++
++# Assuming your 'source', 'docs', and 'tools' directories are in the parent directory
++# of where you run this command, similar to the docker-compose setup.
++# Adjust these paths if necessary.
++# HOST_SOURCE_PATH="../source"
++# HOST_DOCS_PATH="../docs"
++# HOST_TOOLS_PATH="../tools"
++
++# # Enroot command
++# enroot start --name isaac-lab-base-enroot --root --gpus all -e ACCEPT_EULA=Y -e ISAACSIM_BASE_IMAGE="nvcr.io/nvidia/isaac-sim" -e ISAACSIM_VERSION="4.2.0" -e DOCKER_ISAACSIM_ROOT_PATH="/isaac-sim" -e DOCKER_ISAACLAB_PATH="/workspace/isaaclab" -e DOCKER_USER_HOME="/root" -e ISAACSIM_PATH="/workspace/isaaclab/_isaac_sim" -e OMNI_KIT_ALLOW_ROOT=1 isaac-lab-base.sqsh bash
++
++# docker run -d --name isaac-lab-base --env-file .env.base --env ISAACSIM_PATH=${DOCKER_ISAACLAB_PATH}/_isaac_sim --env OMNI_KIT_ALLOW_ROOT=1 --gpus all --network host --entrypoint bash --stdin=true --tty=true olivertum/isaac-lab-base:0.1
+diff --git a/run_eval.sh b/run_eval.sh
+index 29b23523..58caa7a2 100755
+--- a/run_eval.sh
++++ b/run_eval.sh
+@@ -42,7 +42,6 @@ for seed in "${seeds[@]}"; do
+     # --load_run ${datetime}_fromVision_motions_DepthCam_extended_SEED_${seed} \
+     # --evaluate
+ 
+-    # USE
+     ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py \
+     --task Isaac-Velocity-AMPFlat-Unitree-Go2-Play-v0 \
+     --load_run ${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse_SEED_${seed} \
+diff --git a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+index 1ec25cdd..24a87bad 100644
+--- a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
++++ b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+@@ -149,7 +149,7 @@ def main():
+     
+     
+     # Recorded jpos path
+-    recording_path = "datasets/fromVision_motions/fromVision_amp.txt" # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
++    recording_path = "datasets/fromVision_motions_DepthCam_extended/start_stop_1271493000_amp.txt" # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
+     with open(recording_path, "r") as f:
+         motion_json = json.load(f)
+         motion_data = np.array(motion_json["Frames"])
+@@ -169,10 +169,9 @@ def main():
+     
+     recording_dt = float(motion_json["FrameDuration"])
+     
+-    assert recording_dt == 0.03334 or recording_dt == 0.01667 # should be 30Hz (video) or 60Hz (mocap)
+-    
+-    recording_dt *= 3 if recording_dt == 0.01667 else 1 # slow down a little
++    assert recording_dt == 0.03334 or recording_dt == 0.01667 or recording_dt == 0.021 # should be 30Hz (video) or 60Hz (mocap)
+     
++    # recording_dt *= 3 if recording_dt == 0.01667 else 1 # slow down a little
+     
+     
+     # Now we are ready!

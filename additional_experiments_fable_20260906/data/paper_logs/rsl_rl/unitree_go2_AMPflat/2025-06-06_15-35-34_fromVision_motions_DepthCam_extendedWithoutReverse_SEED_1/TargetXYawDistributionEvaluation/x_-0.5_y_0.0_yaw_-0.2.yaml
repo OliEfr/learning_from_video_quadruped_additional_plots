@@ -1,0 +1,22 @@
+agent_expert_distances: 2.950343132019043
+amp_motion_folder: datasets/fromVision_motions_DepthCam_extendedWithoutReverse/*
+episode length in s (target): 10.0
+episode_lengths: 500.0
+episodes_per_env: 1
+error_vel_xy: 0.02888656221330166
+error_vel_yaw: 0.07264876365661621
+heading_error: 1.55764901638031
+heading_target: 0.0
+mean_mechanical_cot: 0.7239456176757812
+mean_power: 47.12919235229492
+mean_speed: 0.48710858821868896
+mean_vel_x: -0.48659107089042664
+mean_vel_y: -0.00399213470518589
+mean_yaw: -0.20428778231143951
+num_envs: 5000
+num_eval_steps: 2500000.0
+target_speed: 0.49900001287460327
+target_velocity_x: -0.49900001287460327
+target_velocity_y: 0.0
+target_yaw: -0.1995992362499237
+total_episodes (real): 5000

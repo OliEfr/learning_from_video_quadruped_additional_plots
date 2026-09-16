@@ -1,0 +1,405 @@
+--- git status ---
+On branch add_latent_action_wrapper
+Your branch is up to date with 'origin/add_latent_action_wrapper'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .vscode/launch.json
+	modified:   docker/Dockerfile.base
+	modified:   docker/docker-compose.yaml
+	modified:   run_train.sh
+	modified:   source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/box_env_cfg.py
+	modified:   source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/parameters.py
+	modified:   source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/stairs_env_cfg.py
+	modified:   source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+	modified:   source/standalone/workflows/rsl_rl/play.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	plots/
+	rsl_rl/
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/.vscode/launch.json b/.vscode/launch.json
+index 9cf67d9d..01b23c8d 100644
+--- a/.vscode/launch.json
++++ b/.vscode/launch.json
+@@ -36,13 +36,13 @@
+             "type": "python",
+             "request": "launch",
+             "args": [
+-                // "env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*'",
+-                // "agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*'",
++                // "env.amp_motion_folder='datasets/fromVision_motions_DepthCamStairs/*'",
++                "agent.save_interval=100",
+                 "--task",
+                 "Isaac-Velocity-Box-SimpleReward-Unitree-Go2-v0",
+                 // "--headless",
+                 "--num_envs",
+-                "600",
++                "400",
+                 "--seed",
+                 "42",
+                 "--log_dir",
+@@ -60,7 +60,7 @@
+                 "--task",
+                 "Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0",
+                 "--num_envs",
+-                "25",
++                "200",
+                 "--load_run", "HUAWEI_2025-07-04_16-53-44_complexReward_MaxActDelay_2_SEED_1",
+                 // "--headless"
+                 // "--x_speed", ".5",
+@@ -78,10 +78,10 @@
+             "request": "launch",
+             "args": [
+                 "--task",
+-                "Isaac-Velocity-Stairs-SimpleReward-Unitree-Go2-v0",
++                "Isaac-Velocity-Stairs-SimpleReward-ResidualRL-Unitree-Go2-v0",
+                 "--num_envs",
+                 "25",
+-                "--load_run", "test_simple_reward_SEED_1",
++                "--load_run", "test_SEED_1",
+                 // "--headless"
+                 // "--x_speed", "0.5",
+                 // "--y_speed", "0.0",
+@@ -98,16 +98,17 @@
+             "request": "launch",
+             "args": [
+                 "--task",
+-                "Isaac-Velocity-Box-SimpleReward-Unitree-Go2-v0",
++                "Isaac-Velocity-Box-SimpleReward-Unitree-Go2-Play-v0",
+                 "--num_envs",
+-                "25",
+-                "--load_run", "debug_2025-07-04_15-10-08_SEED_42",
++                "100",
++                "--load_run", "TEST_1_simpRew_SEED_1",
+                 // "--headless"
+                 // "--x_speed", "0.5",
+                 // "--y_speed", "0.0",
+                 // "--yaw", "0.0",
+                 // "--evaluate",
+                 // "--eval_config", "TargetXHeadingDistribution",
++                "--disable_rsi",
+             ],
+             "program": "${workspaceFolder}/source/standalone/workflows/rsl_rl/play.py",
+             "console": "integratedTerminal"
+diff --git a/docker/Dockerfile.base b/docker/Dockerfile.base
+index 7bdb0403..c9a2a709 100644
+--- a/docker/Dockerfile.base
++++ b/docker/Dockerfile.base
+@@ -94,6 +94,47 @@ RUN echo "export ISAACLAB_PATH=${ISAACLAB_PATH}" >> ${HOME}/.bashrc && \
+     echo "alias tensorboard='${ISAACLAB_PATH}/_isaac_sim/python.sh ${ISAACLAB_PATH}/_isaac_sim/tensorboard'" >> ${HOME}/.bashrc && \
+     echo "export TZ=$(date +%Z)" >> ${HOME}/.bashrc
+ 
++
++
++# This overwrites the existing entrypoint that starts Isaac Sim.
++# ENTRYPOINT ["bash"]
++
++
++# create a new user and set the owner of the Isaac Lab directory to this user
++RUN useradd -ms /bin/bash isaac && \
++    chown -R isaac:isaac ${ISAACLAB_PATH} && \
++    echo "isaac    ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
++    chmod 0440 /etc/sudoers
++
++# switch to the new user
++# USER isaac
++
++
++# # Clear .bashrc
++# RUN > /root/.bashrc
++# # Clear .bash_profile (if it exists)
++# RUN > /root/.bash_profile
++# # Clear .bash_login (if it exists)
++# RUN > /root/.bash_login
++# # Clear .profile (for sh or dash shells)
++# RUN > /root/.profile
++
++# # You might also find these in /etc/
++# RUN > /etc/bash.bashrc
++# RUN > /etc/profile
++
++
++# RUN > /root/.bashrc \
++#     && > /root/.bash_profile \
++#     && > /root/.bash_login \
++#     && > /root/.profile \
++#     && > /etc/bash.bashrc \
++#     && > /etc/profile
++
++# RUN echo ":" > /isaac-sim/runheadless.native.sh
++
++
+ # make working directory as the Isaac Lab directory
+ # this is the default directory when the container is run
+ WORKDIR ${ISAACLAB_PATH}
++
+diff --git a/docker/docker-compose.yaml b/docker/docker-compose.yaml
+index 5e694040..d566e5e7 100644
+--- a/docker/docker-compose.yaml
++++ b/docker/docker-compose.yaml
+@@ -136,3 +136,35 @@ volumes:
+   isaac-lab-docs:
+   isaac-lab-logs:
+   isaac-lab-data:
++  
++
++
++
++# Define host paths for persistent data (equivalent to Docker named volumes)
++# You'll need to create these directories on your host machine.
++# ENROOT_VOLUMES_BASE_PATH="${HOME}/enroot_volumes/isaac_lab" # Or any other path you prefer
++# mkdir -p \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-kit" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-ov" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-pip" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-gl" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-cache-compute" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-carb-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-data" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-docs-volume" \ # Renamed to avoid conflict with bind mount
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-docs-build" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-logs" \
++#   "${ENROOT_VOLUMES_BASE_PATH}/isaac-lab-data"
++
++# Assuming your 'source', 'docs', and 'tools' directories are in the parent directory
++# of where you run this command, similar to the docker-compose setup.
++# Adjust these paths if necessary.
++# HOST_SOURCE_PATH="../source"
++# HOST_DOCS_PATH="../docs"
++# HOST_TOOLS_PATH="../tools"
++
++# # Enroot command
++# enroot start --name isaac-lab-base-enroot --root --gpus all -e ACCEPT_EULA=Y -e ISAACSIM_BASE_IMAGE="nvcr.io/nvidia/isaac-sim" -e ISAACSIM_VERSION="4.2.0" -e DOCKER_ISAACSIM_ROOT_PATH="/isaac-sim" -e DOCKER_ISAACLAB_PATH="/workspace/isaaclab" -e DOCKER_USER_HOME="/root" -e ISAACSIM_PATH="/workspace/isaaclab/_isaac_sim" -e OMNI_KIT_ALLOW_ROOT=1 isaac-lab-base.sqsh bash
++
++# docker run -d --name isaac-lab-base --env-file .env.base --env ISAACSIM_PATH=${DOCKER_ISAACLAB_PATH}/_isaac_sim --env OMNI_KIT_ALLOW_ROOT=1 --gpus all --network host --entrypoint bash --stdin=true --tty=true olivertum/isaac-lab-base:0.1
+diff --git a/run_train.sh b/run_train.sh
+index 092e8caf..22f57a7c 100755
+--- a/run_train.sh
++++ b/run_train.sh
+@@ -17,9 +17,9 @@ for seed in "${seeds[@]}"; do
+ 
+     # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extended/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extended/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extended_DR2"
+ 
+-    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl_DR2"
++    # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl_DR2"
+ 
+-    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' --task Isaac-Velocity-AMPNoisyFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl_DR2"
++    # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/*' --task Isaac-Velocity-AMPNoisyFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl_DR2"
+ 
+     # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py env.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse/*' agent.amp_motion_folder='datasets/fromVision_motions_DepthCam_extendedWithoutReverse/*' --task Isaac-Velocity-AMPFlat-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_fromVision_motions_DepthCam_extendedWithoutReverse"
+ 
+@@ -32,6 +32,8 @@ for seed in "${seeds[@]}"; do
+     # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-SimpleReward-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_simpleReward_DR"
+ 
+     # ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-ComplexReward-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_complexReward_test_DR3"
++
++    ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-AMPBox-Unitree-Go2-v0 --headless --seed $seed --log_dir "${datetime}_Curr"
+ done
+ 
+ 
+diff --git a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/box_env_cfg.py b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/box_env_cfg.py
+index a8089512..75e1b54c 100644
+--- a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/box_env_cfg.py
++++ b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/box_env_cfg.py
+@@ -34,9 +34,9 @@ class UnitreeGo2BoxEnvCfgSimpleReward(LocomotionVelocityRoughEnvCfg):
+         parameters.add_box_parameters_observation(self)
+         parameters.set_box_env_cfg_cmds(self) # calling this last is the savest way
+         parameters.set_rewards_simple(self)
+-        self.rewards.track_lin_vel_xy_exp.weight = 10.0 # need to increase to force agent to move
++        self.rewards.track_lin_vel_xy_exp.weight = 15.0 # need to increase to force agent to move
+         
+-        self.scene.num_envs = 4096  # 5480
++        self.scene.num_envs = 400 # 4096  # 5480
+         self.episode_length_s = 10.0
+ 
+         # RSI        
+@@ -87,7 +87,7 @@ class UnitreeGo2BoxEnvCfgComplexReward(UnitreeGo2BoxEnvCfgSimpleReward):
+         # post init of parent
+         super().__post_init__()
+ 
+-        parameters.set_rewards_complex(self)
++        # parameters.set_rewards_complex(self)
+         
+ 
+ @configclass
+@@ -133,9 +133,9 @@ class AMPUnitreeGo2BoxEnvCfg(LocomotionVelocityRoughEnvCfg):
+         motion_files = glob.glob(self.amp_motion_folder)
+         self.amp_motion_files = motion_files
+ 
+-        assert (
+-            self.events.reference_state_initialization is not None
+-        ), "Always expecting RSI. For evaluation, please use the same motion files as used for training."
++        # assert (
++        #     self.events.reference_state_initialization is not None
++        # ), "Always expecting RSI. For evaluation, please use the same motion files as used for training."
+ 
+ 
+ 
+diff --git a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/parameters.py b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/parameters.py
+index f305d798..19025c97 100644
+--- a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/parameters.py
++++ b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/parameters.py
+@@ -126,23 +126,24 @@ def set_pose2d_rewards_amp(cfg):
+ 
+ 
+ def set_rewards_complex(cfg):
+-    cfg.rewards.lin_vel_z_l2.weight = -2.0
++    # cfg.rewards.lin_vel_z_l2.weight = -2.0
+     cfg.rewards.ang_vel_xy_l2.weight = -0.05
+-    cfg.rewards.dof_torques_l2.weight = -0.0002
++    # cfg.rewards.dof_torques_l2.weight = -0.0002
+     cfg.rewards.dof_acc_l2.weight = -2.5e-7  # do not use for ResRL
+     cfg.rewards.action_rate_l2.weight = -0.01
+-    cfg.rewards.feet_air_time.weight = (
+-        10  # consider reducing this to 7.5 if performance on task reward is bad; do not use for ResRL
+-    )
+-    cfg.rewards.undesired_contacts_thigh.weight = -1.0
+-    cfg.rewards.undesired_contacts_calf.weight = -1.0
+-    cfg.rewards.contact_forces.weight = -1.0
+-    cfg.rewards.flat_orientation_l2.weight = -0.01
+-    cfg.rewards.joint_pos_limits.weight = -10.0 # do not use for ResRL
+-    cfg.rewards.torque_limits.weight = -1.0e-5
+-    cfg.rewards.joint_deviation_l1.weight = (
+-        -0.75
+-    )  # consider reducing this in case performance on task reward is bad
++    # cfg.rewards.feet_air_time.weight = (
++    #     10  # consider reducing this to 7.5 if performance on task reward is bad; do not use for ResRL
++    # )
++    # cfg.rewards.undesired_contacts_thigh.weight = -1.0
++    # cfg.rewards.undesired_contacts_calf.weight = -1.0
++    # cfg.rewards.contact_forces.weight = -1.0
++    # cfg.rewards.flat_orientation_l2.weight = -0.01
++    # cfg.rewards.joint_pos_limits.weight = -10.0 # do not use for ResRL
++    # cfg.rewards.torque_limits.weight = -1.0e-5
++    # cfg.rewards.joint_deviation_l1.weight = (
++    #     -0.75
++    # )  # consider reducing this in case performance on task reward is bad
++    pass
+ 
+ 
+ def set_stairs_env_cfg_cmds(cfg):
+@@ -280,10 +281,10 @@ def set_amp_settings(cfg, motion_folder="datasets/fromVision_motions_3/*", **kwa
+     params.update(kwargs)
+ 
+     # use reference state initialization
+-    cfg.events.reset_robot_joints = None
+-    cfg.events.reference_state_initialization = EventTerm(
+-        func=mdp.reference_state_initialization, mode="reset", params=params
+-    )
++    # cfg.events.reset_robot_joints = None
++    # cfg.events.reference_state_initialization = EventTerm(
++    #     func=mdp.reference_state_initialization, mode="reset", params=params
++    # )
+ 
+ def disable_domain_randomization(cfg):
+     cfg.scene.robot.actuators["base_legs"].min_delay = 0
+diff --git a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/stairs_env_cfg.py b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/stairs_env_cfg.py
+index f0a064f9..99330212 100644
+--- a/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/stairs_env_cfg.py
++++ b/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/stairs_env_cfg.py
+@@ -25,13 +25,13 @@ class UnitreeGo2StairsEnvCfgSimpleReward(LocomotionVelocityRoughEnvCfg):
+         # post init of parent
+         super().__post_init__()
+         
+-        self.terrain_type = "stairs"
++        self.terrain_type = "flat"
+         parameters.set_terrain(self)
+         parameters.set_rewards_simple(self)
+         parameters.set_stairs_env_cfg_cmds(self)
+-        parameters.set_stairs_env_cfg_reset_base(self)
+-        parameters.add_relative_position_on_stairs_observation(self)
+-        parameters.add_stair_parameters_observation(self)
++        # parameters.set_stairs_env_cfg_reset_base(self)
++        # parameters.add_relative_position_on_stairs_observation(self)
++        # parameters.add_stair_parameters_observation(self)
+ 
+ 
+ @configclass
+@@ -43,6 +43,34 @@ class UnitreeGo2StairsEnvCfgSimpleReward_PLAY(UnitreeGo2StairsEnvCfgSimpleReward
+         parameters.set_play_settings_flat(self)
+         parameters.set_play_settings_rough(self)
+ 
++#######################################################################
++# Stairs residual RL simple reward
++
++
++@configclass
++class UnitreeGo2StairsEnvCfgSimpleRewardResidualRL(UnitreeGo2StairsEnvCfgSimpleReward):
++    def __post_init__(self):
++
++        # post init of parent
++        super().__post_init__()
++
++        self.action_manager_class = "ResidualRLActionManager"
++        
++        self.residual_rl_data = residual_rl_data.data[
++            "datasets/fromVision_motions_DepthCam_extendedWithoutReverse_feetZAmpl/walk_869488000_amp.txt"
++        ]
++        self.actions.joint_pos.scale = 0.15
++
++        self.observations.policy.phases = ObsTerm(func=mdp.phases, noise=None)
++
++        self.scene.robot.actuators["base_legs"].stiffness = 50
++        
++        # we require the joint pos action offsets to be activated for ResRL
++        assert (
++            self.actions.joint_pos.use_default_offset == True
++        ), "Require default offset to be activated for residual RL."
++
++
+ #######################################################################
+ # Stairs complex reward
+ 
+diff --git a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+index ba21e3b9..26cd773a 100644
+--- a/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
++++ b/source/standalone/demos/UnitreeGo2_replay_joint_pos.py
+@@ -62,10 +62,10 @@ from omni.isaac.lab_assets.unitree import UNITREE_GO2_CFG  # isort:skip
+ UNITREE_GO2_CFG.spawn.rigid_props.disable_gravity = True
+ 
+ scene = "box"
+-box_height = 0.3
++box_height = 0.1
+ 
+ # Recorded jpos path
+-recording_path = "datasets/temp/obstacle_3_3015061000_amp_increased_feet_z.txt"  # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
++recording_path = "datasets/fromVision_motions_DepthCam_obstacle/obstacle_2_3126098000_amp.txt"  # "datasets/fromVision_motions/fromVision_amp.txt" || datasets/mocap_motions/trot2_amp.txt
+ 
+ freq = 0.5  # replay frequency in Hz for the recorded trajectory
+ 
+diff --git a/source/standalone/workflows/rsl_rl/play.py b/source/standalone/workflows/rsl_rl/play.py
+index b1c78b8c..ed9267a4 100644
+--- a/source/standalone/workflows/rsl_rl/play.py
++++ b/source/standalone/workflows/rsl_rl/play.py
+@@ -79,6 +79,11 @@ parser.add_argument(
+     default=None,
+     help="Target max_delay for evaluation. For Huawei experiments.",
+ )
++parser.add_argument(
++    "--disable_rsi",
++    action="store_true",
++    help="Disable RSI. If set, RSI will be disabled.",
++)
+ 
+ # append AppLauncher cli args
+ AppLauncher.add_app_launcher_args(parser)
+@@ -184,6 +189,11 @@ def main():
+     if args_cli.max_delay is not None:
+         env_cfg.scene.robot.actuators['base_legs'].max_delay = int(args_cli.max_delay)
+         print(env_cfg.scene.robot.actuators['base_legs'].max_delay)
++        
++    # Overwrite RSI
++    if args_cli.disable_rsi:
++        env_cfg.events.reference_state_initialization = None
++        # TODO would need to replace by random initialization.
+ 
+     # Load the stored agent config. We replace some parameters in agent_cfg with the stored values later in the code.
+     f = open(os.path.join(log_dir, "params", "agent.yaml"))

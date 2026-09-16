@@ -1,0 +1,47 @@
+2026-09-11_11:15:43 START fromVision_motions_DepthCam_extHalf_SEED_1
+2026-09-11_11:17:13 START fromVision_motions_DepthCam_extHalf_SEED_2
+2026-09-12_01:15:01 DONE fromVision_motions_DepthCam_extHalf_SEED_1
+2026-09-12_01:17:38 DONE fromVision_motions_DepthCam_extHalf_SEED_2
+ (train: skip)
+2026-09-12_01:16:34 EVAL DONE fromVision_motions_DepthCam_extHalf_SEED_1
+2026-09-12_01:16:47 START fromVision_motions_DepthCam_extHalf_SEED_3 (train: yes)
+2026-09-12_01:18:17 START fromVision_motions_DepthCam_extHalf_SEED_2 (train: skip)
+2026-09-12_01:19:33 EVAL DONE fromVision_motions_DepthCam_extHalf_SEED_2
+2026-09-12_01:19:47 START fromVision_motions_DepthCam_extAddedOnly_SEED_1 (train: yes)
+2026-09-12_14:08:13 DONE fromVision_motions_DepthCam_extHalf_SEED_3
+2026-09-12_14:09:30 EVAL DONE fromVision_motions_DepthCam_extHalf_SEED_3
+2026-09-12_14:10:19 START fromVision_motions_DepthCam_extendedWithoutReverse_SEED_1 (train: yes)
+2026-09-12_16:48:22 DONE fromVision_motions_DepthCam_extAddedOnly_SEED_1
+2026-09-12_16:50:25 EVAL DONE fromVision_motions_DepthCam_extAddedOnly_SEED_1
+2026-09-12_16:50:50 START fromVision_motions_DepthCam_extAddedOnly_SEED_2 (train: yes)
+2026-09-13_03:31:39 DONE fromVision_motions_DepthCam_extendedWithoutReverse_SEED_1
+2026-09-13_03:32:59 EVAL DONE fromVision_motions_DepthCam_extendedWithoutReverse_SEED_1
+2026-09-13_03:33:22 START fromVision_motions_DepthCam_extAddedOnly_SEED_3 (train: yes)
+2026-09-13_06:49:56 DONE fromVision_motions_DepthCam_extAddedOnly_SEED_2
+2026-09-13_06:51:17 EVAL DONE fromVision_motions_DepthCam_extAddedOnly_SEED_2
+2026-09-13_06:51:53 START fromVision_motions_DepthCam_extAddedOnly_SEED_4 (train: yes)
+2026-09-13_17:24:49 DONE fromVision_motions_DepthCam_extAddedOnly_SEED_3
+2026-09-13_17:26:14 EVAL DONE fromVision_motions_DepthCam_extAddedOnly_SEED_3
+2026-09-13_17:26:25 START fromVision_motions_DepthCam_extNoTurn_SEED_1 (train: yes)
+2026-09-13_20:49:36 DONE fromVision_motions_DepthCam_extAddedOnly_SEED_4
+2026-09-13_20:50:59 EVAL DONE fromVision_motions_DepthCam_extAddedOnly_SEED_4
+2026-09-13_20:51:55 START fromVision_motions_DepthCam_extNoTurn_SEED_2 (train: yes)
+2026-09-13_21:14:32 FAILED fromVision_motions_DepthCam_extNoTurn_SEED_2 rc=0
+2026-09-13_21:15:25 START fromVision_motions_DepthCam_extHalfCov_SEED_1 (train: yes)
+2026-09-14_07:19:36 DONE fromVision_motions_DepthCam_extNoTurn_SEED_1
+2026-09-14_07:20:55 EVAL DONE fromVision_motions_DepthCam_extNoTurn_SEED_1
+2026-09-14_07:20:57 START fromVision_motions_DepthCam_extHalfCov_SEED_2 (train: yes)
+2026-09-14_11:16:23 DONE fromVision_motions_DepthCam_extHalfCov_SEED_1
+2026-09-14_11:17:38 EVAL DONE fromVision_motions_DepthCam_extHalfCov_SEED_1
+2026-09-14_11:18:28 START fromVision_motions_DepthCam_extHalfCov_SEED_3 (train: yes)
+2026-09-14_21:26:44 DONE fromVision_motions_DepthCam_extHalfCov_SEED_2
+2026-09-14_21:28:01 EVAL DONE fromVision_motions_DepthCam_extHalfCov_SEED_2
+2026-09-14_21:29:00 START grid fromVision_motions_DepthCam_extHalf_SEED_1
+2026-09-14_22:45:22 GRID DONE fromVision_motions_DepthCam_extHalf_SEED_1
+2026-09-14_22:45:30 START grid fromVision_motions_DepthCam_extHalf_SEED_2
+2026-09-15_00:00:42 DONE fromVision_motions_DepthCam_extHalfCov_SEED_3
+2026-09-15_00:01:48 EVAL DONE fromVision_motions_DepthCam_extHalfCov_SEED_3
+2026-09-15_00:02:00 START grid fromVision_motions_DepthCam_extHalf_SEED_3
+2026-09-15_00:02:08 GRID DONE fromVision_motions_DepthCam_extHalf_SEED_2
+2026-09-15_01:01:32 GRID DONE fromVision_motions_DepthCam_extHalf_SEED_3
+2026-09-15_01:02:31 queue empty, exiting

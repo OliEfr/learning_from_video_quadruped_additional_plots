@@ -350,3 +350,253 @@ Reading: for the video sets, the cells in which the policy stays closest to the 
   vx-vy grid), consistent with the missing backward-walking and slow-turning demonstrations."
 * "The AMP loader samples clips by MotionWeight and time uniformly within a clip, so short fast clips dominate the expert samples per frame:
   45 % (MoCap) and 22 % (Video (extended)) of the expert samples are faster than the 1 m/s command limit."
+
+---------------------------------------------------------------------------------------------------
+
+## Experiment 5 - Does coverage or the amount of data explain the Video (extended) gain? (author's follow-up, 2026-09-11)
+
+Critique addressed: the 23 % / 13 % headline (Video (extended) vs MoCap, Fig. 4) changes source, amount (6.0 s -> 12.2 s) and coverage
+(13.9 % -> 25.0 % of the command box) at once. Author constraints: no MoCap extension, no re-run of the paper baselines beyond one seed,
+focus on the video data. Design: keep the source (video) and the pipeline fixed and vary amount and coverage separately, by cutting the
+existing expert files of `fromVision_motions_DepthCam_extendedWithoutReverse` (no re-reconstruction, no re-retargeting).
+
+Scripts: `scripts/exp5_build_video_subsets.py` (sets + coverage; window starts recorded as E1_STARTS / E1B_STARTS, `--e1-search` /
+`--e1b-search` redo the searches), `scripts/exp5_analyze.py` (Fig.-4 metrics), `scripts/exp5_grid_analysis.py` (E1 grid). Numbers:
+`data/exp5_coverage.md`, `data/exp5_sets.json`, `data/exp5_metrics.{md,json}`, `data/exp5_grid.{md,json}`. Figures: `figures/fig_exp5_fig4_style`
+(Fig.-4-style bars: Video, Video (ext.), E1b, E2, E3; `scripts/exp5_fig4_style.py`), `figures/fig_exp5_fig5_style` (Fig.-5-style coverage +
+policy heat maps, paper rows + one row per arm with a TargetXY grid, currently E1; `scripts/exp5_fig5_style.py <folder ...>`),
+`figures/fig_exp5_grid_key_result` (coverage-vs-error regression, `scripts/exp5_grid_analysis.py`). Training/eval at the paper's code state (IsaacLab e3df3c0b, rsl_rl a404f75, 5480 envs,
+25 000 iterations, `amp_task_reward_lerp` 0.3) in the worktree `~/project_repos/isaac_lab/IsaacLab_paper_e3df3c0b`; evaluation with the
+paper's `DefaultEvalConfig` (10 000 envs x 2 episodes of 10 s on the training command distribution = the Fig.-4 numbers).
+
+### Baseline note (verified against the AMP_for_hardware repository)
+The paper's MoCap set follows Escontrela et al. [14]: `datasets/mocap_motions/` of AMP_for_hardware contains six clips (pace0, pace1, trot0,
+trot1, rightturn0, leftturn0; 4.5 s; FrameDuration 0.021; MotionWeight 0.5 on pace0/trot1), described in their Sec. III-C as "pacing,
+trotting, cantering, and turning in place"; `retarget_motion.py:52` reproduces that selection ("These are the data used in AMP_for_hardware").
+The MoCap baseline is therefore the standard published subset, not a selection made for this paper - the paper should cite [14] for the clip
+selection (it currently cites only [7] for the data).
+
+### Ablation sets (all cut from the 8 files of Video (extended); header fields incl. MotionWeight unchanged unless stated)
+
+| set | construction | amount | what it isolates |
+|---|---|---|---|
+| E1 Video (extended, half) | every clip trimmed to ONE contiguous window of 50 % of its frames; the 8 window starts chosen jointly (coordinate ascent, 8 restarts) to retain the covered vx-vy cells, vx-wz cells, 3-D box coverage and standing mass of the full set | 186 fr, 5.93 s | vs Video (extended): half the amount at reduced (20.5 %) coverage; vs Video: equal amount, higher coverage |
+| E1b Video (extended, half, coverage-matched) | every clip cut to TWO contiguous windows of 25 % of its frames, each written as its own file with half the clip's MotionWeight (per-clip AMP mass unchanged, no artificial junction); the 16 window starts chosen jointly to reproduce the coverage of the full set | 16 files, 186 fr, 5.67 s | vs Video (extended): half the amount at equal (24.7 %) coverage - the direct amount-vs-coverage test; added 2026-09-13 after E1 |
+| E2 Video (added clips only) | slow turn, L-R turn, start-stop 1, start-stop 2 | 189 fr, 6.17 s | same amount as Video, the extension's content only (no fast walk clip) |
+| E3 Video (extended minus turning) | 8 clips minus slow turn and L-R turn | 257 fr, 8.37 s | the -39 % yaw-error claim of Sec. IV-A |
+| E4 Video (extended minus start-stop) | 8 clips minus the two start-stop clips | 302 fr, 9.87 s | the standing-command claim (built, not trained: budget) |
+| E0 | Video (extended), one new seed at the pinned code state | 374 fr, 12.20 s | code-state anchor against the paper's Fig.-4 values |
+
+Coverage (Exp.-2 rule and tolerances, `data/exp5_coverage.md`):
+
+| set | clips | frames | dur [s] | vx-vy cells | vx-wz cells | box cov [%] | standing [%] | turning [%] | vx>1 [%] |
+|---|---|---|---|---|---|---|---|---|---|
+| Video (paper) | 4 | 185 | 6.03 | 22/147 | 48/441 | 13.9 | 2.2 | 42.0 | 25.0 |
+| Video (extended) (paper) | 8 | 374 | 12.20 | 24/147 | 83/441 | 25.0 | 4.0 | 54.0 | 22.2 |
+| **E1 extHalf** | 8 | 186 | 5.93 | 24/147 | 71/441 | 20.5 | 4.1 | 44.4 | 20.6 |
+| **E1b extHalfCov** | 16 (8 clips x 2 windows) | 186 | 5.67 | 25/147 | 78/441 | 24.9 | 4.6 | 46.4 | 20.6 |
+| (first half of every clip, not used) | 8 | 186 | 5.93 | 18/147 | 49/441 | 17.5 | 3.0 | 52.3 | 22.2 |
+| (every 2nd frame of every clip, not used) | 8 | 190 | 12.14 | 20/147 | 56/441 | 18.8 | 4.0 | 49.9 | 22.2 |
+| E2 extAddedOnly | 4 | 189 | 6.17 | 8/147 | 48/441 | 19.1 | 6.9 | 75.9 | 0.0 |
+| E3 extNoTurn | 6 | 257 | 8.37 | 24/147 | 64/441 | 21.3 | 5.2 | 43.0 | 28.6 |
+| E4 extNoStartStop | 6 | 302 | 9.87 | 22/147 | 70/441 | 18.6 | 1.2 | 52.5 | 28.6 |
+
+E1 covers as many vx-vy cells as Video (extended) (24; 21 of them the same cells), 71 of its 83 vx-wz cells (63 the same) and 82 % of its
+3-D box coverage at 50 % of the frames; Video has 92 % / 58 % / 56 % of those values at the same amount. Windows (frame ranges of the original files): L-R turn [14:50) of 73,
+slow [23:57) of 69, slow turn [15:37) of 44, start-stop 1 [13:27) of 27, start-stop 2 [22:44) of 45, turn L [2:24) of 45, turn R [22:44) of 44,
+walk [3:17) of 27. The naive "first half of every clip" would have lost 41 % of the vx-wz cells.
+
+E1b closes the remaining coverage gap: 24.9 % box coverage (Video (extended): 25.0 %; Monte-Carlo estimate, +-0.2), 78/441 vx-wz cells, 4.6 % standing mass at 5.67 s.
+One contiguous window per clip cannot exceed about 22 % at half the frames (tested with a box-only objective), two windows per clip can.
+Windows: L-R turn [17:35)+[48:66) of 73, slow [16:33)+[44:61) of 69, slow turn [20:31)+[32:43) of 44, start-stop 1 [0:7)+[12:19) of 27,
+start-stop 2 [0:11)+[16:27) of 45, turn L [2:13)+[14:25) of 45, turn R [20:31)+[32:43) of 44, walk [3:10)+[14:21) of 27. Caveat: of E1b's
+25 vx-vy and 78 vx-wz cells only 19 and 54 coincide with cells of the full set; the rest arise from the velocity estimate at the edges of
+the short windows (7-18 frames, smoothing window 7). It is what the paper's metric reports, and it is stated here rather than hidden.
+
+Two properties of the paper's box-coverage metric surfaced while building the sets and belong in the paper's Sec. IV-B wording:
+(i) it is amount-sensitive by construction - the "every 2nd frame" variant keeps the full 12.2 s trajectory yet drops to 18.8 %, because
+the measure counts commands within one grid step of *some* frame and half the frames leave gaps; (ii) concatenating non-adjacent windows
+inside one file inflates it through the velocity spike at the junction (24.5 % vs 22.0 % for the same frames as separate files). E1b
+therefore uses separate files.
+
+E2 is the mirror image: at Video's amount it covers 48/441 vx-wz cells like Video but only 8/147 vx-vy cells (no forward walking above
+0.5 m/s: the walk clip is the only one faster than 0.8 m/s), with 7 % standing and 76 % turning mass.
+
+### Predictions (written before training)
+* Coverage, not amount: E1 ~ Video (extended) << Video on vel./yaw error; E2 improves yaw and standing but loses forward-speed tracking.
+* Amount: E1 degrades towards Video although its coverage is close to Video (extended).
+
+### Runs (queue `run_exp5_queue_v2.sh`, 2 concurrent, ~1.0 iterations/s combined, 13-14 h per run in dual mode; 2026-09-11 11:15 to 2026-09-15 01:02, 61.8 h of the 90-h budget; E3 seeds 2-3 added afterwards, 2026-09-15 12:07 to 2026-09-16 02:00)
+Trained and evaluated: E1 seeds 1-3, E0 seed 1, E2 seeds 1-4 (seed 1 diverged, see below), E3 seeds 1-3, E1b seeds 1-3; TargetXY grid
+(147 cells x 5000 envs) for E1 seeds 1-3. E3 seed 2 was stopped at iteration 2000 and seed 3 not started, to fit E1b into the 90-h budget
+(author's decision 2026-09-13); both were trained and evaluated after the budget (2026-09-15/16). All evaluations load `model_20000.pt`, as the paper's runs did: the paper-era runner never advances
+`current_learning_iteration`, so the final save overwrites `model_0.pt` and `get_checkpoint_path` picks the highest numbered file -
+the Fig.-4 numbers are iteration-20000 policies. Kept for comparability; worth one sentence in the paper's experimental setup.
+
+### Results (`data/exp5_metrics.md`, `scripts/exp5_analyze.py`; DefaultEvalConfig as Fig. 4, 20 000 episodes per seed)
+
+| set | clips / dur / box cov. | seeds | vel. error [m/s] | yaw error [rad/s] | CoT | vs Video (ext.) vel / yaw / CoT |
+|---|---|---|---|---|---|---|
+| MoCap (paper) | 6 / 4.5 s / 13 % | 3 | 0.0624 | 0.645 | 1.51 | +30 % / +400 % / +15 % |
+| Video (paper) | 4 / 6.0 s / 13.9 % | 3 | 0.0565 | 0.213 | 1.59 | +17 % / +65 % / +21 % |
+| Video (extended) (paper) | 8 / 12.2 s / 25.0 % | 3 | 0.0481 | 0.129 | 1.31 | - |
+| **E0** Video (extended), re-run | 8 / 12.2 s / 25.0 % | 1 | 0.0471 | 0.124 | 1.26 | -2 % / -4 % / -4 % |
+| **E1** Video (extended, half) | 8 / 5.9 s / 20.5 % | 3 | 0.0575 [0.0560, 0.0594] | 0.181 [0.136, 0.229] | 1.35 [1.20, 1.54] | +20 % / +40 % / +3 % |
+| **E1b** Video (extended, half, coverage-matched) | 16 / 5.7 s / 24.9 % | 3 | 0.0535 [0.0519, 0.0544] | 0.131 [0.125, 0.134] | 1.15 [1.09, 1.22] | +11 % / +1 % / -12 % |
+| **E2** Video (added clips only) | 4 / 6.2 s / 19.1 % | 3 (seeds 2-4) | 0.195 [0.182, 0.214] | 0.131 [0.119, 0.137] | 1.93 [1.85, 2.07] | +306 % / +1 % / +48 % |
+| **E3** Video (extended minus turning) | 6 / 8.4 s / 21.3 % | 3 | 0.0523 [0.0496, 0.0544] | 0.145 [0.133, 0.158] | 1.34 [1.28, 1.39] | +9 % / +12 % / +3 % |
+
+Per seed: E1 (0.0560, 0.229, 1.54), (0.0572, 0.136, 1.20), (0.0594, 0.177, 1.30); E1b (0.0544, 0.133, 1.13), (0.0519, 0.125, 1.22),
+(0.0541, 0.134, 1.09); E2 (0.182, 0.137, 2.07), (0.214, 0.135, 1.88), (0.191, 0.119, 1.85). All valid runs completed exactly 20 000
+evaluation episodes (no falls); heading error 0.40-0.43 for every arm.
+
+**E0 anchor.** The re-run seed of Video (extended) lands 2-4 % below the paper's three-seed means on all three metrics, inside a normal
+seed spread. The pinned code state reproduces the paper, so the new arms are compared with the paper's Fig.-4 values directly.
+
+**Excluded run.** E2 seed 1 diverged: the PPO critic loss first spiked at iteration 7772, exploded from iteration 9640 on (3 -> 1e12 -> 1e27)
+and the policy collapsed at 9880 (mean reward 1050 -> 200, robots falling, discriminator separating trivially) without recovering; its
+model_20000 evaluation gives 0.544 / 0.691 / 19.9 with 23 760 episodes (falls). None of the other 13 runs shows a single critic spike after
+iteration 0, so this is a random PPO instability, not a property of the E2 data. It was replaced by seed 4 and is listed in
+`data/exp5_metrics.md` as excluded.
+
+### Reading
+
+1. **Duration alone does not explain the Video (extended) gain.** At 5.7 s - less than the 6.0 s of Video - the coverage-matched half set
+   (E1b) reaches the yaw error of Video (extended) (0.131 vs 0.129) and a lower cost of transport (1.15 vs 1.31), while Video, at the same
+   duration but 13.9 % coverage, sits at 0.213 and 1.59. Relative to the Video -> Video (extended) gain, E1b recovers 98 % of the yaw
+   improvement and more than all of the CoT improvement with half the data.
+
+2. **Coverage acts per command axis, and amount is not zero.** Holding the amount at about 6 s and raising box coverage from 13.9 % (Video)
+   to 20.5 % (E1) to 24.9 % (E1b) gives yaw error 0.213 -> 0.181 -> 0.131 and CoT 1.59 -> 1.35 -> 1.15, monotone in coverage. Velocity error
+   does not follow: 0.0565 -> 0.0575 -> 0.0535. E1 covers all 24 vx-vy cells of the full set yet tracks velocity no better than Video, and
+   E1b, at equal coverage, remains 11 % above Video (extended). The remaining velocity gap at equal coverage is the amount effect
+   (5.7 s vs 12.2 s); about one third of the Video -> Video (extended) velocity gain is recovered by coverage alone.
+
+3. **Content decides which metric improves (E2, E3).** The four added clips alone (turning, start-stop; no forward walking above 0.5 m/s)
+   give the yaw error of Video (extended) (0.131) but a velocity error 3.5 times that of Video (0.195): the policy caps its speed
+   (training-time mean speed 0.43 m/s at a mean target of 0.54 m/s; E0: 0.50). The fast walk clip is necessary for velocity tracking, the
+   turning clips are necessary for yaw tracking: removing them from the full set (E3, three seeds) raises the yaw error by 12 % (0.145 [0.133, 0.158] vs 0.129) and the
+   velocity error by 9 % at 8.4 s of data. The -39 % yaw claim of Sec. IV-A is therefore attributable to the turning clips.
+
+4. **For the paper.** The critique is right that Fig. 4 confounds source, amount and coverage; the ablation resolves it for the video side.
+   The yaw-error and CoT gains of Video (extended) over Video are coverage effects (turning and standing clips), reproducible with half the
+   data. The velocity-tracking gain is a joint effect of covering fast commands (the walk clip) and of the amount of data; it should not be
+   attributed to coverage alone. "Coverage" should be stated per command axis (vx-vy cells for velocity tracking, vx-wz cells for yaw
+   tracking), because the 3-D box measure is amount-sensitive and mixes both.
+
+### Grid evaluation of E1 (TargetXY, 7 x 21 vx-vy cells at yaw rate 0; `data/exp5_grid.md`, `figures/fig_exp5_grid_key_result`)
+Seed-mean grid of the three E1 policies (exact yaml values, 5000 envs per cell) against the paper sets recovered from the Fig.-5 colours
+(Exp. 4). Command distance = normalised distance of the cell's command to the nearest expert frame of the training set; combined error =
+0.5 (vel/0.1 + yaw/0.4) as in Exp. 4.
+
+| set | covered cells | rho(cmd dist, err vel) | rho(cmd dist, err yaw) | rho(cmd dist, comb.) | slope comb. vs cmd dist | intercept | comb. covered / uncovered | agent-expert dist covered / uncovered |
+|---|---|---|---|---|---|---|---|---|
+| **E1** Video (ext., half), 3 seeds | 24 | 0.21 [0.10, 0.35] | 0.68 [0.29, 0.74] | 0.60 [0.41, 0.60] | 0.36 | 0.35 | 0.39 / 0.53 (p = 1e-5) | 2.19 / 3.11 |
+| Video (ext.) (paper, recovered) | 24 | 0.38 | 0.16 | 0.31 | 0.08 | 0.36 | 0.34 / 0.40 (p = 8e-4) | 2.24 / 3.16 |
+| Video (paper, recovered) | 22 | 0.62 | 0.18 | 0.44 | 0.24 | 0.46 | - | 2.54 / 3.28 |
+| MoCap (paper, recovered) | 14 | 0.25 | 0.71 | 0.61 | 0.22 | 0.61 | 0.67 / 0.76 (p = 9e-4) | 2.88 / 2.93 |
+
+Brackets: per-seed range. Grid means of E1 (uniform over the 147 cells, not the Fig.-4 command distribution): vel 0.061, yaw 0.161, CoT 1.40.
+
+Reading: at well-covered commands the half set tracks like the full set (regression intercept 0.35 vs 0.36; covered-cell combined error
+0.39 vs 0.34), but its error grows about four times faster with the distance to the nearest expert frame (slope 0.36 vs 0.08; rho 0.60 vs
+0.31) and the covered/uncovered gap is three times larger (0.13 vs 0.06). Less data makes the policy more sensitive to the remaining gaps
+in coverage - the mechanism behind the Fig.-8 argument of the paper, now shown within one source and one clip set. The yaw error carries
+the effect (rho 0.68; covered 0.109 vs uncovered 0.171 rad/s), the velocity error only weakly (rho 0.21), consistent with the Fig.-4 result
+that coverage governs yaw tracking while velocity tracking also needs amount. The imitation score follows coverage as in Exp. 4
+(rho(cmd dist, agent-expert dist) 0.82; 2.19 in covered vs 3.11 in uncovered cells). Seed spread is large for yaw (rho 0.29-0.74): seed 1,
+the seed with the worst Fig.-4 yaw error (0.229), fails mostly in the uncovered high-|vy| cells. Caveat: the paper values are colour-recovered
+and clipped at the colour-bar limits (yaw 0.4 rad/s), which compresses their slopes; the qualitative ordering E1 > Video (ext.) is robust
+to that, the factor is not.
+
+Paste-ready (Fig. 8 paragraph): "Trained on half the video data with the same clips, the policy tracks well-covered commands as well as
+the full set (regression intercept 0.35 vs 0.36) but its error grows faster with the distance to the nearest expert frame (slope 0.36 vs
+0.08, rho = 0.60 vs 0.31): the amount of data buys robustness to the remaining gaps in coverage, not accuracy where the data is."
+
+### Caveats
+* E0 is a single seed; E1, E1b, E2 and E3 have three (E3 seeds 2-3 trained after the 90-h budget). The paper values are the published three-seed means (Fig. 4), not re-runs.
+* E1b's coverage partly stems from velocity-estimation edge effects of the short windows (19/25 vx-vy and 54/78 vx-wz cells coincide with
+  the full set); the metric is the paper's, the caveat should accompany the number.
+* The grid comparison with the paper's Fig. 5/7 uses values recovered from the figure colours (Exp. 4), clipped at the colour-bar limits,
+  whereas the E1 grid values are exact; slopes of the paper sets are compressed by the clipping.
+* All new policies and the paper's were evaluated at iteration 20 000 (see Runs).
+
+### Paste-ready sentences
+* Sec. IV-B (after the coverage numbers): "To separate the amount of data from its coverage, we trained on subsets of the extended video
+  set. Cutting every clip to two short windows such that the command coverage of the full set is preserved (5.7 s instead of 12.2 s) leaves
+  the yaw tracking error unchanged (0.131 vs 0.129 rad/s) and lowers the cost of transport (1.15 vs 1.31), while the velocity error rises by
+  11 % (0.054 vs 0.048 m/s). Cutting to one window per clip, which reduces the box coverage to 20.5 %, raises the yaw error to 0.181 rad/s.
+  The improvements in yaw tracking and efficiency therefore follow the coverage of the expert data rather than its amount; velocity tracking
+  benefits from both."
+* Sec. IV-A (turning / added clips): "Training on the four added clips alone reproduces the yaw tracking error of the extended set
+  (0.131 rad/s) but, lacking any forward walking faster than 0.5 m/s, increases the velocity error to 0.195 m/s; removing the two turning
+  clips from the extended set increases the yaw error by 23 %. The gains are thus attributable to the content of the added clips."
+* Abstract / conclusion (soften "amount"): replace "more data" phrasing by "recordings that cover the command range; the gain is
+  reproduced with half the data when the coverage is preserved".
+* Sec. III / IV (baseline): "The MoCap baseline uses the six clips (pace, trot, left and right turn) of Escontrela et al. [14], i.e. the
+  standard subset of the dog motion-capture dataset [7] used for AMP on quadrupeds."
+* Setup: "All policies are evaluated at training iteration 20 000." (only if the authors keep the paper-era checkpoint behaviour.)
+
+## Experiment 6 - What else is in the paper's training logs (logs.zip, 2026-09-16)?
+
+`~/Downloads/logs.zip` (48 GB, 9662 files) holds the paper's runs: `logs/rsl_rl/unitree_go2_{AMPflat,flat,AMPBox,Box,AMPstanding,standing}/`.
+Everything except checkpoints (`model_*.pt`) and TensorBoard files was extracted to `data/paper_logs/` (20 MB, 3647 yaml files):
+`metrics.yaml` (DefaultEvalConfig, the Fig.-4 numbers), `None_metrics.yaml`, the per-cell grid evaluations
+(`TargetXY/TargetXYaw/TargetXHeadingDistributionEvaluation/*.yaml`), `params/`, `git/` diffs.
+
+### Exact reproduction of the paper run (code-state check)
+The Exp.-5 re-run seed of Video (extended) (E0) is identical to the paper's seed 1 to all printed digits: error_vel_xy 0.04705556482076645,
+error_vel_yaw 0.1237926259636879, CoT 1.2578564882278442 in both `metrics.yaml`. Training and evaluation are deterministic given the seed,
+so the ablation arms of Exp. 5 are compared to the paper on identical code. The Fig.-4 sets now carry exact per-seed values in
+`data/exp5_metrics.md` (whiskers in `fig_exp5_fig4_style`): MoCap 0.0624 [0.0609, 0.0633] / 0.645 [0.590, 0.682] / 1.51 [1.48, 1.55];
+Video 0.0565 [0.0540, 0.0579] / 0.213 [0.190, 0.228] / 1.59 [1.52, 1.69]; Video (extended) 0.0481 [0.0471, 0.0497] / 0.129 [0.124, 0.136] /
+1.31 [1.25, 1.43].
+
+### Yaw-tracking reward weight sweep with four metrics (paper Fig. 5)
+Runs `*_trackAnVelRewWeight_{30,40,50}_SEED_{1,2}` for MoCap and Video (extended) (2 seeds each; weight 20 = the three Fig.-4 seeds).
+Their real evaluation is `None_metrics.yaml`; the `metrics.yaml` inside these folders is a stale copy of the AlignedDepthAnything seed-1
+evaluation (identical numbers in 11 of 12 folders) and must not be used. `scripts/fig5_reward_weight_4metrics.py` ->
+`figures/fig5_reward_weight_4metrics.{pdf,png}` (2 x 2, single column), `data/reward_weight_sweep.{md,json}`. Mean [min, max]:
+
+| set | weight | yaw err [rad/s] | vel err [m/s] | CoT | imitation score (agent-expert distance) |
+|---|---|---|---|---|---|
+| MoCap | 20 | 0.645 [0.590, 0.682] | 0.0624 [0.0609, 0.0633] | 1.51 [1.48, 1.55] | 2.15 [2.11, 2.19] |
+| MoCap | 30 | 0.342 [0.282, 0.403] | 0.0776 [0.0656, 0.0895] | 1.55 [1.49, 1.61] | 2.27 [2.27, 2.28] |
+| MoCap | 40 | 0.127 [0.122, 0.133] | 0.0922 [0.0906, 0.0939] | 1.66 [1.58, 1.75] | 2.34 [2.32, 2.35] |
+| MoCap | 50 | 0.087 [0.083, 0.091] | 0.0788 [0.0729, 0.0847] | 1.59 [1.47, 1.71] | 2.44 [2.37, 2.50] |
+| Video (extended) | 20 | 0.129 [0.124, 0.136] | 0.0481 [0.0471, 0.0497] | 1.31 [1.25, 1.43] | 2.18 [2.14, 2.21] |
+| Video (extended) | 30 | 0.083 [0.083, 0.084] | 0.0487 [0.0477, 0.0496] | 1.27 [1.24, 1.29] | 2.19 [2.18, 2.19] |
+| Video (extended) | 40 | 0.071 [0.069, 0.074] | 0.0491 [0.0474, 0.0509] | 1.24 [1.23, 1.25] | 2.19 [2.17, 2.21] |
+| Video (extended) | 50 | 0.065 [0.065, 0.065] | 0.0519 [0.0506, 0.0533] | 1.30 [1.27, 1.32] | 2.21 [2.20, 2.21] |
+
+Reading: MoCap needs weight 40 to reach the yaw error that Video (extended) has at the default weight 20 (0.127 vs 0.129), and pays for it
+with +92 % velocity tracking error (0.092 vs 0.048), +27 % CoT (1.66 vs 1.31) and a 9 % worse imitation score (2.34 vs 2.15 at its own
+default). Video (extended) improves its yaw error by 36-50 % over the same weight range at +1 to +8 % velocity error, unchanged CoT
+(-6 to -1 %) and unchanged imitation score (+1 to +2 %). Reward tuning cannot substitute for coverage: the task reward can force yaw
+tracking, but only at the expense of every other metric when the expert data do not contain the turning motions.
+
+Paste-ready (Sec. IV-A, replacing/extending the Fig.-5 sentences; caption currently ends mid-sentence, "...reward weight at (Right): ..."):
+* "Increasing the yaw-tracking reward weight from 20 to 40 lets MoCap reach the yaw tracking error of Video (extended) at the default
+  weight (0.127 vs. 0.129 rad/s), but at +92 % velocity tracking error, +27 % cost of transport and a 9 % lower imitation score, whereas
+  Video (extended) halves its yaw error over the same range with unchanged cost of transport and imitation score (Figure 5)."
+* Caption: "Fig. 5: Yaw-tracking reward weight sweep (mean and range over seeds; weight 20 is the paper default, three seeds, otherwise two).
+  Video (extended) improves yaw tracking at every weight without cost. For MoCap, yaw tracking can only be bought by a higher reward weight,
+  which degrades velocity tracking, cost of transport and imitation score (agent-expert distance, lower is better)."
+
+### Other material in logs.zip that the paper does not use yet
+* Exact per-cell grids of the paper policies (147 vx-vy cells, 441 vx-wz cells, 5000 envs each): MoCap seeds 1 and 3, Video (extended)
+  seed 1; Video seed 2 has a partial vx-wz grid (139/441). Fig. 7's statistics (rho, slope; currently recovered from figure colours in
+  Exp. 4/5) can be recomputed exactly and extended with CoT and imitation score per cell. Each grid yaml also contains
+  `agent_expert_distances`, `mean_mechanical_cot`, `heading_error`, `mean_power`.
+* `TargetXHeadingDistributionEvaluation` (525 cells, heading-command mode) for MoCap seeds 1, 3 and Video seed 2: an evaluation mode not
+  shown in the paper.
+* Per-seed Fig.-4 values for all eight sources and all four scenarios (`metrics.yaml`; box: `AMPBox/*Curr_RSI`, `MoCapAMP_reduced_data`,
+  `Box/*Rew_Curr`; stand-up: `AMPstanding/*RSI`, `standing/*Rew`), so every bar of Fig. 4 can be quoted with its range.
+* Development variants not in the paper: domain-randomisation tests (`*_DR`, `*_DR2`, `*_DR5*`, `feetZAmpl`), the complex-reward
+  action-delay sweep (`HUAWEI_*_complexReward_MaxActDelay_{0..128}`, 3 seeds each, `unitree_go2_flat`), AMPBox `Curr` vs `Curr_RSI`
+  (reference-state initialisation ablation), `MoCapAMP_data` vs `MoCapAMP_reduced_data` on the box task.
+* TensorBoard event files (5.7 GB, not extracted): training curves for every run, usable for a sample-efficiency statement (iterations to
+  reach a given tracking reward for MoCap vs Video (extended)) and for showing the E2-style critic divergence does not occur in the
+  paper runs.
+* `RecordJposEpisodeTargetVelocityEvaluation` (MoCap seeds 1, 3): recorded joint-position episodes, usable for gait plots.
+* `git/IsaacLab.diff`, `git/rsl_rl.diff` per run: the exact uncommitted code state of every paper run.
