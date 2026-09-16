@@ -83,12 +83,12 @@ def two_panels(data, weights):
         MIN_WHISKER = 0.012
         yerr = [np.maximum(mean - lo, MIN_WHISKER), np.maximum(hi - mean, MIN_WHISKER)]
         ax.errorbar(ws, mean, yerr=yerr, color=COLORS[name], marker="o", ms=2.0, lw=1.2, capsize=2.0, elinewidth=0.8, capthick=0.8, label=LEGEND[name], zorder=3)
-    ax.set_title("Tracking Err. Yaw [rad/s]", fontsize=6, fontweight="bold", pad=2)
+    ax.set_title("Tracking Err. Yaw [rad/s]", fontsize=6.2, fontweight="bold", pad=2)
     ax.set_ylim(0, 0.85)  # head room for the dataset legend (upper right)
     ax.set_yticks([0, 0.25, 0.5, 0.75])
     h_sets, l_sets = ax.get_legend_handles_labels()
     ax.legend(h_sets, [l.replace(" (AMP)", "").replace("Video w. Depth Camera", "Video") for l in l_sets],
-              fontsize=5.0, frameon=False, loc="upper right", handlelength=1.4, borderaxespad=0.1, labelspacing=0.25, handletextpad=0.4)
+              fontsize=5.8, frameon=False, loc="upper right", handlelength=1.4, borderaxespad=0.1, labelspacing=0.25, handletextpad=0.4)
     ax = axes[1]
     for name, byw in data.items():
         ws = [w for w in sorted(byw) if w <= MAX_W_2P]
@@ -97,21 +97,21 @@ def two_panels(data, weights):
             mean = np.array([100 * (sign * np.mean(byw[w][m]) - ref) / abs(ref) for w in ws])
             ax.plot(ws, mean, color=COLORS[name], ls=ls, lw=1.3 if name == NAME_MOCAP else 1.0, zorder=3)
             if name == NAME_MOCAP:  # direct end labels for the lines that change
-                ax.text(ws[-1] + 0.6, mean[-1], f"{mean[-1]:+.0f}", color=COLORS[name], fontsize=5, va="center", ha="left")
+                ax.text(ws[-1] + 0.6, mean[-1], f"{mean[-1]:+.0f}", color=COLORS[name], fontsize=5.2, va="center", ha="left")
     ax.axhline(0, color="0.3", lw=0.5, zorder=1)
     for w in weights:  # vertical guides at the evaluated weights instead of markers
         ax.axvline(w, color="0.75", lw=0.5, zorder=0)
-    ax.set_title("Change [%]", fontsize=6, fontweight="bold", pad=2)
+    ax.set_title("Change [%]", fontsize=6.2, fontweight="bold", pad=2)
     ax.set_yticks([0, 20, 40])
     ax.set_xlim(19, 43.5)
     from matplotlib.lines import Line2D
     hs = [Line2D([], [], color="0.25", ls=ls, lw=1.2, label=lab) for ls, _, lab, _ in RIGHT.values()]
-    fig.legend(handles=hs, loc="lower center", ncol=3, fontsize=5.2, frameon=False, bbox_to_anchor=(0.5, 0.935), handlelength=2.6, columnspacing=1.6, borderaxespad=0.0, borderpad=0.0)
+    fig.legend(handles=hs, loc="lower center", ncol=3, fontsize=5.8, frameon=False, bbox_to_anchor=(0.5, 0.935), handlelength=2.6, columnspacing=1.6, borderaxespad=0.0, borderpad=0.0)
     for ax in axes:
         ax.set_xticks(weights)
-        ax.tick_params(labelsize=5.2, length=2, pad=1.2)
+        ax.tick_params(labelsize=5.2, length=1.8, pad=1.5)
         ax.grid(True, axis="y", ls="--", lw=0.4, alpha=0.7)
-        ax.set_xlabel("Yaw Tracking Reward Weight", fontsize=5.6, labelpad=1.5)
+        ax.set_xlabel("Yaw Tracking Reward Weight", fontsize=6.2, labelpad=1.5)
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)
     fig.subplots_adjust(top=0.78, bottom=0.28, left=0.1, right=0.99, wspace=0.3)
