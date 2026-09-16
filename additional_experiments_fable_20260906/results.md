@@ -600,3 +600,25 @@ Paste-ready (Sec. IV-A, replacing/extending the Fig.-5 sentences; caption curren
   paper runs.
 * `RecordJposEpisodeTargetVelocityEvaluation` (MoCap seeds 1, 3): recorded joint-position episodes, usable for gait plots.
 * `git/IsaacLab.diff`, `git/rsl_rl.diff` per run: the exact uncommitted code state of every paper run.
+
+## Sine yaw-rate tracking figure restyled (2026-09-16)
+
+`~/Downloads/sine_representative (1).pdf` was redrawn in the paper's figure style using about half the vertical space.
+The original plotting script and its data are not available, so `scripts/sine_tracking_paper_style.py` recovers both curves
+once from the vector paths of that PDF (pdftocairo SVG). The pixel-to-data map is fitted on the tick marks detected in the
+source figure and the tick values listed in `X_TICK_VALUES` / `Y_TICK_VALUES`, so a new source PDF only needs those two
+lists updated. The curves are cached in `data/sine_tracking.csv` (525 samples, 17.22 s).
+
+Caveat: the curves are what the source PDF displays. Matplotlib's path simplification had already thinned the samples when
+it wrote that PDF (the smooth target is drawn with 127 points), so the cached actual trace is the drawn one, not
+necessarily every logged control step.
+
+Trial and recovered numbers: sinusoidal yaw-rate command of amplitude 0.50 rad/s and period 10 s at a constant forward
+command of 0.3 m/s; tracking RMSE 0.172 rad/s, MAE 0.133 rad/s against the motion-capture measurement.
+
+Figures: `figures/fig_sine_tracking.pdf` (single column) and `figures/fig_sine_tracking_2col.pdf` (double column). Style
+follows the other additional figures: DejaVu Sans, ticks 5.2 pt, axis labels 6.2 pt, legend 5.8 pt in one row above the
+panel, y-grid only, no top/right spines, target black dashed, actual in the paper colour of Video w. Depth Camera
+(extended). Legend entries are "Target (commanded)" and "Actual (Motion Capture)"; the forward command is marked as
+`$v_x = 0.3$ m/s` in the lower right of the panel. The source figure is 4.86 x 2.86 in, i.e. 2.06 in tall when scaled to one column, so the
+single-column version saves about 56 % of the vertical space.
