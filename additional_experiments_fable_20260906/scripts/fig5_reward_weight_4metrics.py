@@ -71,7 +71,7 @@ def two_panels(data, weights):
     """Two panels (height as the paper's Fig. 5): yaw tracking error (absolute) | velocity tracking error, CoT and expert
     imitation as change relative to the dataset's own default weight. Seed means only (ranges: table / 2x2 figure). Weights 20-40."""
     weights = [w for w in weights if w <= MAX_W_2P]
-    fig, axes = plt.subplots(1, 2, figsize=(COL_W, 0.36 * COL_W))
+    fig, axes = plt.subplots(1, 2, figsize=(COL_W, 0.31 * COL_W))
     ax = axes[0]
     for name, byw in data.items():
         ws = [w for w in sorted(byw) if w <= MAX_W_2P]
@@ -84,8 +84,11 @@ def two_panels(data, weights):
         yerr = [np.maximum(mean - lo, MIN_WHISKER), np.maximum(hi - mean, MIN_WHISKER)]
         ax.errorbar(ws, mean, yerr=yerr, color=COLORS[name], marker="o", ms=2.0, lw=1.2, capsize=2.0, elinewidth=0.8, capthick=0.8, label=LEGEND[name], zorder=3)
     ax.set_title("Tracking Err. Yaw [rad/s]", fontsize=6, fontweight="bold", pad=2)
-    ax.set_ylim(bottom=0)
+    ax.set_ylim(0, 0.85)  # head room for the dataset legend (upper right)
+    ax.set_yticks([0, 0.25, 0.5, 0.75])
     h_sets, l_sets = ax.get_legend_handles_labels()
+    ax.legend(h_sets, [l.replace(" (AMP)", "").replace("Video w. Depth Camera", "Video") for l in l_sets],
+              fontsize=5.0, frameon=False, loc="upper right", handlelength=1.4, borderaxespad=0.1, labelspacing=0.25, handletextpad=0.4)
     ax = axes[1]
     for name, byw in data.items():
         ws = [w for w in sorted(byw) if w <= MAX_W_2P]
@@ -101,8 +104,6 @@ def two_panels(data, weights):
     ax.set_title("Change [%]", fontsize=6, fontweight="bold", pad=2)
     ax.set_yticks([0, 20, 40])
     ax.set_xlim(19, 43.5)
-    ax.legend(h_sets, [l.replace(" (AMP)", "").replace("Video w. Depth Camera", "Video") for l in l_sets],
-              fontsize=5.0, frameon=False, loc="upper left", handlelength=1.4, borderaxespad=0.1, labelspacing=0.25, handletextpad=0.4)
     from matplotlib.lines import Line2D
     hs = [Line2D([], [], color="0.25", ls=ls, lw=1.2, label=lab) for ls, _, lab, _ in RIGHT.values()]
     fig.legend(handles=hs, loc="lower center", ncol=3, fontsize=5.2, frameon=False, bbox_to_anchor=(0.5, 0.935), handlelength=2.6, columnspacing=1.6, borderaxespad=0.0, borderpad=0.0)
@@ -113,7 +114,7 @@ def two_panels(data, weights):
         ax.set_xlabel("Yaw Tracking Reward Weight", fontsize=5.6, labelpad=1.5)
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)
-    fig.subplots_adjust(top=0.80, bottom=0.25, left=0.1, right=0.99, wspace=0.3)
+    fig.subplots_adjust(top=0.78, bottom=0.28, left=0.1, right=0.99, wspace=0.3)
     import os as _os
     from common import FIG
     for ext, kw in (("pdf", {}), ("png", {"dpi": 200})):  # tight crop without the default 0.1 in padding
